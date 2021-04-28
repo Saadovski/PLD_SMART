@@ -12,13 +12,13 @@ const app = express();
 //     .catch(() => console.log('Connexion à MongoDB échouée !'));
 
 
-mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/auctions', {
+mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/DB_WALOU', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
     useCreateIndex: true,
     autoIndex: true,
-})
+}).then(() => console.log("test"));
 
 app.use(express.json());
 
