@@ -52,10 +52,10 @@ function Signup() {
           Valider
         </Button>
       </Form>
-        <div>
-          <Link to="/" className="btn btn-primary">Retour</Link>
-        </div>
+      <div>
+        <Button className="btn btn-primary" onClick={(event) => {window.location.href="/"}}>Retour</Button>
       </div>
+    </div>
   );
 }
 
