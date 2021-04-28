@@ -1,7 +1,12 @@
+import {Link} from "react-router-dom";
+
 function Signup_Signin() {
+
     return (
       <div>
-          <h1>Connexion Inscription</h1>
+        <Link to="/connexion">Connexion</Link>
+      <div></div>
+        <Link to="/inscription">Inscription</Link>
       </div>  
     );
 }
