@@ -20,6 +20,7 @@ function Navbar() {
         <Link to="/">Home</Link>
         <Link to="/connexion">Connexion</Link>
         <Link to="/inscription">Inscription</Link>
+        <Link to="/monespace">Mon Espace</Link>
       </div>
       <a href="javascript:void(0);" class="icon" onClick={open}>
         <i class="fa fa-bars"></i>

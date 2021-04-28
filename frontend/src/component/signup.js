@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
+import { Form, Button } from 'react-bootstrap';
 
 function Signup() {
 	const [username, setUsername] = useState("");
