@@ -17,9 +17,9 @@ function Navbar() {
         Logo
       </Link>
       <div id="myLinks">
-        <Link to="">Home</Link>
-        <Link to="">Contact</Link>
-        <Link to="">About</Link>
+        <Link to="/">Home</Link>
+        <Link to="/connexion">Connexion</Link>
+        <Link to="/inscription">Inscription</Link>
       </div>
       <a href="javascript:void(0);" class="icon" onClick={open}>
         <i class="fa fa-bars"></i>
