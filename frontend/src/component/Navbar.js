@@ -9,6 +9,11 @@ function Navbar() {
     } else {
       x.style.display = "block";
     }
+
+    const links = document.querySelectorAll("#myLinks > a");
+    links.forEach((link) => {
+      link.addEventListener("click", () => (x.style.display = "none"));
+    });
   };
 
   return (
@@ -21,6 +26,7 @@ function Navbar() {
         <Link to="/connexion">Connexion</Link>
         <Link to="/inscription">Inscription</Link>
         <Link to="/monespace">Mon Espace</Link>
+        <Link to="/creersession">Rejoindre ou créer une session</Link>
       </div>
       <a href="javascript:void(0);" class="icon" onClick={open}>
         <i class="fa fa-bars"></i>

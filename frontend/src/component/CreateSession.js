@@ -1,12 +1,10 @@
-import { useState } from "react";
 import { Container, Button, Form } from "react-bootstrap";
-import { Redirect } from "react-router";
 
 function CreateSession() {
 
   const generateSessionId = () => {
-    const randomID = Math.random() * 100;
-    <Redirect to={{ pathname: `/session/${randomID}` }} />;
+    const randomID = Math.floor(Math.random() * 100);
+    window.location.href=`/session/${randomID}`;
   };
 
   return (

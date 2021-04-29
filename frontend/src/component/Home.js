@@ -11,7 +11,7 @@ function Home() {
 
       <div>
         <h2>Rejoins tes amis pour choisir ton film !</h2>
-        <Button onClick={() => console.log("rejoindre session")}>Lancer une session !</Button>
+        <Button onClick={() => (window.location.href = "/creersession")}>Lancer une session !</Button>
       </div>
     </div>
   );
