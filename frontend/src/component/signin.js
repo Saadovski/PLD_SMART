@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import "../styles/Boutons.css";
-import "../styles/Textes.css";
-import "../styles/Box.css";
+import "../styles/boutons.css";
+import "../styles/textes.css";
+import "../styles/box.css";
 
 function Signin() {
 
