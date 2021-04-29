@@ -2,8 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const User = require('./models/user');
-const Preference = require('./models/preference');
+
+const userRoute = require('./routes/user');
+
 mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/DB_WALOU?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
@@ -23,54 +24,6 @@ mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/DB_WALOU?retr
 
 app.use(express.json());
 
-app.post('/api/inscription', (req, res, next) => {
-
-    //il faut transformer "profil" en vecteur
-    const preference_ = new Preference({
-        genre: req.body.profil
-      });
-    preference_.save();
-
-    const user = new User({
-      username: req.body.username,
-      password: req.body.password,
-      preference: preference_
-    });
-
-    user.save()
-      .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
-      .catch(error => res.status(400).json({ error }));
-  });
-
-
-
-app.post('/api/connexion', (req, res, next) => {
-    console.log(req.body);
-    res.status(201).json({
-        message: 'Objet créé !'
-    });
-});
-
-app.get('/api/connexion', (req, res, next) => {
-    const stuff = [
-        {
-            _id: 'oeihfzeoi',
-            title: 'Mon premier objet',
-            description: 'Les infos de mon premier objet',
-            imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-            price: 4900,
-            userId: 'qsomihvqios',
-        },
-        {
-            _id: 'oeihfzeomoihi',
-            title: 'Mon deuxième objet',
-            description: 'Les infos de mon deuxième objet',
-            imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
-            price: 2900,
-            userId: 'qsomihvqios',
-        },
-    ];
-    res.status(200).json(stuff);
-});
+app.use('/api', userRoute);
 
 module.exports = app;

@@ -1,0 +1,21 @@
+.monEspace-container > div:nth-child(1){
+    text-align: center;
+}
+
+.monEspace-container .nav {
+    display: flex;
+    justify-content: center;
+}
+
+.monEspace-container .nav > div {
+    padding: 10px;
+    background-color: #607a7a;
+    color: #fafafa;
+    margin: 5px 10px 5px 10px;
+    flex-basis: 200px;
+}
+
+i {
+    align-items: center;
+    vertical-align: middle;
+}

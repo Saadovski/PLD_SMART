@@ -1,0 +1,29 @@
+.home-container {
+  text-align: center;
+}
+
+.presentation-container {
+  padding: 10px 5px 10px 5px;
+  width: 90%;
+  margin: auto;
+}
+
+.presentation-container div {
+  text-align: left;
+}
+
+.presentation-container h2 {
+  font-weight: bold;
+  font-size: 26px;
+}
+
+.join-container {
+  background-color: #eee;
+  text-align: center;
+  padding: 10px 5px 10px 5px;
+}
+
+.join-container h2 {
+  font-weight: bold;
+  font-size: 26px;
+}
