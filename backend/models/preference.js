@@ -4,7 +4,8 @@ const preferenceSchema = mongoose.Schema({
     genre: { type: String, required: true },
     annee: { type: Number, required: false },
     pays:  { type: String, required: false },
-    nbFilms:  { type: Number, required: false },   
+    nbFilms:  { type: Number, required: false },  
+    synopsis:  { type: String, required: false },
 
 });
   
