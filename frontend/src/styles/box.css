@@ -1,0 +1,16 @@
+.box_centre{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.box_en_bas{
+    position: absolute;
+    bottom: 0;
+}
+
+.box_sans_contour{
+    border: 0px solid;
+
+}

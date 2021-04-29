@@ -1,5 +1,3 @@
-import { InputGroup, FormControl } from 'react-bootstrap';
-
 function Signup_profile(props) {
 
     const handleSubmit = (e) => {

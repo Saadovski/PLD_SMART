@@ -1,3 +1,5 @@
+import { Button } from "react-bootstrap";
+
 function Home() {
   return (
     <div>
@@ -6,7 +8,14 @@ function Home() {
 
       <div>Explication de l'app ...</div>
       <div>Connecte-toi pour utiliser Walou</div>
+
+      <div>
+        <h2>Rejoins tes amis pour choisir ton film !</h2>
+        <Button onClick={() => (window.location.href = "/creersession")}>Lancer une session !</Button>
+      </div>
+      <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/initialisation"}}>Cliquez ici</button>
     </div>
+
   );
 }
 

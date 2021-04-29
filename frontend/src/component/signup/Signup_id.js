@@ -1,5 +1,8 @@
 import React, { useState } from "react";
-import { Form, Button } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import "../../styles/boutons.css";
+import "../../styles/textes.css";
+import "../../styles/box.css";
 
 function Signup_id(props) {
   const [passwordConf, setPasswordConf] = useState("");
@@ -7,10 +10,10 @@ function Signup_id(props) {
   const handleSubmit = (e) => {
     if(props.password !== passwordConf) {
       console.log("pas meme mdp");
-      props.setState(2);
     }
     else {
       console.log("signin up");
+      props.setState(2);
       e.preventDefault();
       fetch('check_username', {
         method: 'POST',
@@ -35,7 +38,7 @@ function Signup_id(props) {
   };
 
   return (
-    <div className="signin-container">
+    <div class="box_centre">
       <Form>
         <Form.Group controlId="UsernameForm">
           <Form.Label>Nom d'utilisateur</Form.Label>
@@ -49,12 +52,14 @@ function Signup_id(props) {
           <Form.Label>Confirmation du mot de passe</Form.Label>
           <Form.Control type="password" placeholder="Confirmation..." onChange={(event) => {setPasswordConf(event.target.value)} }/>
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <div class="bouton-vert-hover">
+        <button className="bouton-vert-rempli texte-blanc" type="submit" onClick={handleSubmit}>
           Valider
-        </Button>
+        </button>
+        </div>
       </Form>
-      <div>
-        <Button className="btn btn-primary" onClick={(event) => {window.location.href="/connexion"}}>Retour</Button>
+      <div class="bouton-gris-hover box_en_bas">
+        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>Retour</button>
       </div>
     </div>
   );

@@ -1,0 +1,25 @@
+.texte-blanc{
+
+font-family: Proxima;
+font-style: normal;
+font-weight: normal;
+font-size: 30px;
+line-height: 45px;
+
+color: #FFFFFF;
+}
+
+.texte-vert{
+
+    font-family: Proxima;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 30px;
+    line-height: 45px;
+    
+    color: #5CDB95;
+    }
+    
+.texte-centre{
+    text-align: center;
+}

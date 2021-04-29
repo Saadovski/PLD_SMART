@@ -1,4 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import "../styles/boutons.css";
+import "../styles/textes.css";
+import "../styles/box.css";
 
 function Signin() {
 
@@ -38,20 +41,20 @@ function Signin() {
   };
 
     return (
-      <div>
+      <div class="box_centre">
       <form>
       <label>
-      Nom d'utilisateur :
-      <input type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Entrez votre nom d'utilisateur ici"/>
+      <input class="box_sans_contour texte-vert texte-centre" type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Entrez votre nom d'utilisateur ici"/>
       </label>
       <label>
-      Mot de passe :
-      <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Entrez votre mot de passe ici"/>
+      <input class="box_sans_contour texte-vert texte-centre" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Entrez votre mot de passe ici"/>
       </label>
       <div>
 
       </div>
-      <button onClick={handleSubmit}>Connexion</button>
+      <div class="bouton-vert-hover">
+      <button class="bouton-vert-rempli texte-blanc" onClick={handleSubmit}>Connexion</button>
+      </div>
       </form>
       </div>
     );
