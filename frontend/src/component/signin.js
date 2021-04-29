@@ -42,7 +42,7 @@ function Signin() {
 
     return (
       <div class="box-centre">
-      <form>
+      <form class="texte-centre">
       <label>
       <input class="box-sans-contour texte-vert texte-centre" type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Entrez votre nom d'utilisateur ici"/>
       </label>

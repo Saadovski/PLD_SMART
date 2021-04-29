@@ -11,7 +11,7 @@
 }
 
 .box-en-haut{
-    top: 0;
+    top: 10vh;
     position: absolute;
     /*
     position: relative;
