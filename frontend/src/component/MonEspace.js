@@ -6,6 +6,7 @@ function MonEspace() {
   const [state, setState] = useState(1);
 
   return (
+    <div className="box-centre">
     <div className="monEspace-container">
       <div>
         <div>Username ici ...</div>
@@ -23,6 +24,7 @@ function MonEspace() {
         {state === 1 && <UserInfos />}
         {state === 2 && <div>state2</div>}
       </div>
+    </div>
     </div>
   );
 }

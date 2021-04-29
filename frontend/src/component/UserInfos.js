@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import "../styles/Boutons.css";
+import "../styles/Textes.css";
+import "../styles/Box.css";
 
 function UserInfos() {
   const [isModifying, setIsModifying] = useState(false);
@@ -15,7 +18,7 @@ function UserInfos() {
     }
   };
   return (
-    <div className="container-fluid">
+    <div className="container-fluid texte-centre">
       <Form.Group>
         <Form.Label>Nom d'utilisateur</Form.Label>
         <Form.Control
@@ -42,22 +45,31 @@ function UserInfos() {
       </Form.Group>
 
       {isModifying ? (
-        <div>
+        <div class="texte-centre">
           <Form.Group>
             <Form.Label>Confirmation du Mot de passe</Form.Label>
             <Form.Control type="password" readOnly={!isModifying} onChange={() => setHasChanged(true)} />
           </Form.Group>
-          <Button variant="danger" className="float-left mt-3" onClick={() => setIsModifying(false)}>
-            Annulé
-          </Button>
-          <Button className="float-left mt-3" onClick={handleModify}>
+          <div className="bouton-vert-hover">
+          <button className="bouton-vert-rempli" onClick={handleModify}>
             Valider
-          </Button>
+          </button>
+          </div>
+          <hr></hr>
+          <div className="bouton-gris-hover">
+          <button className="bouton-gris-rempli" onClick={() => setIsModifying(false)}>
+            Annuler
+          </button>
+          </div>
+
+
         </div>
       ) : (
-        <Button className="float-left mt-3" onClick={handleModify}>
+        <div className="bouton-vert-hover">
+        <button className="bouton-vert-rempli" onClick={handleModify}>
           Modifier
-        </Button>
+        </button>
+        </div>
       )}
     </div>
   );

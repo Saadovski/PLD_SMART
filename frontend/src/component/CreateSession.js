@@ -8,12 +8,14 @@ function CreateSession() {
   };
 
   return (
-    <Container>
-      <Button onClick={generateSessionId}>Créer une session</Button>
+    <div class="box-centre">
+    <Container className="texte-centre bouton-vert-hover">
+      <button className="bouton-vert-rempli" onClick={generateSessionId}>Créer une session</button>
       <div className="separator">ou</div>
       <div>Rejoindre une session</div>
       <Form.Control type="text" placeholder="Numéro de session"></Form.Control>
     </Container>
+    </div>
   );
 }
 
