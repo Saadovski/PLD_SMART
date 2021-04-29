@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { Form, Button } from 'react-bootstrap';
+import "../styles/boutons.css";
+import "../styles/textes.css";
+import "../styles/box.css";
 
 function Signup() {
 	const [username, setUsername] = useState("");
@@ -34,7 +37,7 @@ function Signup() {
   };
 
   return (
-    <div className="signin-container">
+    <div class="box_centre">
       <Form>
         <Form.Group controlId="UsernameForm">
           <Form.Label>Nom d'utilisateur</Form.Label>
@@ -48,12 +51,14 @@ function Signup() {
           <Form.Label>Confirmation du mot de passe</Form.Label>
           <Form.Control type="password" placeholder="Confirmation..." onChange={(event) => {setPasswordConf(event.target.value)} }/>
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={handleSubmit}>
+        <div class="bouton-vert-hover">
+        <button className="bouton-vert-rempli texte-blanc" type="submit" onClick={handleSubmit}>
           Valider
-        </Button>
+        </button>
+        </div>
       </Form>
-      <div>
-        <Button className="btn btn-primary" onClick={(event) => {window.location.href="/"}}>Retour</Button>
+      <div class="bouton-gris-hover box_en_bas">
+        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/"}}>Retour</button>
       </div>
     </div>
   );
