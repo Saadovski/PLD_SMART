@@ -17,18 +17,12 @@ function App() {
         <Navbar />
         <Switch>
           <Route exact path="/" component={Home} />
-<<<<<<< HEAD
           <Route path="/inscription" component={Signup} />
           <Route path="/connexion" component={Signin} />
           <Route path="/monespace" component={MonEspace} />
           <Route path="/creersession" component={CreateSession} />
           <Route path="/session/:id" component={SessionPage} />
-=======
-          <Route exact path="/Initialisation" component={Signup_Signin} />
-          <Route exact path="/inscription" component={Signup} />
-          <Route exact path="/connexion" component={Signin} />
-          <Route exact path="/monespace" component={MonEspace} />
->>>>>>> c2de17b3db8dd379efc75e595795553c7a8e6d47
+          <Route path="/Initialisation" component={Signup_Signin} />
         </Switch>
       </Router>
     </div>
