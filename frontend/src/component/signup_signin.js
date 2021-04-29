@@ -1,13 +1,13 @@
 import {Link} from "react-router-dom";
 import {Button} from "react-bootstrap";
-import "../styles/boutons.css";
-import "../styles/textes.css";
-import "../styles/box.css";
+import "../styles/Boutons.css";
+import "../styles/Textes.css";
+import "../styles/Box.css";
 
 function Signup_Signin() {
 
     return (
-      <div class="box_centre">
+      <div class="box-centre">
         <div>
       <div className="bouton-vert-hover">
         <button className="bouton-vert-rempli texte-blanc" onClick={(event) => {window.location.href="/connexion"}}>Connexion</button>

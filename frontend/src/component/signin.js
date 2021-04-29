@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
-import "../styles/boutons.css";
-import "../styles/textes.css";
-import "../styles/box.css";
+import "../styles/Boutons.css";
+import "../styles/Textes.css";
+import "../styles/Box.css";
 
 function Signin() {
 
@@ -41,13 +41,13 @@ function Signin() {
   };
 
     return (
-      <div class="box_centre">
+      <div class="box-centre">
       <form>
       <label>
-      <input class="box_sans_contour texte-vert texte-centre" type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Entrez votre nom d'utilisateur ici"/>
+      <input class="box-sans-contour texte-vert texte-centre" type="text" name="username" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Entrez votre nom d'utilisateur ici"/>
       </label>
       <label>
-      <input class="box_sans_contour texte-vert texte-centre" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Entrez votre mot de passe ici"/>
+      <input class="box-sans-contour texte-vert texte-centre" type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Entrez votre mot de passe ici"/>
       </label>
       <div>
 

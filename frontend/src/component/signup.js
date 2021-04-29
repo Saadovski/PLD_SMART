@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import { Form, Button } from 'react-bootstrap';
-import "../styles/boutons.css";
-import "../styles/textes.css";
-import "../styles/box.css";
+import "../styles/Boutons.css";
+import "../styles/Textes.css";
+import "../styles/Box.css";
 
 function Signup() {
 	const [username, setUsername] = useState("");
@@ -37,7 +37,7 @@ function Signup() {
   };
 
   return (
-    <div class="box_centre">
+    <div class="box-centre">
       <Form>
         <Form.Group controlId="UsernameForm">
           <Form.Label>Nom d'utilisateur</Form.Label>
@@ -57,7 +57,7 @@ function Signup() {
         </button>
         </div>
       </Form>
-      <div class="bouton-gris-hover box_en_bas">
+      <div class="bouton-gris-hover box-en-bas">
         <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/"}}>Retour</button>
       </div>
     </div>
