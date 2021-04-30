@@ -3,7 +3,7 @@
 }
 
 .swipe{
-    position: absolute;
+    position: relative;
 }
 
 .cardContent {

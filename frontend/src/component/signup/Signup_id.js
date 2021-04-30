@@ -6,43 +6,17 @@ import "../../styles/box.css";
 
 function Signup_id(props) {
   const [passwordConf, setPasswordConf] = useState("");
-
-  const handleOnChangeUser = (e) => {
-		e.preventDefault();
-    props.setUsername(e.target.value);
-
-    fetch('check_username', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: props.username,
-      }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        e.target.style.border = "";
-      }
-      else {
-        e.target.style.border = "1px solid red";
-      }
-    });
-	};
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:1024/api/';
 
   const handleSubmit = (e) => {
-    console.log(props.password);
-    console.log(passwordConf);
+    e.preventDefault();
     if(props.password !== passwordConf) {
       //TODO Changer la target
       e.target.style.border = "1px solid red";
     }
     else {
       e.target.style.border = "";
-      props.setState(2);
-      e.preventDefault();
-      fetch('check_username', {
+      fetch(REACT_APP_API_URL+'user/check_username', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +27,8 @@ function Signup_id(props) {
       })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
+        console.log(data.success);
+        if (data.success === "true") {
           e.target.style.border = "";
           props.setState(2);
         }
@@ -69,7 +44,7 @@ function Signup_id(props) {
       <Form class="texte-centre">
         <Form.Group controlId="UsernameForm">
           <Form.Label>Nom d'utilisateur</Form.Label>
-          <Form.Control class="box-sans-contour texte-vert texte-centre"  type="username" placeholder="Nom d'utilisateur..." onChange={handleOnChangeUser}/>
+          <Form.Control class="box-sans-contour texte-vert texte-centre"  type="username" placeholder="Nom d'utilisateur..." onChange={(event) => {props.setUsername(event.target.value)}} />
         </Form.Group>
         <Form.Group controlId="PasswordForm">
           <Form.Label>Mot de passe</Form.Label>
@@ -86,7 +61,9 @@ function Signup_id(props) {
         </div>
       </Form>
       <div class="bouton-gris-hover box-en-bas">
-        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>Retour</button>
+        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>
+          Retour
+        </button>
       </div>
     </div>
   );
