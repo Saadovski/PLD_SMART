@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "./App.css";
-import Signin from "./component/signin";
+import Signin from "./component/Signin";
 import Signup_container from "./component/signup/Signup_container";
 import Navbar from "./component/Navbar";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,7 +10,7 @@ import Simple from "./component/swipe/examples/Simple";
 import Advanced from "./component/swipe/examples/Advanced";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
-import Signup_Signin from "./component/signup_signin";
+import Signup_Signin from "./component/Signup_Signin";
 
 function App() {
   return (
