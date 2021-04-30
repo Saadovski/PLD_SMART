@@ -6,6 +6,7 @@ const filmCtrl = require('../controllers/film');
 const user = require('../models/film');
 
 router.post('/create_film', filmCtrl.createFilm);
+router.post('/get_film_by_gender', filmCtrl.filmGender);
 
 
 module.exports = router;

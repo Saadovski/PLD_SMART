@@ -20,3 +20,18 @@ exports.createFilm = (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 
 };
+
+exports.filmGender = (req, res, next) => {
+
+
+    const listFilm = [];
+    const longueurListGenre = req.body.listeGenre.length;
+    console.log(longueurListGenre)
+    //const listeGenre = req.body.listeGenre[1]
+    console.log(listeGenre)
+    
+    return res.status(200).json({ 
+        status: 'username available',
+        success: "true" });
+
+};
