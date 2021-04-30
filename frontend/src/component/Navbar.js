@@ -38,9 +38,9 @@ function Navbar() {
   return (
     <div>
       <div className="navbar-container">
-        <a href="javascript:void(0);" className="icon" onClick={open}>
+        <button href="" className="icon" onClick={open}>
           <i class="fa fa-bars"></i>
-        </a>
+        </button>
         <Link to="/" className="active" id="logo">
           Logo
         </Link>

@@ -44,8 +44,12 @@
   width: 100%;
 }
 
+.navbar-container button {
+  border: 0;
+}
+
 /* Style navigation menu links */
-.navbar-container a {
+.navbar-container a, .navbar-container button {
   color: white;
   padding: 15px;
   text-decoration: none;
@@ -53,7 +57,7 @@
 }
 
 /* Style the hamburger menu */
-.navbar-container a.icon {
+.navbar-container button.icon {
   background: var(--primaryColor);
   width: 15%;
   text-align: center;

@@ -1,4 +1,3 @@
-import { Button } from "react-bootstrap";
 import "../styles/home.css";
 
 function Home() {

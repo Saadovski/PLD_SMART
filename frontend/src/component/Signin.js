@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import "../styles/boutons.css";
 import "../styles/textes.css";
 import "../styles/box.css";
