@@ -13,7 +13,10 @@ exports.createFilm = (req, res, next) => {
     ...req.body
     });
     film_.save()
-    .then(() => res.status(201).json({ message: 'Film enregistré !'}))
+    .then(() => res.status(201).json({ 
+    success: "true" ,
+    message: 'Film enregistré !'
+}))
     .catch(error => res.status(400).json({ error }));
 
 };
