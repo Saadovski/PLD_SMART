@@ -1,18 +1,19 @@
 .box-centre{
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
 }
 
 .box-en-bas{
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    bottom: 0vh;
 }
 
 .box-en-haut{
-    top: 10vh;
-    position: absolute;
+    top: 0vh;
+    position: relative;
     /*
     position: relative;
     position: absolute;
