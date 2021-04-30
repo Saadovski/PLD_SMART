@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 // import TinderCard from '../react-tinder-card/index'
 import TinderCard from '../react-tinder-card/index'
-import "../../../styles/Swipe.css";
+import "../../../styles/swipe.css";
 import "../../../styles/box.css";
 import "../../../styles/textes.css";
 
@@ -41,20 +41,23 @@ function Simple () {
   }
 
   return (
-    <div class="box-centre swipe-color">
-      
+    
+    <div> 
       <div class="box-en-haut">
       <h1 class="texte-blanc">Commencez à swiper vos films!</h1>
       </div> 
       <div className='cardContainer'>
         {characters.map((character) =>
+        <div class="box-centre swipe-color">
         <div>
           <TinderCard className='swipe' key={character.name} onSwipe={(dir) => swiped(dir, character.name)} onCardLeftScreen={() => outOfFrame(character.name)}>
+          
           <div className=' background-vide'><h3>{character.name}</h3></div>
 
             <div style={{ backgroundImage: 'url(' + character.url + ')' }} className='card'>
             </div>
           </TinderCard>
+          </div>
           </div>
         )}
       </div>
