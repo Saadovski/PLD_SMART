@@ -11,7 +11,8 @@ exports.createUser = (req, res, next) => {
 
       //il faut transformer "profil" en vecteur
       const preference_ = new Preference({
-        genre: req.body.profil
+        genre: req.body.profil,
+        nbFilms: 0
       });
       preference_.save()
       .then()
@@ -20,11 +21,21 @@ exports.createUser = (req, res, next) => {
       const user = new User({
       username: req.body.username,
       password: hash,
+      nbSession: 0,
       preference: preference_
       });
 
       user.save()
-      .then(() => res.status(201).json({ message: 'User enregistré !'}))
+      .then(() =>  res.status(200).json({
+        success: "true" ,
+        reponse: "User enregistré et connecté",
+        userId: user._id,
+        token: jwt.sign(
+          { userId: user._id },
+          'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
+          { expiresIn: '24h' }
+        )
+      }))
       .catch(error => res.status(400).json({ error }));
 
     })
@@ -37,15 +48,20 @@ exports.connectUser = (req, res, next) => {
   User.findOne({ username: req.body.username })
   .then(user => {
     if(!user) {
-      return res.status(401).json({ error: 'User not found !' });
+      return res.status(401).json({ 
+        error: 'User not found !',
+        success: "false"  });
     }
 
     bcrypt.compare(req.body.password, user.password)
     .then(valid => {
       if(!valid) {
-        return res.status(401).json({ error: 'Wrong password !' });
+        return res.status(401).json({ 
+          error: 'Wrong password !',
+          success: "false"  });
       }
       res.status(200).json({
+        success: "true",
         userId: user._id,
         token: jwt.sign(
           { userId: user._id },
@@ -65,9 +81,31 @@ exports.verifUsername = (req, res, next) => {
   User.findOne({ username: req.body.username })
   .then(user => {
     if(!user) {
-      return res.status(200).json({ status: 'username available'});
+      return res.status(200).json({ 
+      status: 'username available',
+      success: "true" });
     }
-    return res.status(200).json({ status: 'username not available' });
+    return res.status(200).json({
+      status: 'username not available',
+      success: "false" 
+    });
+    })
+  .catch(error => res.status(500).json({ error }));
+};
+
+exports.checkInfoUser = (req, res, next) => {
+  
+  User.findOne({ _id: req.body.userId }).populate('preference')
+  .then(user => {
+    if(!user) {
+      return res.status(200).json({ success: "false", status: 'username not available' });
+    }
+    return res.status(200).json({ 
+      status: 'stats found',
+      success: "false",
+      nb_sessions: user.nbSession,
+      nb_films: user.preference.nbFilms
+    });
     })
   .catch(error => res.status(500).json({ error }));
 };
