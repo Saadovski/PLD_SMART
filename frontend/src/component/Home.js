@@ -10,7 +10,7 @@ function Home() {
         <h2>Comment ça fonctionne ?</h2>
         <div>Un problème pour choisir un film avec tes potes ? N'en dis pas plus Walou est là pour toi</div>
         <br />
-        <div>Connecte toi et swipe pour trouver LE film qui animera ta soirée film entre potes</div>
+        <div>Connecte toi et swipe pour trouver LE film qui animera ta soirée entre potes</div>
       </div>
 
       <div className="join-container bouton-vert-hover box-en-bas">
