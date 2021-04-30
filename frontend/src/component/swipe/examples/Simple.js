@@ -136,7 +136,7 @@ function Simple () {
 </div>        
           </div>
       </div>
-      {lastDirection ? <h2 className='infoText texte-blanc box-en-bas'>You swiped {lastDirection}</h2> : <h2 className='infoText texte-blanc box-en-bas' />}
+      {lastDirection ? <h2 className='infoText texte-blanc box-en-bas'>You swiped {lastDirection}</h2> : <h2 className='infoText texte-blanc box-en-bas'>test</h2>}
     </div>
   )
 }
