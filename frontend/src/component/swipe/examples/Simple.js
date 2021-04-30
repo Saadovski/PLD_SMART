@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 // import TinderCard from '../react-tinder-card/index'
-import {TinderCard} from '../react-tinder-card/index'
+import TinderCard from '../react-tinder-card/index'
 import "../../../styles/swipe.css";
 import "../../../styles/box.css";
 import "../../../styles/textes.css";
