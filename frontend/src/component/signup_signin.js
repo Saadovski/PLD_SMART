@@ -4,7 +4,7 @@ import "../styles/boutons.css";
 import "../styles/textes.css";
 import "../styles/box.css";
 
-function Signup_Signin() {
+function Signup_signin() {
 
     return (
       <div class="box-centre">
@@ -21,4 +21,4 @@ function Signup_Signin() {
     );
 }
 
-export default Signup_Signin;
+export default Signup_signin;

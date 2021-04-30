@@ -10,7 +10,7 @@ import Simple from "./component/swipe/examples/Simple";
 import Advanced from "./component/swipe/examples/Advanced";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
-import Signup_Signin from "./component/Signup_Signin";
+import Signup_signin from "./component/Signup_signin";
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
           <Route exact path="/monespace" component={MonEspace} />
           <Route exact path="/creersession" component={CreateSession} />
           <Route exact path="/session/:id" component={SessionPage} />
-          <Route exact path="/Initialisation" component={Signup_Signin} />
+          <Route exact path="/Initialisation" component={Signup_signin} />
         </Switch>
       </Router>
     </div>
