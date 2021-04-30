@@ -1,5 +1,5 @@
 function Signup_profile(props) {
-
+    const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:1024/api/';
     const genres = ["Action","Thriller","Science-Fiction"];
 
     const handleSubmit = (e) => {
@@ -12,7 +12,7 @@ function Signup_profile(props) {
           }
         }
 
-        fetch('inscription', {
+        fetch(REACT_APP_API_URL+'user/inscription', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -20,7 +20,7 @@ function Signup_profile(props) {
             body: JSON.stringify({
               username: props.username,
               password: props.password,
-              profile: profile,
+              profil: "Action",
             }),
           })
           .then((response) => response.json())

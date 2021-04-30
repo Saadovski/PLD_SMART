@@ -36,7 +36,7 @@ exports.createUser = (req, res, next) => {
           { expiresIn: '24h' }
         )
       }))
-      .catch(error => res.status(400).json({ error }));
+      .catch();
 
     })
 

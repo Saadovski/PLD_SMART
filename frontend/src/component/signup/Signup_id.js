@@ -6,12 +6,13 @@ import "../../styles/box.css";
 
 function Signup_id(props) {
   const [passwordConf, setPasswordConf] = useState("");
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:1024/api/';
 
   const handleOnChangeUser = (e) => {
 		e.preventDefault();
     props.setUsername(e.target.value);
 
-    fetch('http://localhost:1024/user/check_username', {
+    fetch(REACT_APP_API_URL+'user/check_username', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,9 +39,8 @@ function Signup_id(props) {
     }
     else {
       e.target.style.border = "";
-      props.setState(2);
       e.preventDefault();
-      fetch('check_username', {
+      fetch(REACT_APP_API_URL+'user/check_username', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -67,7 +67,7 @@ function Signup_id(props) {
       <Form class="texte-centre">
         <Form.Group controlId="UsernameForm">
           <Form.Label>Nom d'utilisateur</Form.Label>
-          <Form.Control class="box-sans-contour texte-vert texte-centre"  type="username" placeholder="Nom d'utilisateur..." onChange={handleOnChangeUser}/>
+          <Form.Control class="box-sans-contour texte-vert texte-centre"  type="username" placeholder="Nom d'utilisateur..." onChange={(event) => {props.setUsername(event.target.value)}} />
         </Form.Group>
         <Form.Group controlId="PasswordForm">
           <Form.Label>Mot de passe</Form.Label>
