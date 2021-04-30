@@ -1,8 +1,17 @@
 function Signup_profile(props) {
 
+    const genres = ["Action","Thriller","Science-Fiction"];
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        window.location.href = "/monespace";
+
+        let profile = [];
+        for(let i=0; i<genres.length; i++) {
+          if(document.querySelector("#"+genres[i]).checked === true){
+            profile.push(genres[i]);
+          }
+        }
+
         fetch('inscription', {
             method: 'POST',
             headers: {
@@ -11,7 +20,7 @@ function Signup_profile(props) {
             body: JSON.stringify({
               username: props.username,
               password: props.password,
-              profile: [],
+              profile: profile,
             }),
           })
           .then((response) => response.json())
@@ -30,12 +39,14 @@ function Signup_profile(props) {
         <div className="signup_profile">
             <h1>Choisissez les genres qui vous attirent</h1>
             <div className="genres_Container">
-                <input type="checkbox" id="action" name="action"/>
-                <label htmlFor="scales">Action</label>
-                <input type="checkbox" id="thriller" name="thriller"/>
-                <label htmlFor="scales">Thriller</label>
-                <input type="checkbox" id="sci-fi" name="sci-fi"/>
-                <label htmlFor="scales">Science-Fiction</label>
+                {genres.map((genre, index) => {
+                  return (
+                    <div className="genre" key={index} >
+                      <input type="checkbox" id={genre} name={genre}/>
+                      <label htmlFor="scales">{genre}</label>
+                    </div>
+                  );
+                })}
             </div>
             <div>
                 <button type="submit" onClick={handleSubmit}>Valider</button>

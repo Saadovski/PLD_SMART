@@ -5,6 +5,7 @@ const uniqueValidator = require('mongoose-unique-validator');
 const userSchema = mongoose.Schema({
     username: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    nbSession: { type: Number, required: false },
     preference: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Preference"

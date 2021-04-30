@@ -25,7 +25,7 @@ mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/DB_WALOU?retr
 
 app.use(express.json());
 
-app.use('/api', userRoute);
+app.use('/api/user', userRoute);
 app.use('/api/film', filmRoute);
 
 module.exports = app;

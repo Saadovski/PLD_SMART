@@ -3,8 +3,8 @@ import "../styles/home.css";
 
 function Home() {
   return (
-    <div className="home-container box-centre">
-      <div className="box-en-haut"><h1>Walou</h1>Slogan ...</div>
+    <div className="home-container">
+            <div className="box-en-haut"><h1>Walou</h1>Slogan ...</div>
 
 
       <div className="presentation-container">

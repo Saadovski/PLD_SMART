@@ -115,18 +115,17 @@ function Simple () {
   }
   return (
     
-    <div class="box-centre swipe-color">
+    <div class="box-ecran swipe-color">
     <div class="box-en-haut">
-      <h1 class="texte-blanc">Commencez à swiper vos films!</h1>
       </div>
       <div className='cardContainer'>
         <div>
+        <div className=' background-vide'><h3>{character[characterIndex].title} ({character[characterIndex].runtime})</h3></div>
 
          <TinderCard className='swipe' key={character[characterIndex].title} onSwipe={(e, dir) => {
            setCharacterIndex(characterIndex+1);
            swiped(dir, character[characterIndex].title)}} onCardLeftScreen={() => outOfFrame(character[characterIndex].title)}>
           
-          <div className=' background-vide'><h3>{character[characterIndex].title} ({character[characterIndex].runtime})</h3></div>
 
             <div style={{ backgroundImage: 'url(' + character[characterIndex].img + ')' }} className='card'>
             </div>
