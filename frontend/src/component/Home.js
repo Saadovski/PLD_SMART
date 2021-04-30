@@ -3,9 +3,9 @@ import "../styles/home.css";
 
 function Home() {
   return (
-    <div className="home-container">
-      <h1>Walou</h1>
-      <div>Slogan ...</div>
+    <div className="home-container box-centre">
+            <div className="box-en-haut"><h1>Walou</h1>Slogan ...</div>
+
 
       <div className="presentation-container">
         <h2>Comment ça fonctionne ?</h2>
@@ -14,9 +14,9 @@ function Home() {
         <div>Connecte toi et swipe pour trouver LE film qui animera ta soirée film entre potes</div>
       </div>
 
-      <div className="join-container">
+      <div className="join-container bouton-vert-hover box-en-bas">
         <h2>Rejoins tes amis !</h2>
-        <Button onClick={() => (window.location.href = "/creersession")}>Lancer une session</Button>
+        <button className="bouton-vert-rempli" onClick={() => (window.location.href = "/creersession")}>Lancer une session</button>
       </div>
       {/* <button
         className="bouton-gris-rempli texte-blanc"

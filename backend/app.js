@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 
 const userRoute = require('./routes/user');
+const filmRoute = require('./routes/film');
 
 mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/DB_WALOU?retryWrites=true&w=majority',
     {
@@ -24,6 +25,7 @@ mongoose.connect('mongodb://pldsmart:pldsmart@146.59.236.173:27017/DB_WALOU?retr
 
 app.use(express.json());
 
-app.use('/api', userRoute);
+app.use('/api/user', userRoute);
+app.use('/api/film', filmRoute);
 
 module.exports = app;

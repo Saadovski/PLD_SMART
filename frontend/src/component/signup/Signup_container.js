@@ -10,7 +10,7 @@ function Signup_container() {
 
     return (
         <div className="signup-container">
-            {state === 1 && <Signup_id setState={setState} username={username} setUsername={setUsername} setPassword={setPassword} />}
+            {state === 1 && <Signup_id setState={setState} username={username} setUsername={setUsername} password={password} setPassword={setPassword} />}
             {state === 2 && <Signup_profile setState={setState} username={username} password={password} />}
         </div>
     )

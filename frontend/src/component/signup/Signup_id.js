@@ -7,12 +7,37 @@ import "../../styles/box.css";
 function Signup_id(props) {
   const [passwordConf, setPasswordConf] = useState("");
 
+  const handleOnChangeUser = (e) => {
+		e.preventDefault();
+    props.setUsername(e.target.value);
+
+    fetch('http://localhost:1024/user/check_username', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: props.username,
+      }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        e.target.style.border = "";
+      }
+      else {
+        e.target.style.border = "1px solid red";
+      }
+    });
+	};
+
   const handleSubmit = (e) => {
     if(props.password !== passwordConf) {
-      console.log("pas meme mdp");
+      //TODO Changer la target
+      e.target.style.border = "1px solid red";
     }
     else {
-      console.log("signin up");
+      e.target.style.border = "";
       props.setState(2);
       e.preventDefault();
       fetch('check_username', {
@@ -27,11 +52,11 @@ function Signup_id(props) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          console.log("Success");
+          e.target.style.border = "";
           props.setState(2);
         }
         else {
-          console.log("Failed");
+          e.target.style.border = "1px solid red";
         }
       });
     }
@@ -42,7 +67,7 @@ function Signup_id(props) {
       <Form class="texte-centre">
         <Form.Group controlId="UsernameForm">
           <Form.Label>Nom d'utilisateur</Form.Label>
-          <Form.Control class="box-sans-contour texte-vert texte-centre"  type="username" placeholder="Nom d'utilisateur..." onChange={(event) => {props.setUsername(event.target.value)} }/>
+          <Form.Control class="box-sans-contour texte-vert texte-centre"  type="username" placeholder="Nom d'utilisateur..." onChange={handleOnChangeUser}/>
         </Form.Group>
         <Form.Group controlId="PasswordForm">
           <Form.Label>Mot de passe</Form.Label>
@@ -59,7 +84,9 @@ function Signup_id(props) {
         </div>
       </Form>
       <div class="bouton-gris-hover box-en-bas">
-        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/"}}>Retour</button>
+        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>
+          Retour
+        </button>
       </div>
     </div>
   );
