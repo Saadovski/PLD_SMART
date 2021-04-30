@@ -2,7 +2,7 @@ import React, { useState, useMemo } from 'react'
 // import TinderCard from '../react-tinder-card/index'
 import TinderCard from '../react-tinder-card/index'
 import "../../../styles/Swipe.css";
-import "../../../styles/Box.css";
+import "../../../styles/box.css";
 
 const db = [
   {

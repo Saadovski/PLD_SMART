@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Form, Button } from "react-bootstrap";
-import "../styles/Boutons.css";
-import "../styles/Textes.css";
-import "../styles/Box.css";
+import "../styles/boutons.css";
+import "../styles/textes.css";
+import "../styles/box.css";
 
 function UserInfos() {
   const [isModifying, setIsModifying] = useState(false);
