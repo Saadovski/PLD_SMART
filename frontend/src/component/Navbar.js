@@ -39,7 +39,7 @@ function Navbar() {
     <div>
       <div className="navbar-container">
         <button href="" className="icon" onClick={open}>
-          <i class="fa fa-bars"></i>
+          <i className="fa fa-bars"></i>
         </button>
         <Link to="/" className="active" id="logo">
           Logo
@@ -47,7 +47,7 @@ function Navbar() {
       </div>
       <div id="myLinks">
         <Button className="icon" onClick={closeNavBar}>
-          <i class="fas fa-times"></i>
+          <i className="fas fa-times"></i>
         </Button>
         <Link to="/">Home</Link>
         <Link to="/connexion">Connexion</Link>

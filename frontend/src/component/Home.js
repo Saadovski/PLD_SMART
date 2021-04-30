@@ -1,22 +1,36 @@
 import "../styles/home.css";
+import PeopleWatchingFilm from "../images/home-cinema-amico.svg";
+import Popcorn from "../images/popcorn.svg";
+import Glasses from "../images/glasses.svg";
 
 function Home() {
   return (
     <div className="home-container">
-            <div className="box-en-haut"><h1>Walou</h1>Slogan ...</div>
+      <div className="header">
+        <div>
+          <div className="text-header">
+            <h1>Walou</h1>
+            <div>Slogan ...</div>
+          </div>
+          <img src={PeopleWatchingFilm} alt="film-amico" id="PeopleWatchingFilm"></img>
+          <img src={Popcorn} alt="popcorn" id="Popcorn"></img>
+          <img src={Glasses} alt="glasses" id="Glasses"></img>
+        </div>
+      </div>
 
-
-      <div className="presentation-container">
+      <section className="presentation-container">
         <h2>Comment ça fonctionne ?</h2>
         <div>Un problème pour choisir un film avec tes potes ? N'en dis pas plus Walou est là pour toi</div>
         <br />
         <div>Connecte toi et swipe pour trouver LE film qui animera ta soirée entre potes</div>
-      </div>
+      </section>
 
-      <div className="join-container bouton-vert-hover box-en-bas">
+      <section className="join-container bouton-vert-hover box-en-bas">
         <h2>Rejoins tes amis !</h2>
-        <button className="bouton-vert-rempli" onClick={() => (window.location.href = "/creersession")}>Lancer une session</button>
-      </div>
+        <button className="bouton-vert-rempli" onClick={() => (window.location.href = "/creersession")}>
+          Lancer une session
+        </button>
+      </section>
       {/* <button
         className="bouton-gris-rempli texte-blanc"
         onClick={(event) => {
