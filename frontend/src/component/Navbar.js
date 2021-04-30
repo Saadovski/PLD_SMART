@@ -8,18 +8,21 @@ function Navbar() {
     var bg = document.querySelector(".blackBackground");
     console.log("open", x);
     if (x.style.left !== 0) {
-      console.log("diff de -600px")
+      console.log("diff de -600px");
       x.style.left = 0;
       bg.style.display = "block";
     } else {
       x.style.left = "-80vw";
       bg.style.display = "none";
     }
-    
 
     const links = document.querySelectorAll("#myLinks > a");
     links.forEach((link) => {
-      link.addEventListener("click", () => (x.style.left = "-80vw"));
+      link.addEventListener("click", () => {
+        x.style.left = "-80vw";
+        var bg = document.querySelector(".blackBackground");
+        bg.style.display = "none";
+      });
     });
   };
 
