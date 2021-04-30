@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const parser = require('mongodb-query-parser')
 const Film = require('../models/film');
 
 
@@ -34,19 +34,45 @@ exports.filmGender = (req, res, next) => {
     let requete = "{$or:[";
 
     for(let genre of listeGenre) {
-        requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"}
+        requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"
+    }
 
-    requete = requete + "]}";
+    requete = requete.substring(0, requete.length-1) + "]}";
+    console.log(requete)
+    Film.find(parser(requete))
+    .then(listeFilms => {
+        console.log("liste récupérée")
+        if(listeFilms.length > 250){
 
-    // Film.find(requete)
-    // .then(listeFilms => {
-    //     console.log(listeFilms);
-    // })        
-    // utiliser json.parse ? 
-    console.log(requete);
+            listeFilms = listeFilms.sort(() => Math.random() - 0.5);
+            listeFilms = listeFilms.slice(0, 249);
+            console.log("liste raccourcie")
+            console.log(listeFilms.length)
+        } 
+        // else{
+        //     while(listeFilms.length < 250){
+        //         console.log("1");
+        //         Film.aggregate.prototype.sample(1)
+        //         .then( film => {
+        //             console.log("ta mere");
+        //             if(listeFilms.indexOf(film) === -1) listeFilms.push(film); 
+        //         })
+        //         .catch(error => res.status(400).json({ error }));
 
-    return res.status(200).json({ 
-        status: 'username available',
-        success: "true" });
+               
+        //     }
+        //     console.log("liste allongée")
+        //     console.log(listeFilms.length)
+        // }
+        
+        return res.status(200).json({ 
+            success: "true",
+            listFilms: listeFilms
+        });
+
+    })        
+    .catch(error =>  res.status(400).json({ error }))
+
+
 
 };
