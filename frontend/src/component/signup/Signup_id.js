@@ -8,38 +8,14 @@ function Signup_id(props) {
   const [passwordConf, setPasswordConf] = useState("");
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:1024/api/';
 
-  const handleOnChangeUser = (e) => {
-		e.preventDefault();
-    props.setUsername(e.target.value);
-
-    fetch(REACT_APP_API_URL+'user/check_username', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: props.username,
-      }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        e.target.style.border = "";
-      }
-      else {
-        e.target.style.border = "1px solid red";
-      }
-    });
-	};
-
   const handleSubmit = (e) => {
+    e.preventDefault();
     if(props.password !== passwordConf) {
       //TODO Changer la target
       e.target.style.border = "1px solid red";
     }
     else {
       e.target.style.border = "";
-      e.preventDefault();
       fetch(REACT_APP_API_URL+'user/check_username', {
         method: 'POST',
         headers: {
@@ -51,7 +27,8 @@ function Signup_id(props) {
       })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
+        console.log(data.success);
+        if (data.success === "true") {
           e.target.style.border = "";
           props.setState(2);
         }
