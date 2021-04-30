@@ -16,7 +16,7 @@ exports.createUser = (req, res, next) => {
       });
       preference_.save()
       .then()
-      .catch(error => res.status(400).json({ error }));
+      .catch(error =>  res.status(400).json({ error }));
 
       const user = new User({
       username: req.body.username,
@@ -36,7 +36,7 @@ exports.createUser = (req, res, next) => {
           { expiresIn: '24h' }
         )
       }))
-      .catch();
+      .catch(error =>  res.status(400).json({ error }));
 
     })
 

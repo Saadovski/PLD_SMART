@@ -8,7 +8,8 @@ const userSchema = mongoose.Schema({
     nbSession: { type: Number, required: false },
     preference: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Preference"
+        ref: "Preference",
+        required: true
       }
 });
 

@@ -24,12 +24,27 @@ exports.createFilm = (req, res, next) => {
 exports.filmGender = (req, res, next) => {
 
 
-    const listFilm = [];
+    let listFilm = [];
     const longueurListGenre = req.body.listeGenre.length;
-    console.log(longueurListGenre)
-    //const listeGenre = req.body.listeGenre[1]
-    console.log(listeGenre)
+    console.log(longueurListGenre);
+    const listeGenre = req.body.listeGenre
+    console.log(listeGenre);
     
+
+    let requete = "{$or:[";
+
+    for(let genre of listeGenre) {
+        requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"}
+
+    requete = requete + "]}";
+
+    // Film.find(requete)
+    // .then(listeFilms => {
+    //     console.log(listeFilms);
+    // })        
+    // utiliser json.parse ? 
+    console.log(requete);
+
     return res.status(200).json({ 
         status: 'username available',
         success: "true" });
