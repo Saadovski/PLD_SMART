@@ -11,7 +11,7 @@ function Signup_id(props) {
 		e.preventDefault();
     props.setUsername(e.target.value);
 
-    fetch('check_username', {
+    fetch('http://localhost:1024/user/check_username', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -32,8 +32,6 @@ function Signup_id(props) {
 	};
 
   const handleSubmit = (e) => {
-    console.log(props.password);
-    console.log(passwordConf);
     if(props.password !== passwordConf) {
       //TODO Changer la target
       e.target.style.border = "1px solid red";
@@ -86,7 +84,9 @@ function Signup_id(props) {
         </div>
       </Form>
       <div class="bouton-gris-hover box-en-bas">
-        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>Retour</button>
+        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>
+          Retour
+        </button>
       </div>
     </div>
   );
