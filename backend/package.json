@@ -16,6 +16,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb-query-parser": "^2.4.2",
     "mongoose": "^5.12.6",
+    "mongoose-simple-random": "^0.4.1",
     "mongoose-unique-validator": "^2.0.3"
   }
 }
