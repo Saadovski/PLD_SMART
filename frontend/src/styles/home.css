@@ -21,7 +21,7 @@ h1 {
   width: 300px;
   position: absolute;
   top: 90px;
-  left: 30%;
+  left: 20%;
   animation-name: floating3;
   animation-duration: 30s;
   animation-iteration-count: infinite;
@@ -52,6 +52,33 @@ h1 {
   animation-timing-function: linear;
   animation-direction: normal;
   z-index: 0;
+}
+
+.header #Arrow {
+  transform: rotate(90deg);
+  width: 30px;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - 15px);
+  /* animation-name: arrow;
+  animation-duration: 5s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ;
+  animation-direction: normal; */
+}
+
+@keyframes arrow {
+  0% {
+    opacity: 100%;
+  }
+
+  20% {
+    opacity: 0%;
+  }
+
+  40% {
+    opacity: 100%;
+  }
 }
 
 @keyframes floating1 {

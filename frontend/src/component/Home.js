@@ -2,6 +2,7 @@ import "../styles/home.css";
 import PeopleWatchingFilm from "../images/home-cinema-amico.svg";
 import Popcorn from "../images/popcorn.svg";
 import Glasses from "../images/glasses.svg";
+import Arrow from "../images/next.svg";
 
 function Home() {
   return (
@@ -15,6 +16,7 @@ function Home() {
           <img src={PeopleWatchingFilm} alt="film-amico" id="PeopleWatchingFilm"></img>
           <img src={Popcorn} alt="popcorn" id="Popcorn"></img>
           <img src={Glasses} alt="glasses" id="Glasses"></img>
+          <img src={Arrow} alt="arrow" id="Arrow"></img>
         </div>
       </div>
 
