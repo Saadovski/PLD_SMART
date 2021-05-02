@@ -1,8 +1,12 @@
+import { useContext } from "react";
 import { Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../context/authContext";
 import "../styles/navbar.css";
 
 function Navbar() {
+  const authContext = useContext(AuthContext);
+
   const open = () => {
     var x = document.getElementById("myLinks");
     var bg = document.querySelector(".blackBackground");
@@ -39,7 +43,7 @@ function Navbar() {
     <div>
       <div className="navbar-container">
         <button href="" className="icon" onClick={open}>
-          <i class="fa fa-bars"></i>
+          <i className="fa fa-bars"></i>
         </button>
         <Link to="/" className="active" id="logo">
           Logo
@@ -47,13 +51,24 @@ function Navbar() {
       </div>
       <div id="myLinks">
         <Button className="icon" onClick={closeNavBar}>
-          <i class="fas fa-times"></i>
+          <i className="fas fa-times"></i>
         </Button>
-        <Link to="/">Home</Link>
-        <Link to="/connexion">Connexion</Link>
-        <Link to="/inscription">Inscription</Link>
-        <Link to="/monespace">Mon Espace</Link>
+        <Link to="/">Accueil</Link>
+        {!authContext.isAuth && <Link to="/connexion">Connexion</Link>}
+        {!authContext.isAuth && <Link to="/inscription">Inscription</Link>}
+        {authContext.isAuth && <Link to="/monespace">Mon Espace</Link>}
         <Link to="/creersession">Rejoindre ou créer une session</Link>
+        {authContext.isAuth && (
+          <Button
+            variant="danger"
+            onClick={() => {
+              authContext.logout();
+              // closeNavBar();
+            }}
+          >
+            Deconnexion
+          </Button>
+        )}
       </div>
       <div className="blackBackground"></div>
     </div>
