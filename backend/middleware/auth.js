@@ -6,6 +6,7 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, 'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE');
         const userId = decodedToken.userId;
         if (req.body.userId && req.body.userId !== userId) {
+            console.log("c pas bon")
             throw 'User ID not right';
         } else {
             next();

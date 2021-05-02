@@ -9,5 +9,5 @@ router.post('/inscription', userCtrl.createUser);
 router.post('/connexion', userCtrl.connectUser);
 router.post('/check_username', userCtrl.verifUsername);
 router.post('/check_infouser', auth, userCtrl.checkInfoUser);
-
+router.post('/unsubscribe', auth,  userCtrl.unsubscribe);
 module.exports = router;

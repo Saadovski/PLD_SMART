@@ -11,12 +11,12 @@ exports.createUser = (req, res, next) => {
 
       //il faut transformer "profil" en vecteur
       const preference_ = new Preference({
-        genre: req.body.profil,
+        genre: JSON.stringify(req.body.profil),
         nbFilms: 0
       });
       preference_.save()
       .then()
-      .catch(error => res.status(400).json({ error }));
+      .catch(error =>  res.status(400).json({ error }));
 
       const user = new User({
       username: req.body.username,
@@ -36,7 +36,7 @@ exports.createUser = (req, res, next) => {
           { expiresIn: '24h' }
         )
       }))
-      .catch();
+      .catch(error =>  res.status(400).json({ error }));
 
     })
 
@@ -93,6 +93,21 @@ exports.verifUsername = (req, res, next) => {
   .catch(error => res.status(500).json({ error }));
 };
 
+exports.unsubscribe = (req, res, next) => {
+  
+  console.log(req.body.userId)
+  User.deleteOne({ _id: req.body.userId })
+  .then(() => res.status(200).json({ 
+    message: 'Objet supprimé !',
+    success: "true" 
+}))
+  .catch(error => res.status(400).json({ 
+    error ,
+    success: "false" 
+  }));
+  
+};
+
 exports.checkInfoUser = (req, res, next) => {
   
   User.findOne({ _id: req.body.userId }).populate('preference')
@@ -102,7 +117,7 @@ exports.checkInfoUser = (req, res, next) => {
     }
     return res.status(200).json({ 
       status: 'stats found',
-      success: "false",
+      success: "true",
       nb_sessions: user.nbSession,
       nb_films: user.preference.nbFilms
     });
