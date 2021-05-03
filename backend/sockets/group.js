@@ -1,12 +1,25 @@
 
 exports.Group = class Group {
     constructor(group_id, user) {
-        this.group_id = group_id;
+        this.group_id = group_id; 
         this.owner = user;
         this.users = [user];
         this.status = "waiting";
         this.list_films = [];
         this.mood =[];
+        this.resultatSwipe
+
+        // {
+        //     user1: 34,
+        //     user2: 35
+        // }
+
+        // {
+        //      filmid1: 2,
+        //      filmid2: 3,
+        //      filmid3: 10,
+        // }
+        
     }
   
     addUser(username){
@@ -20,8 +33,9 @@ exports.Group = class Group {
 
     }
   
+
     to_json(){
-      console.log("coucou")
+
       return {
         groupeId: this.group_id,
         user: this.users, 

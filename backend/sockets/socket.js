@@ -98,14 +98,92 @@ exports.init = (server) => {
       // ajouter l'utilisateur dans son groupe, l'inscrire dans les variables partagées et envoyer le nouveau groupe aux autres membres
 
       let groupe = mapGroupIdGroup[data.groupId];
-      mapUsernameGroupId[user.username] = data.groupId;
-      groupe.addUser(user.username);
-      socket.join(data.groupId);
+      if (groupe.status === "waiting"){
+        mapUsernameGroupId[user.username] = data.groupId;
+        groupe.addUser(user.username);
+        socket.join(data.groupId);
+  
+        // envoyer le contenu du groupe au nouvel utilisateur
+        socket.emit('group', groupe.to_json())
+        socket.broadcast.emit('group', groupe.to_json());
 
-      // envoyer le contenu du groupe au nouvel utilisateur
+      }
       
-      socket.broadcast.emit('group', groupe.to_json());
-      // socket.emit('group', groupeComposition[data.groupId])
+    });
+    socket.on("addMood", async (data) => {
+
+      // on vérifie que les champs nécéssaires sont renseignés
+      console.log(data)
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data && "mood" in data)){
+        console.log("ça va pas")
+      }
+           
+      //auth
+
+      let auth = await verifyUser(data.auth.id, data.auth.token)
+
+      if( auth.success === "false"){
+        console.auth("ça va pas 2")    
+      }
+
+      let user = auth.user[0];
+
+      console.log(user.username)
+
+      // On vérifie que l'utilisateur est bien le chef du groupe
+
+
+      
+      if( user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username){
+        let groupe =  mapGroupIdGroup[mapUsernameGroupId[user.username]]
+        
+        //on ajoute le mood
+        groupe.mood = data.mood
+      
+        // on renvoie le groupe à tout le monde
+   
+        socket.emit('group', groupe.to_json())
+        socket.broadcast.emit('group', groupe.to_json());
+      
+      }
+      else{
+        console.log("l'utilisateur n'est pas le chef du groupe")
+      }
+    });
+
+    socket.on("ready", async (data) => {
+
+      // on vérifie que les champs nécéssaires sont renseignés
+      console.log(data)
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data )){
+        console.log("ça va pas")
+      }
+            
+      //auth
+
+      let auth = await verifyUser(data.auth.id, data.auth.token)
+
+      if( auth.success === "false"){
+        console.auth("ça va pas 2")    
+      }
+
+      let user = auth.user[0];
+
+      console.log(user.username)
+
+      // On vérifie que l'utilisateur est bien le chef du groupe
+
+      if( user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username){
+        let groupe =  mapGroupIdGroup[mapUsernameGroupId[user.username]]
+      
+        // on renvoie les films à tout le monde
+   
+        // a faire 
+
+      }
+      else{
+        console.log("l'utilisateur n'est pas le chef du groupe")
+      }
     });
   });
 };
