@@ -120,11 +120,12 @@ function Advanced() {
   return (
     <div >
     <div class="box-ecran swipe-color">
-      <div class="box-en-haut">
-      </div>
+    <hr></hr>
+
       <div className='cardContainer'>
         <div>
         <div className=' background-vide'><h3>{Movies[MovieIndex].title}, {Movies[MovieIndex].year} ({Movies[MovieIndex].runtime})</h3></div>
+        <hr></hr>
 
         <TinderCard className='swipe' key={Movies[MovieIndex].title} onSwipe={(dir) => {
           setMovieIndex(MovieIndex + 1);
@@ -135,12 +136,15 @@ function Advanced() {
           <div style={{ backgroundImage: 'url(' + Movies[MovieIndex].img + ')' }} className='card'>
           </div>
         </TinderCard>
-        <div className='buttons box-horizontal'>
-          <div className="bouton-gris-hover">
-  <button className="bouton-gris-rempli" onClick={() => swipe('left')}>Swipe left!</button>
+        <hr></hr>
+
+        <div className='buttons bouton-swipe box-horizontal'>
+          <div className="bouton-swipe-non-hover">
+  <button className="bouton-swipe-non" onClick={() => swipe('left')}>non</button>
   </div>
-  <div className="bouton-vert-hover">
-  <button className="bouton-vert-rempli" onClick={() => swipe('right')}>Swipe right!</button>
+  <hr></hr>
+  <div className="bouton-swipe-oui-hover">
+  <button className="bouton-swipe-oui" onClick={() => swipe('right')}>oui</button>
   </div>
   
 </div>
@@ -149,10 +153,7 @@ function Advanced() {
         </div>
       </div>
       
-{ lastDirection ? <h2 key={lastDirection} className='infoText'>You swiped {lastDirection}</h2> : <h2 className='infoText'>Swipe a card or press a button to get started!</h2> }
-
     </div>
-    { lastDirection=="left" ? <div key={lastDirection} className="test box-horizontal-gauche"> testgauche </div> : <div key={lastDirection} className="test box-horizontal-droite"> testdroite </div> }
 
 </div>
   

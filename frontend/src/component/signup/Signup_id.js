@@ -42,6 +42,7 @@ function Signup_id(props) {
   return (
     <div class="box-centre">
       <form class="texte-centre">
+        <h3> Inscription </h3>
       <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
@@ -74,7 +75,6 @@ function Signup_id(props) {
           Valider
         </button>
         </div>
-        </form>
 
       <hr></hr>
 
@@ -83,6 +83,8 @@ function Signup_id(props) {
           Retour
         </button>
       </div>
+      </form>
+
     </div>
   );
 }

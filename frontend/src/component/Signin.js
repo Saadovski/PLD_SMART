@@ -61,10 +61,12 @@ function Signin(props) {
   return (
     <div class="box-centre">
       {props.location.state?.from && (
-        <div className="isRedirected">
+        <div className="texte-centre isRedirected">
           <h2>Pour accéder à cette page, veuillez vous connecter</h2>
         </div>
       )}
+              <h3> Connexion </h3>
+
       <form class="texte-centre">
         <label>
           <input
@@ -90,13 +92,14 @@ function Signin(props) {
             Connexion
           </button>
         </div>
-      </form>
       <hr></hr>
       <div class="bouton-gris-hover box-en-bas">
         <button className="bouton-gris-rempli" onClick={(event) => {window.location.href="/connection"}}>
           Retour
         </button>
       </div>
+      </form>
+
     </div>
   );
 }
