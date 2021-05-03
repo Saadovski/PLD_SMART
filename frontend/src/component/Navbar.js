@@ -50,9 +50,12 @@ function Navbar() {
         </Link>
       </div>
       <div id="myLinks">
+        <div className="box-horizontal">
         <Button className="icon" onClick={closeNavBar}>
           <i className="fas fa-times"></i>
         </Button>
+        <h3> {authContext.username} </h3>
+        </div>
         <Link to="/">Accueil</Link>
         {!authContext.isAuth && <Link to="/connexion">Connexion</Link>}
         {!authContext.isAuth && <Link to="/inscription">Inscription</Link>}

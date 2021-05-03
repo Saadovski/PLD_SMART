@@ -1,6 +1,6 @@
 function Signup_profile(props) {
     const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:1024/api/';
-    const genres = ["Action","Thriller","Science-Fiction"];
+    const genres = ["Action","Anime","Comedy","Documentary","Drama","Fantasy","French","Horror","Kids and family","Musical","Police","Awarded","Romance","Thriller","Science-Fiction"];
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -36,7 +36,8 @@ function Signup_profile(props) {
     }
 
     return (
-        <div className="signup_profile">
+      <div className="box-centre">
+        <div className="signup_profile texte-centre">
             <h1>Choisissez les genres qui vous attirent</h1>
             <div className="genres_Container">
                 {genres.map((genre, index) => {
@@ -48,9 +49,10 @@ function Signup_profile(props) {
                   );
                 })}
             </div>
-            <div>
-                <button type="submit" onClick={handleSubmit}>Valider</button>
+            <div className="bouton-vert-hover">
+                <button className="bouton-vert-rempli" type="submit" onClick={handleSubmit}>Valider</button>
             </div>
+        </div>
         </div>
 
     );

@@ -7,8 +7,8 @@ import { AuthContext } from "../context/authContext";
 function Signin(props) {
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("nom d'utilisateur");
+  const [password, setPassword] = useState("password");
 
   const authContext = useContext(AuthContext);
 
@@ -69,9 +69,8 @@ function Signin(props) {
             class="box-sans-contour texte-vert texte-centre"
             type="text"
             name="username"
-            value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="Entrez votre nom d'utilisateur ici"
+            placeholder="Nom d'utilisateur"
           />
         </label>
         <label>
@@ -79,18 +78,23 @@ function Signin(props) {
             class="box-sans-contour texte-vert texte-centre"
             type="password"
             name="password"
-            value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Entrez votre mot de passe ici"
+            placeholder="Mot de passe"
           />
         </label>
-        <div></div>
+        <hr></hr>
         <div class="bouton-vert-hover">
-          <button class="bouton-vert-rempli texte-blanc" onClick={handleSubmit}>
+          <button class="bouton-vert-rempli" onClick={handleSubmit}>
             Connexion
           </button>
         </div>
       </form>
+      <hr></hr>
+      <div class="bouton-gris-hover box-en-bas">
+        <button className="bouton-gris-rempli" onClick={(event) => {window.location.href="/connection"}}>
+          Retour
+        </button>
+      </div>
     </div>
   );
 }

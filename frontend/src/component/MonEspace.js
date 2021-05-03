@@ -12,7 +12,7 @@ function MonEspace() {
         <div>Username ici ...</div>
         <div className="nav">
           <div onClick={() => setState(1)}>
-            <i className="fas fa-user float-left"></i> Mes infos
+            <i className="fas fa-username float-left"></i> Mes infos
           </div>
           <div onClick={() => setState(2)}>
             <i className="fas fa-heart float-left"></i> Mes préférences
