@@ -2,17 +2,19 @@ require('@tensorflow/tfjs');
 const use = require('@tensorflow-models/universal-sentence-encoder');
 
 module.exports = {
-    text_to_vector: function(sentences){
-        use.load().then(model => {
+    text_to_vector: async (sentences) => {
+         return await use.load().then(async(model) => {
             // Embed an array of sentences.
-            const sentences = 'Hello';
-            model.embed(sentences).then(embeddings => {
+            return await model.embed(sentences).then(async(embeddings) => {
               // `embeddings` is a 2D tensor consisting of the 512-dimensional embeddings for each sentence.
               // So in this example `embeddings` has the shape [2, 512].
-              embeddings.print(false);
               const values = embeddings.dataSync();
               const arr = Array.from(values);
-              return arr;
+              var result = [];
+              for(var i = 0; i < sentences.length; ++i){
+                  result[i] = arr.slice(i*512, (i+1)*512);
+              }
+              return result;
             });
           });
     },
