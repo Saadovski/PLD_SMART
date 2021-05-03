@@ -8,3 +8,4 @@ class Group {
       this.list_films = [];
     }
   }
+

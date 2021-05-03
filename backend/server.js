@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 var fs = require('fs');
-
+const User = require('./models/user');
 var soc = require('./sockets/socket')
 
 
