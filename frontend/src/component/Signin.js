@@ -40,7 +40,16 @@ function Signin(props) {
           //authContext.login(newToken);
           // document.querySelector(".connection-info").innerHTML = "Connexion réussie !";
           authContext.login(data.token);
-          //window.location.href = "/";
+          window.location.href = "/";        
+
+          /*if (props.location.state?.from.pathname)
+          {
+          window.location.href = props.location.state?.from.pathname;
+          }
+          else
+          {
+          window.location.href = "/";        
+          }*/
         } else {
           document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
         }

@@ -33,3 +33,27 @@
     border: 0px solid;
 
 }
+
+.box-horizontal{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.box-horizontal-gauche{
+    display: flex;
+    flex-direction: row;
+    left : 0vh;
+    align-items: center;
+}
+
+.box-horizontal-droite{
+    display: flex;
+    flex-direction: row;
+    right : 0vh;
+    align-items: center;
+}
+
+.test{
+    position: absolute;
+}
