@@ -21,6 +21,7 @@ exports.createUser = (req, res, next) => {
         const preference_ = new Preference({
 
           genre: arrayGenre,
+          synopsis : arrayGenre,
           nbFilms: 0
         });
         preference_.save()
