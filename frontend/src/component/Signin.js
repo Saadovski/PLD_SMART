@@ -3,6 +3,7 @@ import "../styles/boutons.css";
 import "../styles/textes.css";
 import "../styles/box.css";
 import { AuthContext } from "../context/authContext";
+import { useHistory } from "react-router";
 
 function Signin(props) {
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
@@ -11,6 +12,7 @@ function Signin(props) {
   const [password, setPassword] = useState("");
 
   const authContext = useContext(AuthContext);
+  const history = useHistory();
 
   useEffect(() => {
     console.log(props);
@@ -39,8 +41,17 @@ function Signin(props) {
           //localStorage.setItem('projetpmToken', JSON.stringify({ token: newToken.token, expiration: newToken.expiration })); // 2h
           //authContext.login(newToken);
           // document.querySelector(".connection-info").innerHTML = "Connexion réussie !";
-          authContext.login(data.token, data.userId ,username);
-          //window.location.href = "/";
+          authContext.login(data.token, data.userId, username);
+          history.push("/monespace");
+
+          /*if (props.location.state?.from.pathname)
+          {
+          window.location.href = props.location.state?.from.pathname;
+          }
+          else
+          {
+          window.location.href = "/";        
+          }*/
         } else {
           document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
         }
