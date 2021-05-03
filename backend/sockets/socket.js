@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const group = require('./group');
+const User = require('../models/user');
 
 
 
@@ -100,7 +102,38 @@ exports.socketConnection = (socket) => {
   });
 };
 
+const verifyUser = (id, token) => {
+  
+      const tokenBis = token.split(' ')[1];
+      const decodedToken = jwt.verify(tokenBis, 'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE');
+      const userId = decodedToken.userId;
+      let res;
 
+      if (id && id !== userId) {
+        res.json({
+          success: "false",
+          error: 'Id not good !'
+        })
+        return res
+      } else {
+        User.find({ _id: id }).then(user => {
+          
+          if(!user) {
+            res.json({
+              success: "false",
+              error: 'User not found !'
+            })
+          } else {
+            res.json({
+              success: "true",
+              username: user.username,
+              id: userId
+            })
+          }
+        });
+      }
+
+}
 
 
 
