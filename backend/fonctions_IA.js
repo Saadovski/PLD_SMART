@@ -43,30 +43,44 @@ module.exports = {
         }
         score = score / len;
         score += this.cosine_similarity(user.preferences.synopsis, movie.synopsisVector);
-        score += 1/(Math.abs(user.preferences.annee - movie.annee));
-        return result;
+        if(user.preferences.annee - movie.annee > 1){
+            score += (1/(Math.abs(user.preferences.annee - movie.annee)))/5;
+        }else{//ce if else est pour eviter d'avoir des grandes valeurs
+            score += 1/5;
+        } //j'ai divisé l'influence de l'année par 5 pour qu'elle ait pas un poids trop fort par rapport au synopsis et les genres
+        return score;
     },
 
     maj_user_preferences: function(user, movie, like){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
         if(like){
             var len = movie.genreVectors.length;
             var nbfilms = user.preferences.nbFilms;
+            var annee = 0;
+            var synopsis = [];
 
-            user.preferences.synopsis = user.preferences.synopsis.map((val, idx) => {//maj synopsis vector
+            synopsis = user.preferences.synopsis.map((val, idx) => {//maj synopsis vector
                 (val*user.preferences.nbFilms + movie.synopsisVector[idx]) / Math.sqrt(nbfilms + 1)
             });
 
             var newGenre = user.preferences.genre;
             newGenre = newGenre.map((val) => val * nbfilms * 5);
             for(var i = 0; i < len; ++i){
-                newGenre = newGenre.map((val, idx) => val + film.genreVectors[i][idx]);
+                newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
             }
             newGenre = newGenre.map((val) => val / Math.sqrt(nbfilms * 5 + len));
             user.preferences.genre = newGenre;
 
-            user.preferences.annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
+            annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
 
-            user.preferences.nbFilms++;
+            nbfilms = user.preferences.nbFilms + 1;
+
+            preferences = {
+                nbFilms : nbfilms,
+                genre: newGenre,
+                synopsis : synopsis,
+                annee : annee
+            }
+            return preferences;
         }
     }
 };

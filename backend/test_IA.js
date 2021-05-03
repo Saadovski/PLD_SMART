@@ -1,19 +1,37 @@
 var IA = require("./fonctions_IA.js");
-require('@tensorflow/tfjs');
-require('@tensorflow-models/universal-sentence-encoder');
 
-sentence1 = "I'm hungry";
-sentence2 = "I want food";
-sentence3 = "I want a new car";
+var genreV = new Array(512);
+var synopsisV = new Array(512);
+var v1 = new Array(512);
+var v2 = new Array(512);
+var v3 = new Array(512);
+for(var i = 0; i< 512; ++i){
+    genreV[i] = Math.random()*2-1;
+    synopsisV[i] = Math.random()*2-1;
+    v1[i] = Math.random()*2-1;
+    v2[i] = Math.random()*2-1;
+    v3[i] = Math.random()*2-1;
+}
 
-embedding1 = IA.text_to_vector(sentence1);
-embedding2 = IA.text_to_vector(sentence2);
-embedding3 = IA.text_to_vector(sentence3);
+var user = {
+    preferences:{
+        nbFilms : 5,
+        genre: genreV,
+        synopsis : synopsisV,
+        annee : 2010.54
+    }
+}
 
-console.log(embedding1);
-console.log(embedding2);
-console.log(embedding3);
 
-console.log(sentence1 + " and " + sentence2 + ": " + IA.cosine_similarity(embedding1, embedding2));
-console.log(sentence1 + " and " + sentence3 + ": " + IA.cosine_similarity(embedding1, embedding3));
-console.log(sentence3 + " and " + sentence2 + ": " + IA.cosine_similarity(embedding3, embedding2));
+var movie = {
+    annee : 2005,
+    genreVectors : [genreV, v2],
+    synopsisVector : synopsisV
+}
+
+for(var i = 0; i < 10; ++i){
+    console.log(IA.user_movie_compatibility(user, movie));
+    user.preferences = IA.maj_user_preferences(user, movie, true);
+    console.log(user.preferences.nbFilms);
+    console.log(user.preferences.annee+"\n\n");
+}
