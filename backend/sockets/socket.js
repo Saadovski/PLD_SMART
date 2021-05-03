@@ -4,7 +4,10 @@ const io = require('socket.io')
 const parser = require('mongodb-query-parser')
 const  connect  = require("../dbConnect");
 const User = require('../models/user')
+const Film = require('../models/film')
 const {Group} = require('./group')
+
+const fetch = require("node-fetch")
 
 const Preference = require('../models/preference');
 
@@ -114,7 +117,7 @@ exports.init = (server) => {
 
       // on vérifie que les champs nécéssaires sont renseignés
       console.log(data)
-      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data && "mood" in data)){
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "mood" in data)){
         console.log("ça va pas")
       }
            
@@ -156,7 +159,7 @@ exports.init = (server) => {
 
       // on vérifie que les champs nécéssaires sont renseignés
       console.log(data)
-      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data )){
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth  )){
         console.log("ça va pas")
       }
             
@@ -179,6 +182,27 @@ exports.init = (server) => {
       
         // on renvoie les films à tout le monde
    
+        //filmsAvantTri = await getFilmsByGender(groupe.mood)
+
+        await fetch("http://localhost:1024/api/film/get_film_by_gender", {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            listeGenre: groupe.mood,
+          }),
+        })
+        .then( async result => { 
+          await result.json()
+          .then( async data => {
+            console.log(data.body)
+          })
+        
+        })
+
+        //console.log(filmsAvantTri)
+
         // a faire 
 
       }
@@ -189,6 +213,70 @@ exports.init = (server) => {
   });
 };
 
+
+const getFilmsByGender = async (mood) =>{
+
+
+  const listeGenre = mood
+  let requete = ""
+  if(listeGenre.length === 0){
+          
+      
+      requete = "{}"
+  }
+  else{
+      requete = "{$or:[";
+
+      for(let genre of listeGenre) {
+          requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"
+      }
+  requete = requete.substring(0, requete.length-1) + "]}";
+  }
+
+
+      await Film.find(parser(requete))
+      .then( async listeFilms => {
+          if(listeFilms.length > 250){
+
+              listeFilms = listeFilms.sort(() => Math.random() - 0.5);
+              listeFilms = listeFilms.slice(0, 250);
+              console.log(listeFilms.length)
+              return listeFilms
+          } 
+          else if(listeFilms.length < 250){
+              tout_films = await Film.find()
+              .then(tout_films =>{
+                  nb_films = tout_films.length
+                  while(listeFilms.length < 250){
+  
+                      var random = Math.floor(Math.random() * nb_films)
+                      film = tout_films[random]
+                      if(listeFilms.indexOf(film) === -1) listeFilms.push(film); 
+                  }
+                  console.log(listeFilms.length)
+                  return listeFilms
+              })
+              .catch(error => res.status(400).json({ error }))
+
+             
+          }
+          else{
+              console.log(listeFilms.length)
+              return listeFilms  
+          }
+          
+              
+              
+          
+
+      
+      
+      
+      
+      })
+
+
+}
 
 const verifyUser = async (id, token) => {
 
