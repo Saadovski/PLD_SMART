@@ -1,6 +1,8 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const fctIa = require("../fonctions_IA.js")
+
 const User = require('../models/user');
 const Preference = require('../models/preference');
 
@@ -10,33 +12,46 @@ exports.createUser = (req, res, next) => {
     .then(hash => {
 
       //il faut transformer "profil" en vecteur
-      const preference_ = new Preference({
-        genre: JSON.stringify(req.body.profil),
-        nbFilms: 0
-      });
-      preference_.save()
-      .then()
-      .catch(error =>  res.status(400).json({ error }));
+      let arrayGenre;
+      (async () => {
+        arrayGenre = (await fctIa.text_to_vector(req.body.profil))
+      
+        console.log(arrayGenre)
 
-      const user = new User({
-      username: req.body.username,
-      password: hash,
-      nbSession: 0,
-      preference: preference_
-      });
+        const preference_ = new Preference({
 
-      user.save()
-      .then(() =>  res.status(200).json({
-        success: "true" ,
-        reponse: "User enregistré et connecté",
-        userId: user._id,
-        token: jwt.sign(
-          { userId: user._id },
-          'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
-          { expiresIn: '24h' }
-        )
-      }))
-      .catch(error =>  res.status(400).json({ error }));
+          genre: arrayGenre,
+          nbFilms: 0
+        });
+        preference_.save()
+        .then( () =>{
+  
+          const user = new User({
+            username: req.body.username,
+            password: hash,
+            nbSession: 0,
+            preference: preference_
+            });
+      
+            user.save()
+            .then(() =>  res.status(200).json({
+              success: "true" ,
+              reponse: "User enregistré et connecté",
+              userId: user._id,
+              token: jwt.sign(
+                { userId: user._id },
+                'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
+                { expiresIn: '24h' }
+              )
+            }))
+            .catch(error =>  res.status(400).json({ error }));
+      
+          })
+        .catch(error =>  res.status(400).json({ error }));
+  
+
+      })()
+
 
     })
 
