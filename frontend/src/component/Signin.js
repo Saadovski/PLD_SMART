@@ -39,7 +39,7 @@ function Signin(props) {
           //localStorage.setItem('projetpmToken', JSON.stringify({ token: newToken.token, expiration: newToken.expiration })); // 2h
           //authContext.login(newToken);
           // document.querySelector(".connection-info").innerHTML = "Connexion réussie !";
-          authContext.login(data.token);
+          authContext.login(data.token, data.userId ,username);
           //window.location.href = "/";
         } else {
           document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
