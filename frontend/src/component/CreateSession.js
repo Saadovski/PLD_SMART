@@ -17,15 +17,17 @@ function CreateSession() {
     setSocket(socket);
     socket.on("group", (group) => {
       setSocket(io(`/${group.id}`));
+      console.log(socket);
       history.push(`/session/${group.id}`);
     });
   }, []);
 
   const generateSessionId = () => {
     socket.emit("createGroup", { userId: authContext.userId, token: authContext.token });
+    console.log(socket);
 
-    const randomID = Math.floor(Math.random() * 100);
-    history.push(`/session/${randomID}`);
+    // const randomID = Math.floor(Math.random() * 100);
+    // history.push(`/session/${randomID}`);
   };
 
   const getSessionId = () => {
