@@ -15,7 +15,7 @@ for(var i = 0; i< 512; ++i){
 
 var user = {
     preferences:{
-        nbFilms : 5,
+        nbFilms : 10,
         genre: genreV,
         synopsis : synopsisV,
         annee : 2010.54
@@ -25,13 +25,13 @@ var user = {
 
 var movie = {
     annee : 2005,
-    genreVectors : [genreV, v2],
-    synopsisVector : synopsisV
+    genreVectors : [v1, v2],
+    synopsisVector : v3
 }
 
 for(var i = 0; i < 10; ++i){
     console.log(IA.user_movie_compatibility(user, movie));
+    console.log(IA.cosine_similarity(user.preferences.synopsis, movie.synopsisVector))
     user.preferences = IA.maj_user_preferences(user, movie, true);
-    console.log(user.preferences.nbFilms);
     console.log(user.preferences.annee+"\n\n");
 }

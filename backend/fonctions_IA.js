@@ -58,16 +58,14 @@ module.exports = {
             var annee = 0;
             var synopsis = [];
 
-            synopsis = user.preferences.synopsis.map((val, idx) => {//maj synopsis vector
-                (val*user.preferences.nbFilms + movie.synopsisVector[idx]) / Math.sqrt(nbfilms + 1)
-            });
+            synopsis = user.preferences.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
 
             var newGenre = user.preferences.genre;
             newGenre = newGenre.map((val) => val * nbfilms * 5);
             for(var i = 0; i < len; ++i){
                 newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
             }
-            newGenre = newGenre.map((val) => val / Math.sqrt(nbfilms * 5 + len));
+            newGenre = newGenre.map((val) => val / (nbfilms * 5));
             user.preferences.genre = newGenre;
 
             annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
