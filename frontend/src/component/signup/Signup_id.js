@@ -42,13 +42,14 @@ function Signup_id(props) {
   return (
     <div class="box-centre">
       <form class="texte-centre">
+        <h3> Inscription </h3>
       <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="text"
             name="username"
             onChange={(event) => {props.setUsername(event.target.value)}}
-            placeholder="Entrez votre nom d'utilisateur ici"
+            placeholder="Nom d'utilisateur"
           />
         </label>
         <label>
@@ -56,26 +57,34 @@ function Signup_id(props) {
             class="box-sans-contour texte-vert texte-centre"
             type="password"
             name="password"
-            onChange={(event) => {props.setPassword(event.target.value)} } placeholder="Entrez votre mot de passe ici" />
+            onChange={(event) => {props.setPassword(event.target.value)} }
+            placeholder="Mot de passe" />
         </label>
         <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="password"
             name="password"
-            onChange={(event) => {setPasswordConf(event.target.value)} } placeholder="Confirmez votre mot de passe ici" />
+            onChange={(event) => {setPasswordConf(event.target.value)} }
+            placeholder="Confirmez votre mot de passe ici" />
         </label>
+        <hr></hr>
+
         <div class="bouton-vert-hover">
-        <button className="bouton-vert-rempli texte-blanc" type="submit" onClick={handleSubmit}>
+        <button className="bouton-vert-rempli" type="submit" onClick={handleSubmit}>
           Valider
         </button>
         </div>
-      </form>
+
+      <hr></hr>
+
       <div class="bouton-gris-hover box-en-bas">
-        <button className="bouton-gris-rempli texte-blanc" onClick={(event) => {window.location.href="/connection"}}>
+        <button className="bouton-gris-rempli" onClick={(event) => {window.location.href="/connection"}}>
           Retour
         </button>
       </div>
+      </form>
+
     </div>
   );
 }

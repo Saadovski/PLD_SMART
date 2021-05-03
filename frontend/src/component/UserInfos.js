@@ -29,7 +29,7 @@ function UserInfos() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
+        userId: authContext.userId,
         password: password,
         token: authContext.token, 
       }),
@@ -95,12 +95,13 @@ function UserInfos() {
             class="box-sans-contour texte-vert texte-centre"
             type="password"
             name="username"
+            value={password}
             readOnly={!isModifying} 
             onChange={() => setHasChanged(true)}
             placeholder="Confirmez votre mot de passe ici"
           />
         </label>
-
+        <hr></hr>
           <div className="bouton-vert-hover">
           <button className="bouton-vert-rempli" onClick={handleModify}>
             Valider
@@ -116,10 +117,13 @@ function UserInfos() {
 
         </div>
       ) : (
+        <div>
+        <hr></hr>
         <div className="bouton-vert-hover">
         <button className="bouton-vert-rempli" onClick={handleModify}>
           Modifier
         </button>
+        </div>
         </div>
       )}
       </form>
