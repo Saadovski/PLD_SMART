@@ -6,6 +6,7 @@ const fctIa = require("../fonctions_IA.js")
 const User = require('../models/user');
 const Preference = require('../models/preference');
 
+
 exports.createUser = (req, res, next) => {
 
   bcrypt.hash(req.body.password, 10)
@@ -140,3 +141,16 @@ exports.checkInfoUser = (req, res, next) => {
     })
   .catch(error => res.status(500).json({ error }));
 };
+
+exports.modifMdp = (req, res, next) => {
+  let query = { $set: {password: req.body.password} };
+ 
+bcrypt.hash(req.body.password, 10)
+.then(hash => {
+  User.updateOne({ _id: req.body.userId }, {$set: {password: hash}},function(err, resp) {
+    if (err) return res.status(500).json({ success: "false", status: 'Error' });
+    console.log("1 document updated");
+    return res.status(200).json({ success: "true", status: 'Password modified' });
+  });
+})
+}

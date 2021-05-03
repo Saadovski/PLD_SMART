@@ -10,4 +10,5 @@ router.post('/connexion', userCtrl.connectUser);
 router.post('/check_username', userCtrl.verifUsername);
 router.post('/check_infouser', auth, userCtrl.checkInfoUser);
 router.post('/unsubscribe', auth,  userCtrl.unsubscribe);
+router.post('/modification', auth, userCtrl.modifMdp);
 module.exports = router;

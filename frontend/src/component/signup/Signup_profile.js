@@ -1,6 +1,12 @@
+import { AuthContext } from "../../context/authContext";
+import { useHistory } from "react-router";
+import React, { useContext } from "react";
+
 function Signup_profile(props) {
     const REACT_APP_API_URL = process.env.REACT_APP_API_URL || 'http://localhost:1024/api/';
     const genres = ["Action","Thriller","Science-Fiction"];
+    const authContext = useContext(AuthContext);
+    const history = useHistory();
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -20,14 +26,15 @@ function Signup_profile(props) {
             body: JSON.stringify({
               username: props.username,
               password: props.password,
-              profil: "Action",
+              profil: profile,
             }),
           })
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
               console.log("Success");
-              window.location.href = "/monespace";
+              authContext.login(data.token, data.userId, props.username);
+              history.push("/monespace");
             }
             else {
               console.log("Failed");
