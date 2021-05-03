@@ -101,7 +101,7 @@ function UserInfos() {
             placeholder="Confirmez votre mot de passe ici"
           />
         </label>
-
+        <hr></hr>
           <div className="bouton-vert-hover">
           <button className="bouton-vert-rempli" onClick={handleModify}>
             Valider
@@ -117,10 +117,13 @@ function UserInfos() {
 
         </div>
       ) : (
+        <div>
+        <hr></hr>
         <div className="bouton-vert-hover">
         <button className="bouton-vert-rempli" onClick={handleModify}>
           Modifier
         </button>
+        </div>
         </div>
       )}
       </form>
