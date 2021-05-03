@@ -194,10 +194,8 @@ exports.init = (server) => {
           }),
         })
         .then( async result => { 
-          await result.json()
-          .then( async data => {
-            console.log(data.body)
-          })
+          data = await result.json()
+          console.log(data)
         
         })
 
