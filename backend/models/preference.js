@@ -5,7 +5,7 @@ const preferenceSchema = mongoose.Schema({
     annee: { type: Number, required: false },
     nbFilms:  { type: Number, required: false },  
     synopsis:  { type: Array, required: false },
-
+ 
 });
   
 module.exports = mongoose.model('Preference', preferenceSchema);

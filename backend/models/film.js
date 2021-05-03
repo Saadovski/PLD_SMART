@@ -10,7 +10,7 @@ const filmSchema = mongoose.Schema({
     img: { type: String, required: false },
     year: { type: Number, required: false },
     poster: { type: String, required: false },
-    genre: { type: String, required: false },
+    genre: { type: Array, required: false },
     genreVectors: { type: Array, required: false },
     runtime: { type: String, required: false },
     coutry: { type: Number, required: false },

@@ -59,15 +59,17 @@ function Navbar() {
         {authContext.isAuth && <Link to="/monespace">Mon Espace</Link>}
         <Link to="/creersession">Rejoindre ou créer une session</Link>
         {authContext.isAuth && (
-          <Button
-            variant="danger"
+          <div className="bouton-gris-hover">
+          <button
+            className="bouton-gris-rempli"
             onClick={() => {
               authContext.logout();
               // closeNavBar();
             }}
           >
             Deconnexion
-          </Button>
+          </button>
+          </div>
         )}
       </div>
       <div className="blackBackground"></div>

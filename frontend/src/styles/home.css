@@ -14,7 +14,8 @@ h1 {
 }
 
 .header .text-header {
-  z-index: 10;
+  z-index: 1;
+  position: relative;
 }
 
 .header #PeopleWatchingFilm {
