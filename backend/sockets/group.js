@@ -7,7 +7,7 @@ exports.Group = class Group {
         this.status = "waiting";
         this.list_films = [];
         this.mood =[];
-        this.resultatSwipe
+
 
         // {
         //     user1: 34,

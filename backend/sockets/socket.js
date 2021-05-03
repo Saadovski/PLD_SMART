@@ -141,7 +141,8 @@ exports.init = (server) => {
         groupe.mood = data.mood
       
         // on renvoie le groupe à tout le monde
-   
+        
+        socket.join(data.groupId);
         socket.emit('group', groupe.to_json())
         socket.broadcast.emit('group', groupe.to_json());
       
