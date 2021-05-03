@@ -8,7 +8,7 @@ import { AuthContext } from "../context/authContext";
 function UserInfos() {
   const [isModifying, setIsModifying] = useState(false);
   const [hasChanged, setHasChanged] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState("password");
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
   const authContext = useContext(AuthContext);
