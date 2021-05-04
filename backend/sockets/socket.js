@@ -6,10 +6,12 @@ const connect = require("../dbConnect");
 const User = require("../models/user");
 const Film = require("../models/film");
 const { Group } = require("./group");
+const IA = require("../fonctions_IA.js");
 
 const fetch = require("node-fetch");
 
 const Preference = require("../models/preference");
+const user = require("../models/user");
 
 var mapGroupIdGroup = {}; // groupId : group
 var mapUsernameGroupId = {}; // username: groupeId
@@ -22,47 +24,42 @@ exports.init = (server) => {
 
     socket.on("openGroup", async (data) => {
       const User = require("../models/user");
-      console.log(data);
+
 
       // on vérifie que les champs nécéssaires sont renseignés
-      
+
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
         console.log("ça va pas");
       }
 
-      
+
       //auth
 
       verifyUser(data.auth.id, data.auth.token)
         .then((userFromDB) => {
-          console.log("user", userFromDB);
           let user = userFromDB[0];
 
-          console.log("Username", user.username);
 
+          // On vérifie que l'utilisateur n'est pas dans un autre groupe.
 
-        // On vérifie que l'utilisateur n'est pas dans un autre groupe.
-  
-        if( user.username in mapUsernameGroupId){
-          
-          let oldGroupId = mapUsernameGroupId[user.username]
-          mapGroupIdGroup[oldGroupId].removeUser(user.username)
-          let tempGroupe = mapGroupIdGroup[oldGroupId];
-          if (tempGroupe.owner === user.username) {
-            console.log("suprimation")
+          if (user.username in mapUsernameGroupId) {
+
+            let oldGroupId = mapUsernameGroupId[user.username]
+            mapGroupIdGroup[oldGroupId].removeUser(user.username)
+            let tempGroupe = mapGroupIdGroup[oldGroupId];
+            if (tempGroupe.owner === user.username) {
+              console.log("suprimation")
+            }
           }
-        }
           // créer un groupe et l'inscrire dans les variables partagées et on le place dans sa propre room
 
           var groupId = "_" + Math.random().toString(36).substr(2, 9);
 
           let newGroup = new Group(groupId, user);
-          console.log(groupId);
           mapGroupIdGroup[newGroup.group_id] = newGroup;
           mapUsernameGroupId[user.username] = newGroup.group_id;
 
           let groupJson = newGroup.to_json();
-          console.log(groupJson);
           socket.join(newGroup.group_id);
           socket.emit("group", groupJson);
           io.emit('message')
@@ -78,7 +75,6 @@ exports.init = (server) => {
     });
     socket.on("joinGroup", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
-      console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data)) {
         console.log("ça va pas");
       }
@@ -88,7 +84,6 @@ exports.init = (server) => {
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log(userFromDB);
             // On vérifie que l'utilisateur n'est pas dans un autre groupe.
 
             if (user.username in mapUsernameGroupId) {
@@ -135,7 +130,7 @@ exports.init = (server) => {
 
     socket.on("addMood", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
-      console.log(data);
+
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "mood" in data)) {
         console.log("ça va pas");
       }
@@ -144,41 +139,42 @@ exports.init = (server) => {
       let groupe = mapGroupIdGroup[data.groupId];
       if (groupe) {
         verifyUser(data.auth.id, data.auth.token)
-        .then((userFromDB) => {
-          let user = userFromDB[0];
-          console.log(userFromDB);
-          
-          // On vérifie que l'utilisateur est bien le chef du groupe
+          .then((userFromDB) => {
+            let user = userFromDB[0];
 
-          if (user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username) {
-            let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
-    
-            //on ajoute le mood
-            groupe.mood = data.mood;
-    
-            // on renvoie le groupe à tout le monde
-    
-            socket.join(data.groupId);
-            socket.emit("group", groupe.to_json());
-            socket.broadcast.emit("group", groupe.to_json());
-          } else {
-            console.log("l'utilisateur n'est pas le chef du groupe");
-          }
 
-        })
-        .catch((error) => {
-          console.log(error);
-          res = {
-            success: "false",
-            error: "User not found !",
-          };
-          return res;
-        })
+            // On vérifie que l'utilisateur est bien le chef du groupe
+
+            if (user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username) {
+              let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
+
+              //on ajoute le mood
+              groupe.mood = data.mood;
+
+              // on renvoie le groupe à tout le monde
+
+              socket.join(data.groupId);
+              socket.emit("group", groupe.to_json());
+              socket.broadcast.emit("group", groupe.to_json());
+              console.log(groupe.mood)
+            } else {
+              console.log("l'utilisateur n'est pas le chef du groupe");
+            }
+
+          })
+          .catch((error) => {
+            console.log(error);
+            res = {
+              success: "false",
+              error: "User not found !",
+            };
+            return res;
+          })
 
       } else {
         socket.emit("error", { message: "ID de session incorrect" });
       }
-      
+
 
     });
 
@@ -191,47 +187,56 @@ exports.init = (server) => {
 
       //auth
 
-            let groupe = mapGroupIdGroup[data.groupId];
-      if (groupe) {
-        verifyUser(data.auth.id, data.auth.token)
-        .then( async(userFromDB) => {
+      console.log("on va commencer la rq des films2")
+      verifyUser(data.auth.id, data.auth.token)
+        .then(async (userFromDB) => {
+          console.log("on va commencer la rq des films3")
+          let user = userFromDB[0];
+
+
+          // On vérifie que l'utilisateur est bien le chef du groupe
+
+          if (user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username) {
+            let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
+
+            // on renvoie les films à tout le monde
+
+            //filmsAvantTri = await getFilmsByGender(groupe.mood)
+
+            await fetch("http://localhost:1024/api/film/get_film_by_gender", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                listeGenre: groupe.mood,
+              }),
+            }).then(async (result) => {
+
+              console.log("c bon pour les films 2")
+              result.json()
+              .then( data => {
+
+                listeFilms = data.listFilms;
+                //console.log(listeFilms);
+                console.log(groupe.users)
+                const liste_films_finale = IA.top_best_movies(listeFilms, groupe.users)
+                groupe.list_films = liste_films_finale
+              
+                groupe.status = "running"
+
+                // envoyer le contenu du groupe au nouvel utilisateur
+                socket.emit("group", groupe.to_json());
+                socket.broadcast.emit("group", groupe.to_json());
+
+              })
+              .catch()
+              
+
+            });
 
 
 
-        // On vérifie que l'utilisateur est bien le chef du groupe
-
-        if (user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username) {
-          let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
-
-          // on renvoie les films à tout le monde
-
-          //filmsAvantTri = await getFilmsByGender(groupe.mood)
-
-          await fetch("http://localhost:1024/api/film/get_film_by_gender", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              listeGenre: groupe.mood,
-            }),
-          }).then(async (result) => {
-            data = await result.json();
-            console.log(data);
-
-
-            
-
-
-
-          });
-
-
-          groupe.status = "running"
-
-          // envoyer le contenu du groupe au nouvel utilisateur
-          socket.emit("group", groupe.to_json());
-          socket.broadcast.emit("group", groupe.to_json()); 
 
 
 
@@ -251,10 +256,8 @@ exports.init = (server) => {
 
 
 
-      } else {
-        socket.emit("error", { message: "ID de session incorrect" });
-      }
-    
+
+
 
 
     });
@@ -262,14 +265,14 @@ exports.init = (server) => {
     socket.on("swipe", async (data) => {
 
       console.log(data)
-      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data )){
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
         console.log("ça va pas")
       }
 
       let auth = await verifyUser(data.auth.id, data.auth.token);
 
-      if( auth.success === "false"){
-        console.auth("ça va pas 2")    
+      if (auth.success === "false") {
+        console.auth("ça va pas 2")
       } else {
         let user = auth.user[0];
         let groupId = mapUsernameGroupId[user.username];
@@ -278,19 +281,20 @@ exports.init = (server) => {
         let classement = groupe.genClassement();
 
         if (match === true) {
-          
+
         }
 
       }
 
-      
-      
 
-      
+
+
+
 
 
     });
-  })};
+  })
+};
 
 const verifyUser = async (id, token) => {
   const decodedToken = jwt.verify(token, "RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE");
@@ -305,6 +309,6 @@ const verifyUser = async (id, token) => {
     };
     return res;
   } else {
-    return User.find({ _id: id });
+    return User.find({ _id: id }).populate('preference');
   }
 };

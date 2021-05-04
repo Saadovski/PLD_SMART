@@ -2,7 +2,7 @@
 exports.Group = class Group {
     constructor(group_id, user) {
         this.group_id = group_id; 
-        this.owner = user;
+        this.owner = user.username;
         this.users = [user];
         this.username = [user.username];
         this.status = "waiting";
