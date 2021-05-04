@@ -44,7 +44,9 @@ exports.init = (server) => {
 
           if (user.username in mapUsernameGroupId) {
             let oldGroupId = mapUsernameGroupId[user.username];
-            mapGroupIdGroup[oldGroupId].removeUser(user);
+            if(oldGroupId in mapGroupIdGroup){
+              mapGroupIdGroup[oldGroupId].removeUser(user);
+            }
             let tempGroupe = mapGroupIdGroup[oldGroupId];
             if (tempGroupe.owner === user.username) {
               console.log("suprimation");
