@@ -13,7 +13,6 @@ exports.Group = class Group {
         this.resultatSwipe = {};
         this.resultatSwipe[user.username] = 0
         this.countFilm = {};
-        
     }
   
     addUser(user){
@@ -21,6 +20,7 @@ exports.Group = class Group {
       this.resultatSwipe[user.username] = 0;
       this.username.push(user.username)
     }
+
     removeUser(user){
         if(this.users.indexOf(user) !== -1){
             let index = this.users.indexOf(user)
@@ -35,16 +35,41 @@ exports.Group = class Group {
       }
     }
   
-    addFilm(filmId, username) {
-      this.resultatSwipe[username]++;
-      this.countFilm[filmId]++;
-      res = false;
-      if (countFilm === this.users.length) {
-        res = true;
-        console.log("Match !");
+    isFinish(){
+      let res = true
+      let count = this.list_films.length
+      for (let username of this.username){
+        if(this.resultatSwipe[username] !== count-1){
+          res = false
+        }
       }
-      return res;
+      return res
     }
+    
+    addFilm(filmId, username, avis) {
+
+      if(!(filmId in this.countFilm)){
+        this.countFilm[filmId] = 0;
+      }
+      console.log("je suis passé ici")
+      this.resultatSwipe[username]++;
+      
+      let res = false;
+
+      if(avis){
+        this.countFilm[filmId]++;
+        if (this.countFilm[filmId] === this.users.length) {
+          res = true;
+          console.log("Match !");
+        }
+        return res;
+      }
+      return false;
+      
+      
+
+    }
+
 
     genClassement() {
       let classement = [];

@@ -62,7 +62,6 @@ exports.filmGender = async (req, res, next) => {
 
                 listeFilms = listeFilms.sort(() => Math.random() - 0.5);
                 listeFilms = listeFilms.slice(0, tailleEchantillon);
-                console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
                     listFilms: listeFilms
@@ -77,7 +76,6 @@ exports.filmGender = async (req, res, next) => {
                     .catch(error => {console.log("soucis")})
                     ; 
                 }
-                console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
                     listFilms: listeFilms
@@ -87,7 +85,6 @@ exports.filmGender = async (req, res, next) => {
                
             }
             else{
-                console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
                     listFilms: listeFilms
@@ -105,7 +102,7 @@ exports.updatePreference = async (req, res, next) => {
     .then( film => {
         User.findOne({ _id: req.body.userId }).populate('preference')
         .then(user => {
-            console.log("préférences de l'user", user.preference)
+
             fctIa.maj_user_preferences(user, film)
             .then(newPreferences =>{
 
@@ -118,7 +115,7 @@ exports.updatePreference = async (req, res, next) => {
                     }},
                     function(err, resp) {
                         if (err) return res.status(502).json({ success: "false", status: 'Error' });
-                        console.log("1 document updated");
+
                         return res.status(200).json({ success: "true", status: 'Preference modified' });
                     });
 

@@ -48,7 +48,7 @@ exports.init = (server) => {
               mapGroupIdGroup[oldGroupId].removeUser(user);
             }
             let tempGroupe = mapGroupIdGroup[oldGroupId];
-            if (tempGroupe.owner === user.username) {
+            if (tempGroupe && tempGroupe.owner === user.username) {
               console.log("suprimation");
             }
           }
@@ -184,7 +184,7 @@ exports.init = (server) => {
         console.log("disconnection", user);
         const groupId = mapUsernameGroupId[user.username];
         const group = mapGroupIdGroup[groupId];
-        console.log("group", group);
+        //console.log("group", group);
         // console.log("index", group.username.indexOf(user.username));
         group.users.splice(
           group.users.findIndex((u) => u.username === user.username),
@@ -289,7 +289,7 @@ exports.init = (server) => {
             io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
           })
           .catch((error) => {
-            console.log(error);
+            console.log("error", error);
             res = {
               success: "false",
               error: "User not found !",
@@ -303,24 +303,34 @@ exports.init = (server) => {
     });
 
     socket.on("swipe", async (data) => {
-      console.log(data);
+      //console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
         console.log("ça va pas");
-      }
+      }else{
 
-      let auth = await verifyUser(data.auth.id, data.auth.token);
-
-      if (auth.success === "false") {
-        console.auth("ça va pas 2");
-      } else {
-        let user = auth.user[0];
+      verifyUser(data.auth.id, data.auth.token)
+      .then( (userFromDB) => {
+        let user = userFromDB[0];
         let groupId = mapUsernameGroupId[user.username];
         let groupe = mapGroupIdGroup[groupId];
-        let match = groupe.addFilm(data.filmId, user.username);
+        let match = groupe.addFilm(data.filmId, user.username, data.avis);
         
-        if (match === true) {
+        console.log(groupe.resultatSwipe)
+        //console.log(groupe.countFilm)
+
+        if(groupe.isFinish()){
+          console.log("toute la liste a été traitée")
+          io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
+        }        
+        else if (match === true) {
+          console.log("match !")
+          io.in(mapUsernameGroupId[user.username]).emit("printMatch", {filmId: data.filmId});
         }
-      }
+
+
+
+
+      })}
     });
   });
 };
