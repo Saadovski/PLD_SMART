@@ -9,12 +9,27 @@ border-radius: 100px;
 color : #f1f1f1;
 }
 
-.bouton-vert-hover button:hover {
-    background: rgba(92, 219, 149, 0.60);
-    border: 1px solid rgba(92, 219, 149, 0.60);
+.bouton-rouge-hover button:hover {
+    background: rgba(240, 73, 73, 0.60);
+    border: 1px solid rgba(240, 73, 73, 0.60);
 }
   
-
+.bouton-rouge-rempli{
+    width: 239px;
+    height: 65px;
+    background: #f04949;
+    border: 1px solid rgba(240, 73, 73, 0.99);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 100px;
+    color : #f1f1f1;
+    }
+    
+    .bouton-vert-hover button:hover {
+        background: rgba(92, 219, 149, 0.60);
+        border: 1px solid rgba(92, 219, 149, 0.60);
+    }
+      
 .bouton-gris-rempli{
 width: 239px;
 height: 66px;
