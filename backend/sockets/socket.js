@@ -196,9 +196,11 @@ exports.init = (server) => {
         .then( async result => { 
           data = await result.json()
           console.log(data)
-        
+
         })
 
+
+        
         //console.log(filmsAvantTri)
 
         // a faire 
@@ -211,99 +213,3 @@ exports.init = (server) => {
   });
 };
 
-
-const getFilmsByGender = async (mood) =>{
-
-
-  const listeGenre = mood
-  let requete = ""
-  if(listeGenre.length === 0){
-          
-      
-      requete = "{}"
-  }
-  else{
-      requete = "{$or:[";
-
-      for(let genre of listeGenre) {
-          requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"
-      }
-  requete = requete.substring(0, requete.length-1) + "]}";
-  }
-
-
-      await Film.find(parser(requete))
-      .then( async listeFilms => {
-          if(listeFilms.length > 250){
-
-              listeFilms = listeFilms.sort(() => Math.random() - 0.5);
-              listeFilms = listeFilms.slice(0, 250);
-              console.log(listeFilms.length)
-              return listeFilms
-          } 
-          else if(listeFilms.length < 250){
-              tout_films = await Film.find()
-              .then(tout_films =>{
-                  nb_films = tout_films.length
-                  while(listeFilms.length < 250){
-  
-                      var random = Math.floor(Math.random() * nb_films)
-                      film = tout_films[random]
-                      if(listeFilms.indexOf(film) === -1) listeFilms.push(film); 
-                  }
-                  console.log(listeFilms.length)
-                  return listeFilms
-              })
-              .catch(error => res.status(400).json({ error }))
-
-             
-          }
-          else{
-              console.log(listeFilms.length)
-              return listeFilms  
-          }
-          
-              
-              
-          
-
-      
-      
-      
-      
-      })
-
-
-}
-
-const verifyUser = async (id, token) => {
-
-
-  const decodedToken = jwt.verify(token, 'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE');
-  const userId = decodedToken.userId;
-  let res ;
-
-  if ( id !== userId) {
-    res =  {
-      "success": "false",
-      "error": 'Id not good !'
-    }
-  } else {
-    await User.find({_id: id})
-    .then(user => {
-      res = {
-        "success": "true",
-        user,
-        "id": userId
-      }
-    })
-    .catch(error => {        
-    res = {
-      "success": "false",
-      "error": 'User not found !'
-    }});
-  }
-  return res
-
-
-}
