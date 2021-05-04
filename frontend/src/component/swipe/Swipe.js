@@ -222,9 +222,9 @@ function Swipe() {
         <div className="bouton-rouge-hover">
           <button
             className="bouton-rouge-rempli"
-            onClick={() => 
-            interrompreSwipe(),
-            history.push("/")
+            onClick={() => {
+            interrompreSwipe();
+            history.push("/")}
             }>
             Interrompre le swipe</button>
         </div>}
