@@ -4,5 +4,6 @@ export const SocketContext = createContext({
   socket: null,
   idSession: null,
   group: null,
-  groudId: null,
+  connectToSession: () => {},
+  updateGroup: () => {},
 });

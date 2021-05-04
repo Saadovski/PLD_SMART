@@ -31,7 +31,6 @@ var movie = {
 
 for(var i = 0; i < 10; ++i){
     console.log(IA.user_movie_compatibility(user, movie));
-    console.log(IA.cosine_similarity(user.preferences.synopsis, movie.synopsisVector))
     user.preferences = IA.maj_user_preferences(user, movie, true);
     console.log(user.preferences.annee+"\n\n");
 }
