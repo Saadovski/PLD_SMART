@@ -1,3 +1,6 @@
+.hide {
+  display: none;
+}
 
 .blackBackground {
   opacity: 60%;
