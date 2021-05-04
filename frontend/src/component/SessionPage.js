@@ -37,8 +37,10 @@ function SessionPage() {
       console.log("Nouveau message group", group);
     });
 
-    socketContext.socket.on("test", (test) => {
-      console.log("test message", test);
+    socketContext.socket.on("start", (group) => {
+      socketContext.updateGroup(group);
+      history.push("/swipe");
+      console.log("received a start");
     });
   }, []);
 
@@ -72,7 +74,6 @@ function SessionPage() {
               className="bouton-gris-rempli texte-blanc"
               onClick={() => {
                 ready();
-                history.push("/Avance");
               }}
             >
               Ready

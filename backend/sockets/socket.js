@@ -247,7 +247,7 @@ exports.init = (server) => {
                   groupe.status = "running";
 
                   // envoyer le contenu du groupe au nouvel utilisateur
-                  io.in(groupe.groupId).emit("group", groupe.to_json());
+                  io.in(mapUsernameGroupId[user.username]).emit("start", groupe.to_json());
                   let end = new Date().getTime();
                   console.log("Time for ready action : ", end - start);
                 })
