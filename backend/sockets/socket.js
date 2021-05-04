@@ -6,10 +6,12 @@ const connect = require("../dbConnect");
 const User = require("../models/user");
 const Film = require("../models/film");
 const { Group } = require("./group");
+const IA = require("../fonctions_IA.js");
 
 const fetch = require("node-fetch");
 
 const Preference = require("../models/preference");
+const user = require("../models/user");
 
 var mapGroupIdGroup = {}; // groupId : group
 var mapUsernameGroupId = {}; // username: groupeId
@@ -22,7 +24,7 @@ exports.init = (server) => {
 
     socket.on("openGroup", async (data) => {
       const User = require("../models/user");
-      console.log(data);
+
 
       // on vérifie que les champs nécéssaires sont renseignés
 
@@ -30,11 +32,11 @@ exports.init = (server) => {
         console.log("ça va pas");
       }
 
+
       //auth
 
       verifyUser(data.auth.id, data.auth.token)
         .then((userFromDB) => {
-          console.log("user", userFromDB);
           let user = userFromDB[0];
 
           console.log("Username", user.username);
@@ -55,13 +57,14 @@ exports.init = (server) => {
           var groupId = "_" + Math.random().toString(36).substr(2, 9);
 
           let newGroup = new Group(groupId, user);
-          console.log(groupId);
           mapGroupIdGroup[newGroup.group_id] = newGroup;
           mapUsernameGroupId[user.username] = newGroup.group_id;
 
           let groupJson = newGroup.to_json();
-          console.log(groupJson);
+          
+          console.log("group id ",newGroup.group_id)
           socket.join(newGroup.group_id);
+
           socket.emit("group", groupJson);
           io.emit("message");
         })
@@ -76,7 +79,6 @@ exports.init = (server) => {
     });
     socket.on("joinGroup", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
-      console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data)) {
         console.log("ça va pas");
       }
@@ -132,24 +134,27 @@ exports.init = (server) => {
     socket.on("addMood", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
       console.log("Add mood function", data);
-      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "mood" in data)) {
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "mood" in data && "groupId" in data)) {
         console.log("ça va pas");
       }
 
       //auth
       let groupe = mapGroupIdGroup[data.groupId];
       if (groupe) {
+        console.log("on est dans le if")
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log("the user", user);
+            console.log("on est dans la ftc")
+            //console.log(user);
+            console.log("groupe", groupe);
 
             // On vérifie que l'utilisateur est bien le chef du groupe
 
-            if (groupe.username.find((username) => username === user.username) && groupe.owner.username === user.username) {
+            if (groupe.username.find((username) => username === user.username) && groupe.owner === user.username) {
               //on ajoute le mood
               groupe.mood = data.mood;
-              console.log("the mood", groupe.mood);
+              console.log("mood :", groupe.mood);
 
               // on renvoie le groupe à tout le monde
               io.in(data.groupId).emit("group", groupe.to_json());
@@ -158,6 +163,7 @@ exports.init = (server) => {
             }
           })
           .catch((error) => {
+            console.log("coucou on est dans le catch")
             console.log(error);
             res = {
               success: "false",
@@ -205,58 +211,86 @@ exports.init = (server) => {
 
       //auth
 
-      let groupe = mapGroupIdGroup[data.groupId];
-      if (groupe) {
-        verifyUser(data.auth.id, data.auth.token)
-          .then(async (userFromDB) => {
-            // On vérifie que l'utilisateur est bien le chef du groupe
+      console.log("on va commencer la rq des films2")
+      verifyUser(data.auth.id, data.auth.token)
+        .then(async (userFromDB) => {
+          console.log("on va commencer la rq des films3")
+          let user = userFromDB[0];
 
-            if (user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username) {
-              let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
 
-              // on renvoie les films à tout le monde
+          // On vérifie que l'utilisateur est bien le chef du groupe
 
-              //filmsAvantTri = await getFilmsByGender(groupe.mood)
+          if (user.username in mapUsernameGroupId && mapGroupIdGroup[mapUsernameGroupId[user.username]].owner === user.username) {
+            let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
 
-              await fetch("http://localhost:1024/api/film/get_film_by_gender", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                  listeGenre: groupe.mood,
-                }),
-              }).then(async (result) => {
-                data = await result.json();
-                console.log(data);
-              });
+            // on renvoie les films à tout le monde
 
-              groupe.status = "running";
+            //filmsAvantTri = await getFilmsByGender(groupe.mood)
 
-              // envoyer le contenu du groupe au nouvel utilisateur
-              socket.emit("group", groupe.to_json());
-              socket.broadcast.emit("group", groupe.to_json());
-            } else {
-              console.log("l'utilisateur n'est pas le chef du groupe");
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-            res = {
-              success: "false",
-              error: "User not found !",
-            };
-            return res;
-          });
-      } else {
-        socket.emit("error", { message: "ID de session incorrect" });
-      }
+            await fetch("http://localhost:1024/api/film/get_film_by_gender", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                listeGenre: groupe.mood,
+              }),
+            }).then(async (result) => {
+
+              console.log("c bon pour les films 2")
+              result.json()
+              .then( data => {
+
+                listeFilms = data.listFilms;
+                //console.log(listeFilms);
+                console.log(groupe.users)
+                const liste_films_finale = IA.top_best_movies(listeFilms, groupe.users)
+                groupe.list_films = liste_films_finale
+              
+                groupe.status = "running"
+
+                // envoyer le contenu du groupe au nouvel utilisateur
+                socket.emit("group", groupe.to_json());
+                socket.broadcast.emit("group", groupe.to_json());
+
+              })
+              .catch()
+              
+
+            });
+
+
+
+
+
+
+
+          } else {
+            console.log("l'utilisateur n'est pas le chef du groupe");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          res = {
+            success: "false",
+            error: "User not found !",
+          };
+          return res;
+        })
+
+
+
+
+
+
+
     });
 
     socket.on("swipe", async (data) => {
-      console.log(data);
+
+      console.log(data)
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
-        console.log("ça va pas");
+        console.log("ça va pas")
       }
 
       let auth = await verifyUser(data.auth.id, data.auth.token);
@@ -271,6 +305,7 @@ exports.init = (server) => {
         let classement = groupe.genClassement();
 
         if (match === true) {
+
         }
       }
     });
@@ -290,6 +325,6 @@ const verifyUser = async (id, token) => {
     };
     return res;
   } else {
-    return User.find({ _id: id });
+    return User.find({ _id: id }).populate('preference');
   }
 };
