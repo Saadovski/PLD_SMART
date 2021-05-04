@@ -25,7 +25,6 @@ exports.Group = class Group {
             delete this.users[index]
             delete this.username[index]
         }
-
     }
 
     initFilm(){
@@ -68,8 +67,29 @@ exports.Group = class Group {
         users: this.username, 
         owner: this.owner,
         mood: this.mood,
-        films: this.list_films,
+        films: this.clean_films(),
         status: this.status
       }
     }
+
+    clean_films(){
+      let liste = []
+
+      for(let film of this.list_films) {
+        liste.push(
+          {
+            "netflixid": film.netflixid, 
+            "title": film.title, 
+            "synopsis":film.synopsis, 
+            "img": film.img,
+            "year": film.year,
+            "poster": film.poster,
+            "genre": film.genre,
+            "country": film.country
+          })
+    }
+    return liste
+    }
+
+
   }
