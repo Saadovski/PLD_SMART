@@ -40,7 +40,7 @@ function UserInfos() {
           console.log("successfully modified the password");
           
         } else {
-          document.querySelector(".connection-info").innerHTML = "La modification a échoué";
+          console.log("unsuccessfully modified the password");
         }
       });
     }

@@ -130,7 +130,7 @@ const mouseCoordinatesFromEvent = (e) => {
   return { x: e.clientX, y: e.clientY }
 }
 
-const TinderCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, onCardLeftScreen, className, preventSwipe = [] }, perentRef) => {
+const MovieCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, onCardLeftScreen, className, preventSwipe = [] }, perentRef) => {
   const swipeAlreadyReleased = React.useRef(false)
 
   let elementGlobal
@@ -246,4 +246,4 @@ const TinderCard = React.forwardRef(({ flickOnSwipe = true, children, onSwipe, o
   )
 })
 
-export default TinderCard;
+export default MovieCard;

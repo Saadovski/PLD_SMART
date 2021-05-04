@@ -26,7 +26,7 @@ function SessionPage() {
         <button
           className="bouton-gris-rempli texte-blanc"
           onClick={() => {
-            history.push("/Simple");
+            history.push("/Swipe");
           }}
         >
           Swiper

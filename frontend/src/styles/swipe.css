@@ -33,3 +33,53 @@
   .background-vide {
 background-color: transparent;
   }
+
+  .oui {
+    background-color: rgba(92, 219, 149, 0.60);
+    text-align:left;
+    animation-duration: 2s;
+    animation-name: slideoui;
+    animation-iteration-count: 1;
+    position: absolute;
+    top: 50vh;
+    left: 0;
+  }
+  
+  @keyframes slideoui {
+    from {
+      margin-left: 100%;
+      width: 300%;
+    }
+  
+    to {
+      margin-left: 0%;
+      width: 100%;
+    }
+  }
+
+  .non {
+    background-color: rgba(96, 117, 117, 0.60);
+    text-align:right;
+    animation-duration: 2s;
+    animation-name: slidenon;
+    animation-iteration-count: 1;
+    position: absolute;
+    top: 50vh;
+    right: 0;
+  }
+  
+  @keyframes slidenon {
+    from {
+      margin-right: 100%;
+      width: 300%;
+    }
+  
+    to {
+      margin-right: 0%;
+      width: 100%;
+    }
+  }
+
+  .img-swipe{
+    size:10vh;
+  }
