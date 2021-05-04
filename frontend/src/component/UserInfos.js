@@ -7,8 +7,11 @@ import { AuthContext } from "../context/authContext";
 function UserInfos() {
   const [isModifying, setIsModifying] = useState(false);
   const [hasChanged, setHasChanged] = useState(false);
-  const [username, setUsername] = useState();
   const [password, setPassword] = useState("password");
+  const [username, setUsername] = useState();
+  const [oldPassword, setOldPassword] = useState(null);
+  const [newPassword, setNewPassword] = useState(null);
+  const [newPasswordConf, setNewPasswordConf] = useState(null);
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
   const authContext = useContext(AuthContext);
 
@@ -16,45 +19,49 @@ function UserInfos() {
     setUsername(authContext.username);
   }, [authContext.username]);
 
-  const handleModify = (e) => {
-    setIsModifying(!isModifying);
-
-    if (isModifying && hasChanged) {
-    
-    e.preventDefault();
-    console.log("Submitting form...");
-    console.log(`%c${username} ${password}`, "color: #cc0000");
-
-    fetch(REACT_APP_API_URL + "user/modification", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "authorization": "Bearer "+authContext.token,
-      },
-      body: JSON.stringify({
-        userId: authContext.userId,
-        password: password, 
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.success) {
-          console.log("successfully modified the password");
-          
-        } else {
-      console.log("unsuccessfully modified the password");        
-      }
-      });
+  const handleSubmit = (e) => {
+    if (newPassword === newPasswordConf) {
+      fetch(REACT_APP_API_URL + "user/modification", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: "Bearer " + authContext.token,
+        },
+        body: JSON.stringify({
+          userId: authContext.userId,
+          password: newPassword,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            console.log("successfully modified the password");
+          } else {
+            console.log("unsuccessfully modified the password");
+          }
+        });
+    } else {
+      e.preventDefault();
+      setIsModifying(true);
+      alert("Confirmation du mot de passe incorrect");
     }
   };
 
-  /*const handleModify = () => {
+  const handleModify = (e) => {
     setIsModifying(!isModifying);
 
-    if (isModifying && hasChanged) {
-      alert("Vos données ont été mises à jour");
+    if (isModifying) {
+      document.querySelector("#samplePassword").classList.remove("hide");
+    } else {
+      document.querySelector("#samplePassword").classList.add("hide");
     }
-  };*/
+
+    if (isModifying && hasChanged) {
+      e.preventDefault();
+      console.log("Submitting form...");
+      console.log(`%c${username} ${password}`, "color: #cc0000");
+    }
+  };
 
   return (
     <div className="container-fluid texte-centre">
@@ -64,10 +71,9 @@ function UserInfos() {
             class="box-sans-contour texte-vert texte-centre"
             type="text"
             value={username}
-            readOnly={!isModifying}
-            onChange={(e) => {
+            readOnly
+            onChange={() => {
               setHasChanged(true);
-              setUsername(e.target.value);
             }}
             placeholder="Entrez votre nom d'utilisateur ici"
           />
@@ -76,56 +82,82 @@ function UserInfos() {
         <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
+            name="samplePassword"
+            id="samplePassword"
             type="password"
             value={password}
-            readOnly={!isModifying}
+            readOnly
             onChange={(e) => {
               setHasChanged(true);
               setPassword(e.target.value);
             }}
-            placeholder="Entrez votre mot de passe ici"
-
-            />
-        </label>
-
-
-      {isModifying ? (
-        <div class="texte-centre">
-          <label>
-          <input
-            class="box-sans-contour texte-vert texte-centre"
-            type="password"
-            name="passwordconf"
-            readOnly={!isModifying} 
-            onChange={() => setHasChanged(true)}
-            placeholder="Confirmez votre mot de passe ici"
           />
         </label>
-        <hr></hr>
-          <div className="bouton-vert-hover">
-          <button className="bouton-vert-rempli" onClick={handleModify}>
-            Valider
-          </button>
-          </div>
-          <hr></hr>
-          <div className="bouton-gris-hover">
-            <button className="bouton-gris-rempli" onClick={handleModify}>
-              Annuler
-            </button>
-          </div>
 
-
-        </div>
-      ) : (
-        <div>
-        <hr></hr>
-        <div className="bouton-vert-hover">
-        <button className="bouton-vert-rempli" onClick={handleModify}>
-          Modifier
-        </button>
-        </div>
-        </div>
-      )}
+        {isModifying ? (
+          <div class="texte-centre">
+            <label>
+              <label>
+                <input
+                  class="box-sans-contour texte-vert texte-centre"
+                  type="password"
+                  name="oldPassword"
+                  value={oldPassword}
+                  placeholder="Ancien mot de passe ..."
+                  onChange={(e) => {
+                    setHasChanged(true);
+                    setOldPassword(e.target.value);
+                  }}
+                />
+              </label>
+              <input
+                class="box-sans-contour texte-vert texte-centre"
+                type="password"
+                name="newPassword"
+                value={newPassword}
+                placeholder="Nouveau mot de passe ..."
+                onChange={(e) => {
+                  setHasChanged(true);
+                  setNewPassword(e.target.value);
+                }}
+              />
+            </label>
+            <label>
+              <input
+                class="box-sans-contour texte-vert texte-centre"
+                type="password"
+                name="newPasswordConf"
+                value={newPasswordConf}
+                placeholder="Confirmer le nouveau mot de passe ..."
+                onChange={(e) => {
+                  setHasChanged(true);
+                  setNewPasswordConf(e.target.value);
+                }}
+              />
+            </label>
+            <hr></hr>
+            <div className="bouton-vert-hover">
+              <button className="bouton-vert-rempli" onClick={handleSubmit}>
+                Valider
+              </button>
+            </div>
+            <hr></hr>
+            <div className="bouton-gris-hover">
+              <button className="bouton-gris-rempli" onClick={handleModify}>
+                Annuler
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <hr></hr>
+            <div className="bouton-vert-hover">
+              <button className="bouton-vert-rempli" onClick={handleModify}>
+                Modifier
+              </button>
+            </div>
+          </div>
+        )}
       </form>
     </div>
   );

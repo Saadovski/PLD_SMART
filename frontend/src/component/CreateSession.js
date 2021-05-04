@@ -11,9 +11,10 @@ function CreateSession() {
   const history = useHistory();
   const authContext = useContext(AuthContext);
   const socketContext = useContext(SocketContext);
+  const URL = process.env.REACT_APP_API_URL || "http://localhost:1024";
 
   useEffect(() => {
-    let newSocket = io("http://localhost:1024");
+    let newSocket = io("http://146.59.236.173:1024");
     setSocket(newSocket);
     console.log(newSocket);
     newSocket.on("error", (error) => {
