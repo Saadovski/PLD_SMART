@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const parser = require('mongodb-query-parser')
 const Film = require('../models/film');
 
-const tailleEchantillon = 1000
+const tailleEchantillon = 100
 exports.createFilm = (req, res, next) => {
 
     //il faut transformer "profil" en vecteur
@@ -41,9 +41,19 @@ exports.filmGender = async (req, res, next) => {
     requete = requete.substring(0, requete.length-1) + "]}";
     }
 
+    requete2 = "{"
+
+
+    for(let genre of listeGenre) {
+        requete2 = requete2 + " genre: \""+genre+"\","
+    }
+    requete2 = requete2.substring(0, requete2.length-1);
+    requete2 = requete2 + "}"
+
     console.log("requete", requete)
-    await Film.find(parser(requete))
-        .then(async listeFilms => {
+    let query = parser(requete)
+    Film.find(query)
+        .then(listeFilms => {
 
             if(listeFilms.length > tailleEchantillon){
 
@@ -56,14 +66,14 @@ exports.filmGender = async (req, res, next) => {
                 });
             } 
             else if(listeFilms.length < tailleEchantillon){
-                while(listeFilms.length < tailleEchantillon){
+                // while(listeFilms.length < tailleEchantillon){
 
-                    //var random = Math.floor(Math.random() * 2924)                     //Film.findOne({}).skip(random)
-                    await Film.aggregate([{ $sample: { size: 1 } }])
-                    .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
-                    .catch(error => {console.log("soucis")})
-                    ; 
-                }
+                //     //var random = Math.floor(Math.random() * 2924)                     //Film.findOne({}).skip(random)
+                //     Film.aggregate([{ $sample: { size: 1 } }])
+                //     .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
+                //     .catch(error => {console.log("soucis")})
+                //     ; 
+                // }
                 console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
