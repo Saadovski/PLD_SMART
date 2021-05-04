@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react'
+import { SocketContext } from '../../../context/socketContext'
 import TinderCard from '../react-tinder-card/index'
+import { AuthContext } from "../../../context/authContext";
 
 const db = [
   { "netflixid": 60000861, "title": "American Psycho", "synopsis": "With chiseled good looks that belie his insanity, a businessman takes pathological pride in yuppie pursuits and indulges in sudden homicidal urges.", "img": "https://occ-0-1091-300.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABbq9EfVINBxAvmWTTbG9Py7E5-g149xKS8K1xSmV_pp03as0Y7kd_xwAExo7OzuDLSLL7oAkAx1mxBEA0ljfCWzxVA.jpg?r=6b9", "year": 2000, "poster": "https://images-na.ssl-images-amazon.com/images/M/MV5BMjIyMTYwMTI0N15BMl5BanBnXkFtZTgwNTU2NTYxMTE@._V1_SX300.jpg", "genre": "Comedy, Crime, Drama", "runtime": "101 min", "coutry": 7.6, "language": "English, Spanish, Cantonese", "plot": "Patrick Bateman is handsome, well educated and intelligent. He is twenty-seven and living his own American dream. He works by day on Wall Street, earning a fortune to complement the one he was born with. At night he descends into madness, as he experiments with fear and violence.", "country": "USA, Canada" },
@@ -98,14 +100,41 @@ let charactersState = db // This fixes issues with updating characters state for
 function Advanced() {
   const Movies = db
   const [MovieIndex, setMovieIndex] = useState(0);
-  const [lastDirection, setLastDirection] = useState(null);
+    const [lastDirection, setLastDirection] = useState(null);
+    const childRefs = useMemo(() => Array(db.length).fill(0).map(i => React.createRef()), [])
 
-  const childRefs = useMemo(() => Array(db.length).fill(0).map(i => React.createRef()), [])
+  const userId = AuthContext.userId;
+  const token = AuthContext.token;
+  const groupId = SocketContext.groudId;
+  const socket = SocketContext.socket;
+
+  const swipeMovie = (avis) => {
+    const filmId = Movies[MovieIndex].netflixid;
+    /*socket.emit('swipe', 
+    {
+      auth: {
+        id: userId,
+        token: token,
+        },
+      groupId,
+      filmId,
+      avis
+    })
+*/
+  }
 
   const swiped = (direction, nameToDelete) => {
-    console.log('removing: ' + nameToDelete)
-    setLastDirection(direction)
-    alreadyRemoved.push(nameToDelete)
+    console.log('removing: ' + nameToDelete);
+    setLastDirection(direction);
+    alreadyRemoved.push(nameToDelete);
+    if (direction=="left")
+    {
+    swipeMovie("false")
+    }
+    else
+    {
+    swipeMovie("true")
+    }
   }
 
   const outOfFrame = (name) => {
@@ -114,7 +143,14 @@ function Advanced() {
 
   const swipe = (dir) => {
     setMovieIndex(MovieIndex + 1);
-    
+    if (dir=="left")
+    {
+    swipeMovie("false")
+    }
+    else
+    {
+    swipeMovie("true")
+    }
   }
 
   return (
