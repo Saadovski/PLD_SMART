@@ -44,7 +44,7 @@ exports.init = (server) => {
 
           if (user.username in mapUsernameGroupId) {
             let oldGroupId = mapUsernameGroupId[user.username];
-            mapGroupIdGroup[oldGroupId].removeUser(user.username);
+            mapGroupIdGroup[oldGroupId].removeUser(user);
             let tempGroupe = mapGroupIdGroup[oldGroupId];
             if (tempGroupe.owner === user.username) {
               console.log("suprimation");
@@ -92,7 +92,7 @@ exports.init = (server) => {
 
             if (user.username in mapUsernameGroupId) {
               let oldGroupId = mapUsernameGroupId[user.username];
-              mapGroupIdGroup[oldGroupId].removeUser(user.username);
+              mapGroupIdGroup[oldGroupId].removeUser(user);
             }
 
             // ajouter l'utilisateur dans son groupe, l'inscrire dans les variables partagées et envoyer le nouveau groupe aux autres membres
@@ -210,10 +210,10 @@ exports.init = (server) => {
 
       //auth
 
-      console.log("on va commencer la rq des films2");
+      //console.log("on va commencer la rq des films2");
       verifyUser(data.auth.id, data.auth.token)
         .then((userFromDB) => {
-          console.log("on va commencer la rq des films3");
+          //console.log("on va commencer la rq des films3");
           let user = userFromDB[0];
 
           // On vérifie que l'utilisateur est bien le chef du groupe
@@ -234,13 +234,12 @@ exports.init = (server) => {
                 listeGenre: groupe.mood,
               }),
             }).then((result) => {
-              console.log("c bon pour les films 2");
               result
                 .json()
                 .then((data) => {
                   listeFilms = data.listFilms;
                   //console.log(listeFilms);
-                  console.log(groupe.users);
+                  //console.log(groupe.users);
                   const liste_films_finale = IA.top_best_movies(listeFilms, groupe.users);
                   groupe.list_films = liste_films_finale;
 
