@@ -43,8 +43,8 @@ function UserInfos() {
           console.log("successfully modified the password");
           
         } else {
-          document.querySelector(".connection-info").innerHTML = "La modification a échoué";
-        }
+      console.log("unsuccessfully modified the password");        
+      }
       });
     }
   };
@@ -108,10 +108,10 @@ function UserInfos() {
             Valider
           </button>
           </div>
-        ) : (
-          <div className="bouton-vert-hover">
-            <button className="bouton-vert-rempli" onClick={handleModify}>
-              Modifier
+          <hr></hr>
+          <div className="bouton-gris-hover">
+            <button className="bouton-gris-rempli" onClick={handleModify}>
+              Annuler
             </button>
           </div>
 
