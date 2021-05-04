@@ -13,6 +13,7 @@ function Mood(props) {
     const authContext = useContext(AuthContext);
     const history = useHistory();
     const socket = io('http://localhost:1024')
+    const socketContext = useContext(SocketContext);
 
     socket.on('connection')
 

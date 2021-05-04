@@ -34,7 +34,7 @@ function UserInfos() {
       body: JSON.stringify({
         userId: authContext.userId,
         password: password,
-        token: authContext.token, 
+        token: authContext.token
       }),
     })
       .then((response) => response.json())
