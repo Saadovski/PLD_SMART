@@ -24,8 +24,9 @@ module.exports = {
         var len = movie.genreVectors.length;
         var score=0;
         for(var i = 0; i < len; ++i){
-            console.log("user.preference.genre ", user.preference.genre.length)
-            console.log("movie.genreVectors[i] ", movie.genreVectors[i].length)
+            // console.log("user.preference.genre ", user.preference.genre.length)
+            // console.log("movie.genreVectors[i] ", movie.genreVectors[i].length)
+            // console.log("similarity", { 1: user.preference.genre, 2: movie.genreVectors[i] })
             score += similarity(user.preference.genre, movie.genreVectors[i]);
         }
         score = score / len;

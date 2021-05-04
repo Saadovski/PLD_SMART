@@ -25,13 +25,11 @@ exports.init = (server) => {
     socket.on("openGroup", async (data) => {
       const User = require("../models/user");
 
-
       // on vérifie que les champs nécéssaires sont renseignés
 
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
         console.log("ça va pas");
       }
-
 
       //auth
 
@@ -61,8 +59,8 @@ exports.init = (server) => {
           mapUsernameGroupId[user.username] = newGroup.group_id;
 
           let groupJson = newGroup.to_json();
-          
-          console.log("group id ",newGroup.group_id)
+
+          console.log("group id ", newGroup.group_id);
           socket.join(newGroup.group_id);
 
           socket.emit("group", groupJson);
@@ -141,11 +139,11 @@ exports.init = (server) => {
       //auth
       let groupe = mapGroupIdGroup[data.groupId];
       if (groupe) {
-        console.log("on est dans le if")
+        console.log("on est dans le if");
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log("on est dans la ftc")
+            console.log("on est dans la ftc");
             //console.log(user);
             console.log("groupe", groupe);
 
@@ -163,7 +161,7 @@ exports.init = (server) => {
             }
           })
           .catch((error) => {
-            console.log("coucou on est dans le catch")
+            console.log("coucou on est dans le catch");
             console.log(error);
             res = {
               success: "false",
@@ -203,6 +201,7 @@ exports.init = (server) => {
     });
 
     socket.on("ready", async (data) => {
+      let start = new Date().getTime();
       // on vérifie que les champs nécéssaires sont renseignés
       console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
@@ -211,12 +210,11 @@ exports.init = (server) => {
 
       //auth
 
-      console.log("on va commencer la rq des films2")
+      console.log("on va commencer la rq des films2");
       verifyUser(data.auth.id, data.auth.token)
         .then((userFromDB) => {
-          console.log("on va commencer la rq des films3")
+          console.log("on va commencer la rq des films3");
           let user = userFromDB[0];
-
 
           // On vérifie que l'utilisateur est bien le chef du groupe
 
@@ -235,36 +233,26 @@ exports.init = (server) => {
               body: JSON.stringify({
                 listeGenre: groupe.mood,
               }),
-            }).then( (result) => {
+            }).then((result) => {
+              console.log("c bon pour les films 2");
+              result
+                .json()
+                .then((data) => {
+                  listeFilms = data.listFilms;
+                  //console.log(listeFilms);
+                  console.log(groupe.users);
+                  const liste_films_finale = IA.top_best_movies(listeFilms, groupe.users);
+                  groupe.list_films = liste_films_finale;
 
-              console.log("c bon pour les films 2")
-              result.json()
-              .then( data => {
+                  groupe.status = "running";
 
-                listeFilms = data.listFilms;
-                //console.log(listeFilms);
-                console.log(groupe.users)
-                const liste_films_finale = IA.top_best_movies(listeFilms, groupe.users)
-                groupe.list_films = liste_films_finale
-              
-                groupe.status = "running"
-
-                // envoyer le contenu du groupe au nouvel utilisateur
-                socket.emit("group", groupe.to_json());
-                socket.broadcast.emit("group", groupe.to_json());
-
-              })
-              .catch( error => console.log(error))
-              
-
+                  // envoyer le contenu du groupe au nouvel utilisateur
+                  io.in(groupe.groupId).emit("group", groupe.to_json());
+                  let end = new Date().getTime();
+                  console.log("Time for ready action : ", end - start);
+                })
+                .catch((error) => console.log(error));
             });
-
-
-
-
-
-
-
           } else {
             console.log("l'utilisateur n'est pas le chef du groupe");
           }
@@ -276,21 +264,13 @@ exports.init = (server) => {
             error: "User not found !",
           };
           return res;
-        })
-
-
-
-
-
-
-
+        });
     });
 
     socket.on("swipe", async (data) => {
-
-      console.log(data)
+      console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
-        console.log("ça va pas")
+        console.log("ça va pas");
       }
 
       let auth = await verifyUser(data.auth.id, data.auth.token);
@@ -305,7 +285,6 @@ exports.init = (server) => {
         let classement = groupe.genClassement();
 
         if (match === true) {
-
         }
       }
     });
@@ -325,6 +304,6 @@ const verifyUser = async (id, token) => {
     };
     return res;
   } else {
-    return User.find({ _id: id }).populate('preference');
+    return User.find({ _id: id }).populate("preference");
   }
 };

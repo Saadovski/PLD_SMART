@@ -58,7 +58,7 @@ function SessionPage() {
           })}
         </div>
 
-        {owner.username === username && (
+        {owner === username && (
           <div className="bouton-vert-hover">
             <button className="bouton-vert-rempli" onClick={() => history.push("/ChoisirMood")}>
               Choisir le mood
@@ -66,12 +66,12 @@ function SessionPage() {
           </div>
         )}
         <hr></hr>
-        {owner.username === username && (
+        {owner === username && (
           <div className="bouton-gris-hover">
             <button
               className="bouton-gris-rempli texte-blanc"
               onClick={() => {
-                //ready();
+                ready();
                 history.push("/Avance");
               }}
             >
