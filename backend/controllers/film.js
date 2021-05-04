@@ -66,14 +66,14 @@ exports.filmGender = async (req, res, next) => {
                 });
             } 
             else if(listeFilms.length < tailleEchantillon){
-                // while(listeFilms.length < tailleEchantillon){
+                while(listeFilms.length < tailleEchantillon){
 
-                //     //var random = Math.floor(Math.random() * 2924)                     //Film.findOne({}).skip(random)
-                //     Film.aggregate([{ $sample: { size: 1 } }])
-                //     .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
-                //     .catch(error => {console.log("soucis")})
-                //     ; 
-                // }
+                    //var random = Math.floor(Math.random() * 2924)                     //Film.findOne({}).skip(random)
+                    Film.aggregate([{ $sample: { size: 1 } }])
+                    .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
+                    .catch(error => {console.log("soucis")})
+                    ; 
+                }
                 console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",

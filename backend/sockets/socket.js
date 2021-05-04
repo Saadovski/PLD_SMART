@@ -266,6 +266,37 @@ exports.init = (server) => {
         });
     });
 
+
+    socket.on("interruptSwipe", async (data) => {
+
+      //on vérifie que l'on a les bons params
+      console.log(data);
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
+        console.log("ça va pas");
+      }
+      else{
+
+        //auth
+
+        verifyUser(data.auth.id, data.auth.token)
+          .then((userFromDB) => {
+            let user = userFromDB[0];
+            io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
+          })
+          .catch((error) => {
+            console.log(error);
+            res = {
+              success: "false",
+              error: "User not found !",
+            };
+            return res;
+          });
+
+
+      }
+
+    });
+
     socket.on("swipe", async (data) => {
       console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
