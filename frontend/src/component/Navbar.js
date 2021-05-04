@@ -61,7 +61,7 @@ function Navbar() {
         {!authContext.isAuth && <NavLink to="/connexion" activeClassName="selected">Connexion</NavLink>}
         {!authContext.isAuth && <NavLink to="/inscription" activeClassName="selected">Inscription</NavLink>}
         {authContext.isAuth && <NavLink to="/monespace" activeClassName="selected">Mon Espace</NavLink>}
-        <Link to="/creersession">Rejoindre ou créer une session</Link>
+        <NavLink activeClassName="selected" to="/creersession">Rejoindre ou créer une session</NavLink>
         {authContext.isAuth && (
         <div className="bouton-gris-hover">
           <button

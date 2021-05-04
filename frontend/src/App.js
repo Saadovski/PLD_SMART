@@ -65,7 +65,7 @@ function App() {
           <Router>
             <Navbar />
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/home" component={Home} />
               <Route path="/Simple" component={Simple} />
               <Route path="/Avance" component={Advanced} />
               <Route path="/inscription" component={Signup_container} />
@@ -75,7 +75,7 @@ function App() {
               <Route path="/creersession" component={CreateSession} />
               <Route path="/ChoisirMood" component={Mood} />
               <Route path="/Initialisation" component={Signup_signin} />
-              <Redirect to="/" />
+              <Redirect to="/home" />
             </Switch>
           </Router>
         </div>
