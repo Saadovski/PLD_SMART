@@ -13,25 +13,35 @@ function CreateSession() {
   const socketContext = useContext(SocketContext);
 
   useEffect(() => {
-    let socket = io();
-    setSocket(socket);
-    socket.on("group", (group) => {
-      setSocket(io(`/${group.id}`));
+    let newSocket = io("http://localhost:1024");
+    setSocket(newSocket);
+    console.log(newSocket);
+    newSocket.on("error", (error) => {
+      alert(error.message);
+    });
+
+    newSocket.on("group", (group) => {
+      console.log(group);
       console.log(socket);
-      history.push(`/session/${group.id}`);
+      history.push(`/session/${group.groupId}`);
     });
   }, []);
 
-  const generateSessionId = () => {
-    socket.emit("createGroup", { userId: authContext.userId, token: authContext.token });
+  const createASession = () => {
+    socket.emit("openGroup", {
+      auth: { id: authContext.userId, token: authContext.token },
+    });
     console.log(socket);
 
     // const randomID = Math.floor(Math.random() * 100);
     // history.push(`/session/${randomID}`);
   };
 
-  const getSessionId = () => {
-    window.location.href = `/session/${joinSessionId}`;
+  const joinASession = () => {
+    socket.emit("joinGroup", {
+      auth: { id: authContext.userId, token: authContext.token },
+      groupId: joinSessionId,
+    });
   };
 
   return (
@@ -40,7 +50,7 @@ function CreateSession() {
         <h2>Créer une session</h2>
 
         <div class="bouton-vert-hover">
-          <button className="bouton-vert-rempli" onClick={generateSessionId}>
+          <button className="bouton-vert-rempli" onClick={createASession}>
             Créer une session
           </button>
         </div>
@@ -53,7 +63,7 @@ function CreateSession() {
           </label>
         </form>
         <div class="bouton-vert-hover">
-          <button className="bouton-vert-rempli" onClick={getSessionId}>
+          <button className="bouton-vert-rempli" onClick={joinASession}>
             Rejoindre une session
           </button>
         </div>
