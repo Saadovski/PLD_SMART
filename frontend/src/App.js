@@ -22,6 +22,7 @@ function App() {
 
   const [socket, setSocket] = useState(null);
   const [socketId, setSocketId] = useState(null);
+  const [group, setGroup] = useState(null);
   const [idSession, setIdSession] = useState(null);
 
   const history = useHistory();
@@ -47,7 +48,7 @@ function App() {
     setToken(null);
     localStorage.removeItem("pldsmartToken");
     localStorage.removeItem("pldsmartUser");
-    history.push("/");
+    window.location.href = "/";
   };
 
   const connectToSession = (socketId, socket, idSession) => {
@@ -56,8 +57,12 @@ function App() {
     setIdSession(idSession);
   };
 
+  const updateGroup = (group) => {
+    setGroup(group);
+  };
+
   return (
-    <SocketContext.Provider value={{ socket: socket, idSession: idSession, connectToSession: connectToSession }}>
+    <SocketContext.Provider value={{ socket: socket, idSession, connectToSession: connectToSession, updateGroup, group: group }}>
       <AuthContext.Provider value={{ isAuth: !!token, login: login, logout: logout, token: token, username: username, userId: userId }}>
         <div className="App">
           <Router>

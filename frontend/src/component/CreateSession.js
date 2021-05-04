@@ -23,6 +23,8 @@ function CreateSession() {
     newSocket.on("group", (group) => {
       console.log(group);
       console.log(socket);
+      socketContext.updateGroup(group);
+      socketContext.connectToSession(newSocket.id, newSocket, group.groupId);
       history.push(`/session/${group.groupId}`);
     });
   }, []);
