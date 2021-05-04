@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const fctIa = require("../fonctions_IA.js")
-
+const Film = require('../models/user');
 const User = require('../models/user');
 const Preference = require('../models/preference');
 
@@ -23,10 +23,10 @@ exports.createUser = (req, res, next) => {
         console.log(arrayGenre)
 
         const preference_ = new Preference({
-
           genre: arrayGenre,
-          synopsis: arrayGenre,
-          nbFilms: 0
+          synopsis : arrayGenre,
+          nbFilms: 0,
+          annee: 0
         });
         preference_.save()
           .then(() => {
@@ -133,6 +133,8 @@ exports.unsubscribe = (req, res, next) => {
 
 exports.checkInfoUser = (req, res, next) => {
 
+  Film
+  let newPreferences = ftcIA.maj_user_preferences(user, film);
   User.findOne({ _id: req.body.userId }).populate('preference')
     .then(user => {
       if (!user) {
@@ -149,14 +151,13 @@ exports.checkInfoUser = (req, res, next) => {
 };
 
 exports.modifMdp = (req, res, next) => {
-  let query = { $set: { password: req.body.password } };
-
-  bcrypt.hash(req.body.password, 10)
-    .then(hash => {
-      User.updateOne({ _id: req.body.userId }, { $set: { password: hash } }, function (err, resp) {
-        if (err) return res.status(500).json({ success: "false", status: 'Error' });
-        console.log("1 document updated");
-        return res.status(200).json({ success: "true", status: 'Password modified' });
-      });
-    })
+ 
+bcrypt.hash(req.body.password, 10)
+.then(hash => {
+  User.updateOne({ _id: req.body.userId }, {$set: {password: hash}},function(err, resp) {
+    if (err) return res.status(500).json({ success: "false", status: 'Error' });
+    console.log("1 document updated");
+    return res.status(200).json({ success: "true", status: 'Password modified' });
+  });
+})
 }

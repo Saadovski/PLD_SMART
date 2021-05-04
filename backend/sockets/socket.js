@@ -44,7 +44,9 @@ exports.init = (server) => {
 
           if (user.username in mapUsernameGroupId) {
             let oldGroupId = mapUsernameGroupId[user.username];
-            mapGroupIdGroup[oldGroupId].removeUser(user);
+            if(oldGroupId in mapGroupIdGroup){
+              mapGroupIdGroup[oldGroupId].removeUser(user);
+            }
             let tempGroupe = mapGroupIdGroup[oldGroupId];
             if (tempGroupe.owner === user.username) {
               console.log("suprimation");
@@ -273,7 +275,7 @@ exports.init = (server) => {
     socket.on("interruptSwipe", async (data) => {
 
       //on vérifie que l'on a les bons params
-      console.log(data);
+      console.log("interrupt_swipe", data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
         console.log("ça va pas");
       }
@@ -315,8 +317,7 @@ exports.init = (server) => {
         let groupId = mapUsernameGroupId[user.username];
         let groupe = mapGroupIdGroup[groupId];
         let match = groupe.addFilm(data.filmId, user.username);
-        let classement = groupe.genClassement();
-
+        
         if (match === true) {
         }
       }

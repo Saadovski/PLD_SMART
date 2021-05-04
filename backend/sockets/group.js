@@ -1,3 +1,5 @@
+const ftcIA = require("../fonctions_IA");
+const Preference = require('../models/preference');
 
 exports.Group = class Group {
     constructor(group_id, user) {
