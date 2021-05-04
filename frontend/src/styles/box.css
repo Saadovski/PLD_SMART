@@ -31,13 +31,13 @@
 
 .box-sans-contour{
     border: 1px solid rgba(92, 219, 149, 0.60);
-    border-radius: 1px;
+    border-radius: 7px;
 
 }
 
 .box-sans-contour:focus{
     border: 4px solid rgba(92, 219, 149, 0.99);
-    border-radius: 10px;
+    border-radius: 7px;
     font-weight: 600;
 }
 
