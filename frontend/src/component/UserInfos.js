@@ -1,18 +1,21 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import "../styles/boutons.css";
 import "../styles/textes.css";
 import "../styles/box.css";
 import { AuthContext } from "../context/authContext";
 
-
 function UserInfos() {
   const [isModifying, setIsModifying] = useState(false);
   const [hasChanged, setHasChanged] = useState(false);
-  const [username, setUsername] = useState("username");
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState("password");
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    setUsername(authContext.username);
+  }, []);
 
   const handleModify = (e) => {
     setIsModifying(!isModifying);
@@ -27,11 +30,11 @@ function UserInfos() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": "Bearer "+authContext.token,
       },
       body: JSON.stringify({
         userId: authContext.userId,
-        password: password,
-        token: authContext.token, 
+        password: password, 
       }),
     })
       .then((response) => response.json())
@@ -40,8 +43,8 @@ function UserInfos() {
           console.log("successfully modified the password");
           
         } else {
-          console.log("unsuccessfully modified the password");
-        }
+      console.log("unsuccessfully modified the password");        
+      }
       });
     }
   };
@@ -57,7 +60,7 @@ function UserInfos() {
   return (
     <div className="container-fluid texte-centre">
       <form>
-      <label>
+        <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="text"
@@ -68,11 +71,10 @@ function UserInfos() {
               setUsername(e.target.value);
             }}
             placeholder="Entrez votre nom d'utilisateur ici"
-
-            />
+          />
         </label>
-      
-      <label>
+
+        <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="password"
@@ -94,8 +96,7 @@ function UserInfos() {
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="password"
-            name="username"
-            value={password}
+            name="passwordconf"
             readOnly={!isModifying} 
             onChange={() => setHasChanged(true)}
             placeholder="Confirmez votre mot de passe ici"
@@ -109,9 +110,9 @@ function UserInfos() {
           </div>
           <hr></hr>
           <div className="bouton-gris-hover">
-          <button className="bouton-gris-rempli" onClick={() => setIsModifying(false)}>
-            Annuler
-          </button>
+            <button className="bouton-gris-rempli" onClick={handleModify}>
+              Annuler
+            </button>
           </div>
 
 

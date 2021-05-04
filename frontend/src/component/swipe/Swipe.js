@@ -1,9 +1,13 @@
-import React, { useState, useMemo } from 'react'
-import MovieCard from './MovieCard'
-import "../../styles/boutons.css";
+import React, { useState, useContext, useMemo } from 'react'
+import { SocketContext } from '../../context/socketContext'
+import MovieCard from './index'
+import { AuthContext } from "../../context/authContext";
+import { useHistory } from "react-router";
+
 import "../../styles/textes.css";
 import "../../styles/box.css";
 import "../../styles/swipe.css";
+import "../../styles/boutons.css";
 
 const db = [
   { "netflixid": 60000861, "title": "American Psycho", "synopsis": "With chiseled good looks that belie his insanity, a businessman takes pathological pride in yuppie pursuits and indulges in sudden homicidal urges.", "img": "https://occ-0-1091-300.1.nflxso.net/dnm/api/v6/evlCitJPPCVCry0BZlEFb5-QjKc/AAAABbq9EfVINBxAvmWTTbG9Py7E5-g149xKS8K1xSmV_pp03as0Y7kd_xwAExo7OzuDLSLL7oAkAx1mxBEA0ljfCWzxVA.jpg?r=6b9", "year": 2000, "poster": "https://images-na.ssl-images-amazon.com/images/M/MV5BMjIyMTYwMTI0N15BMl5BanBnXkFtZTgwNTU2NTYxMTE@._V1_SX300.jpg", "genre": "Comedy, Crime, Drama", "runtime": "101 min", "coutry": 7.6, "language": "English, Spanish, Cantonese", "plot": "Patrick Bateman is handsome, well educated and intelligent. He is twenty-seven and living his own American dream. He works by day on Wall Street, earning a fortune to complement the one he was born with. At night he descends into madness, as he experiments with fear and violence.", "country": "USA, Canada" },
@@ -100,17 +104,62 @@ const alreadyRemoved = []
 let charactersState = db // This fixes issues with updating characters state forcing it to use the current state and not the state that was active when the card was created.
 
 function Swipe() {
-  const Movies = db
+  //const Movies = db
+  const history = useHistory();
   const [MovieIndex, setMovieIndex] = useState(0);
   const [lastDirection, setLastDirection] = useState(null);
-
   const childRefs = useMemo(() => Array(db.length).fill(0).map(i => React.createRef()), [])
+  const socketContext = useContext(SocketContext);
+  const owner = "test"//socketContext.group.owner;
+  const username = "test"//AuthContext.username;
+  const userId = AuthContext.userId;
+  const token = AuthContext.token;
+  const groupId = socketContext.groudId;
+  const socket = socketContext.socket;
+  const Movies = socketContext.group.films;
+
+  const swipeMovie = (avis) => {
+    const filmId = Movies[MovieIndex].netflixid;
+    /*socket.emit('swipe', 
+    {
+      auth: {
+        id: userId,
+        token: token,
+        },
+      groupId,
+      filmId,
+      avis
+    })
+*/
+  }
+
+  const interrompreSwipe = () => {
+    /*socket.emit('printClassement', 
+    {
+      auth: {
+        id: userId,
+        token: token,
+        }
+    })
+*/
+  }
 
   const swiped = (direction, nameToDelete) => {
-    console.log('removing: ' + nameToDelete)
-    setLastDirection(direction)
-    alreadyRemoved.push(nameToDelete)
+    console.log('removing: ' + nameToDelete);
+    setLastDirection(direction);
+    alreadyRemoved.push(nameToDelete);
+    if (direction == "left") {
+      swipeMovie("false")
+    }
+    else {
+      swipeMovie("true")
+    }
   }
+
+  /*socket.on('group', (data) =>{
+    alert(data.user)
+    console.log(data)
+  })*/
 
   const outOfFrame = (name) => {
     console.log(name + ' left the screen!')
@@ -118,48 +167,61 @@ function Swipe() {
 
   const swipe = (dir) => {
     setMovieIndex(MovieIndex + 1);
-    
+    if (dir == "left") {
+      swipeMovie("false")
+    }
+    else {
+      swipeMovie("true")
+    }
   }
 
   return (
-    <div >
-    <div class="box-ecran swipe-color">
-    <hr></hr>
-
-      <div className='cardContainer'>
-        <div>
-        <div className=' background-vide'><h3>{Movies[MovieIndex].title}, {Movies[MovieIndex].year} ({Movies[MovieIndex].runtime})</h3></div>
+    <div className="box-ecran swipe-color" >
         <hr></hr>
 
-        <MovieCard className='swipe' key={Movies[MovieIndex].title} onSwipe={(dir) => {
-          setMovieIndex(MovieIndex + 1);
-          swiped(dir, Movies[MovieIndex].name)
-        }
-        }
-          onCardLeftScreen={() => outOfFrame(Movies[MovieIndex].title)}>
-          <div style={{ backgroundImage: 'url(' + Movies[MovieIndex].img + ')' }} className='card'>
+        <div className='cardContainer'>
+          <div>
+            <div className=' background-vide'><h3>{Movies[MovieIndex].title}, {Movies[MovieIndex].year} ({Movies[MovieIndex].runtime})</h3></div>
+            <hr></hr>
+
+            <MovieCard className='swipe' key={Movies[MovieIndex].title} onSwipe={(dir) => {
+              setMovieIndex(MovieIndex + 1);
+              swiped(dir, Movies[MovieIndex].name)
+            }
+            }
+              onCardLeftScreen={() => outOfFrame(Movies[MovieIndex].title)}>
+              <div style={{ backgroundImage: 'url(' + Movies[MovieIndex].img + ')' }} className='card'>
+              </div>
+            </MovieCard>
+            <hr></hr>
+
+            <div className='buttons bouton-swipe box-horizontal'>
+              <div className="bouton-swipe-non-hover">
+                <button className="bouton-swipe-non" onClick={() => swipe('left')}>non</button>
+              </div>
+              <hr></hr>
+              <div className="bouton-swipe-oui-hover">
+                <button className="bouton-swipe-oui" onClick={() => swipe('right')}>oui</button>
+              </div>
+
+            </div>
+            <h4> {Movies[MovieIndex].genre}</h4>
+            <div>{Movies[MovieIndex].synopsis}
+            </div>
+            {owner === username &&
+        <div className="bouton-rouge-hover">
+          <button
+            className="bouton-rouge-rempli"
+            onClick={() => 
+            history.push("/"),
+            interrompreSwipe()
+            }>
+            Interrompre le swipe</button>
+        </div>}
           </div>
-        </MovieCard>
-        <hr></hr>
 
-        <div className='buttons bouton-swipe box-horizontal'>
-          <div className="bouton-swipe-non-hover">
-  <button className="bouton-swipe-non" onClick={() => swipe('left')}>non</button>
-  </div>
-  <hr></hr>
-  <div className="bouton-swipe-oui-hover">
-  <button className="bouton-swipe-oui" onClick={() => swipe('right')}>oui</button>
-  </div>
-  
-</div>
-        <h4> {Movies[MovieIndex].genre}</h4>
-        <div>{Movies[MovieIndex].synopsis}
         </div>
-      </div>
-      
-    </div>
 
-</div>
 
 
 {lastDirection=="left" ? <div key={lastDirection} className='non'><i class="img-swipe fas fa-no float-left"></i></div> : <h2></h2>}

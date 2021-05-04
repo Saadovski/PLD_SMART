@@ -70,7 +70,14 @@
 }
 
 /* Style the active link (or home/logo) */
-.active {
+.selected {
+  /*background-color: var(--primaryColor);*/
   background-color: var(--primaryColor);
-  color: white;
+  color: black;
+}
+
+/* Style the active link (or home/logo) */
+.logo {
+  background-color: var(--primaryColor);
+  color: black;
 }

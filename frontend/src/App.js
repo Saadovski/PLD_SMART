@@ -6,6 +6,7 @@ import Navbar from "./component/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./component/Home";
 import MonEspace from "./component/MonEspace";
+import Mood from "./component/swipe/Mood";
 import Swipe from "./component/swipe/Swipe";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
@@ -21,6 +22,7 @@ function App() {
 
   const [socket, setSocket] = useState(null);
   const [socketId, setSocketId] = useState(null);
+  const [group, setGroup] = useState(null);
   const [idSession, setIdSession] = useState(null);
 
   const history = useHistory();
@@ -46,7 +48,7 @@ function App() {
     setToken(null);
     localStorage.removeItem("pldsmartToken");
     localStorage.removeItem("pldsmartUser");
-    history.push("/");
+    window.location.href = "/";
   };
 
   const connectToSession = (socketId, socket, idSession) => {
@@ -55,21 +57,26 @@ function App() {
     setIdSession(idSession);
   };
 
+  const updateGroup = (group) => {
+    setGroup(group);
+  };
+
   return (
-    <SocketContext.Provider value={{ socket: socket, idSession: idSession, connectToSession: connectToSession }}>
+    <SocketContext.Provider value={{ socket: socket, idSession, connectToSession: connectToSession, updateGroup, group: group }}>
       <AuthContext.Provider value={{ isAuth: !!token, login: login, logout: logout, token: token, username: username, userId: userId }}>
         <div className="App">
           <Router>
             <Navbar />
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route exact path="/home" component={Home} />
+              <PrivateRoute path="/swipe" component={Swipe} />
               <Route path="/inscription" component={Signup_container} />
               <Route path="/connexion" component={Signin} />
               <PrivateRoute path="/session/:id" component={SessionPage} />
               <PrivateRoute path="/monespace" component={MonEspace} />
               <PrivateRoute path="/creersession" component={CreateSession} />
-              <PrivateRoute path="/Swipe" component={Swipe} />
-              <Redirect to="/" />
+              <PrivateRoute path="/choisirmood" component={Mood} />
+              <Redirect to="/home" />
             </Switch>
           </Router>
         </div>
