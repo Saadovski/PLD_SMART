@@ -19,37 +19,30 @@ function Mood(props) {
 
     const addMood = () =>{
         let profile = [];
+        console.log("la con de tes morts");
         for(let i=0; i<genres.length; i++) {
           if(document.querySelector("#"+genres[i]).checked === true){
             profile.push(genres[i]);
+            console.log("i:"+i);
           }
+
         }
-        socket.emit('addMood', 
+        /*socket.emit('addMood', 
         {
             auth: {
                 id: authContext.userId,
                 token: authContext.token
                 },
             mood: profile
-        })
+        })*/
+        console.log("profil:");
+        console.log(profile);
     }
 
-    const groupeId = document.querySelector('.groupeId')
-			const joinGroup = () =>{
-					socket.emit('joinGroup', 
-					{
-						auth: {
-                            id: authContext.userId,
-                            token: authContext.token
-							},
-						groupId: groupeId.value
-					})
-			}
-		
-			socket.on('group', (data) =>{
-				alert(data.user)
-				console.log(data)
-			})
+	socket.on('group', (data) =>{
+		alert(data.user)
+		console.log(data)
+	})
 
     return (
       <div className="box-centre">
@@ -72,7 +65,7 @@ function Mood(props) {
                 onClick={()=>
                     {
                     addMood();
-                    history.push("/session:"+"mettre ici le nom d'id");
+                    history.push("/session/5");
                     }
                 }>Valider les moods</button>
             </div>
