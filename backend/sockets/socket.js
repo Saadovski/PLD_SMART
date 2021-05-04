@@ -253,20 +253,30 @@ exports.init = (server) => {
         console.log("ça va pas")
       }
 
-      let auth = await verifyUser(data.auth.id, data.auth.token);
+      verifyUser(data.auth.id, data.auth.token)
+      .then(user => {
+        let groupId = mapUsernameGroupId[user.username];
+        let groupe = mapGroupIdGroup[groupId];
+        let match = groupe.addFilm(data.filmId, user.username);
+        
+        if (match === true) {
+          
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        res = {
+          success: "false",
+          error: "User not found !",
+        };
+        return res;
+      });
 
       if( auth.success === "false"){
         console.auth("ça va pas 2")    
       } else {
         let user = auth.user[0];
-        let groupId = mapUsernameGroupId[user.username];
-        let groupe = mapGroupIdGroup[groupId];
-        let match = groupe.addFilm(data.filmId, user.username);
-        let classement = groupe.genClassement();
-
-        if (match === true) {
-          
-        }
+        
 
       }
 

@@ -51,32 +51,32 @@ module.exports = {
         return score;
     },
 
-    maj_user_preferences: function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
+    maj_user_preferences: async function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
         var len = movie.genreVectors.length;
-        var nbfilms = user.preferences.nbFilms;
+        var nbfilms = user.preference.nbFilms;
         var annee = 0;
         var synopsis = [];
-
-        synopsis = user.preferences.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
-
-        var newGenre = user.preferences.genre;
+        synopsis = user.preference.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
+        var newGenre = user.preference.genre;
+        console.log("new1"+newGenre);
         newGenre = newGenre.map((val) => val * nbfilms * 5);
+        console.log("new2"+newGenre);
         for(var i = 0; i < len; ++i){
             newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
         }
         newGenre = newGenre.map((val) => val / (nbfilms * 5));
-        user.preferences.genre = newGenre;
+        user.preference.genre = newGenre;
+        annee = (user.preference.annee * nbfilms + movie.year) / (nbfilms + 1);
+        
+        nbfilms = user.preference.nbFilms + 1;
+        
 
-        annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
-
-        nbfilms = user.preferences.nbFilms + 1;
-
-        preferences = {
+        let preference = {
             nbFilms : nbfilms,
             genre: newGenre,
             synopsis : synopsis,
             annee : annee
         }
-        return preferences;
+        return preference;
     }
 };

@@ -1,3 +1,5 @@
+const ftcIA = require("../fonctions_IA");
+const Preference = require('../models/preference');
 
 exports.Group = class Group {
     constructor(group_id, user) {
@@ -19,6 +21,7 @@ exports.Group = class Group {
       this.resultatSwipe[user.username] = 0;
       this.username.push(user.username)
     }
+    
     removeUser(username){
         if(this.users.indexOf(username) !== -1){
             let index = this.users.indexOf(username)

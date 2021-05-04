@@ -1,8 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const parser = require('mongodb-query-parser')
+const fctIa = require("../fonctions_IA.js")
 const Film = require('../models/film');
+const User = require('../models/user');
+const Preference = require('../models/preference');
+const parser = require('mongodb-query-parser');
 
 
 exports.createFilm = (req, res, next) => {
@@ -79,20 +82,44 @@ exports.filmGender = async (req, res, next) => {
                     listFilms: listeFilms
                 });  
             }
-            
-                
-                
-            
-
-        
-        
-        
         
         })
 
 
 };
 
+exports.updatePreference = (req, res, next) => {
+
+    Film.findOne({ _id: req.body.filmId })
+    .then( film => {
+        User.findOne({ _id: req.body.userId }).populate('preference')
+        .then(user => {
+            
+            let newPreferences = fctIa.maj_user_preferences(user, film);
+            //console.log(newPreferences);
+            console.log("Pain")
+            Preference.updateOne({ _id: user.preference._id }, {$set: 
+            {
+                genre: newPreferences.genre, 
+                annee: newPreferences.annee,
+                nbFilms: newPreferences.nbFilms,
+                synopsis: newPreferences.synopsis
+            }},
+            function(err, resp) {
+                if (err) return res.status(502).json({ success: "false", status: 'Error' });
+                console.log("1 document updated");
+                return res.status(200).json({ success: "true", status: 'Preference modified' });
+            });
+        })
+        .catch(error => res.status(501).json({ error }));
+    })
+    .catch(error => res.status(500).json({ error }));
+
+    
+
+    
+
+}
 
 // exports.filmGender = (req, res, next) => {
 
