@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { Button } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import "../styles/navbar.css";
 
@@ -46,7 +46,7 @@ function Navbar() {
           <i className="fa fa-bars"></i>
         </button>
         
-        <Link to="/" className="active" id="logo">
+        <Link to="/" className="logo  " id="logo">
           Logo
         </Link>
       </div>
@@ -56,14 +56,14 @@ function Navbar() {
           <i className="fas fa-times"></i>
         </Button>
         <div className="texte-centre"> {authContext.username} </div>
-        </div>
-        <Link to="/">Accueil</Link>
-        {!authContext.isAuth && <Link to="/connexion">Connexion</Link>}
-        {!authContext.isAuth && <Link to="/inscription">Inscription</Link>}
-        {authContext.isAuth && <Link to="/monespace">Mon Espace</Link>}
+      </div>
+      <NavLink to="/" activeClassName="selected">Accueil</NavLink>
+        {!authContext.isAuth && <NavLink to="/connexion" activeClassName="selected">Connexion</NavLink>}
+        {!authContext.isAuth && <NavLink to="/inscription" activeClassName="selected">Inscription</NavLink>}
+        {authContext.isAuth && <NavLink to="/monespace" activeClassName="selected">Mon Espace</NavLink>}
         <Link to="/creersession">Rejoindre ou créer une session</Link>
         {authContext.isAuth && (
-          <div className="bouton-gris-hover">
+        <div className="bouton-gris-hover">
           <button
             className="bouton-gris-rempli"
             onClick={() => {
@@ -73,7 +73,7 @@ function Navbar() {
           >
             Deconnexion
           </button>
-          </div>
+        </div>
         )}
       </div>
       <div className="blackBackground"></div>
