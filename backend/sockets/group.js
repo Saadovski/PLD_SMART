@@ -23,16 +23,49 @@ exports.Group = class Group {
         }
 
     }
+
+    initFilm(){
+      for (let film of list_films) {
+        countFilm[film._id] = 0;
+      }
+    }
   
+    addFilm(filmId, username) {
+      this.resultatSwipe[username]++;
+      this.countFilm[filmId]++;
+      res = false;
+      if (countFilm === this.users.length) {
+        res = true;
+        console.log("Match !");
+      }
+      return res;
+    }
+
+    genClassement() {
+      let classement = [];
+      let index = 0;
+      let nbFilm = 0;
+      while (index < this.users.length && nbFilm < 5) {
+        for (let film of this.list_films) {
+          if(this.countFilm[film._id] === (this.users.length - index)) {
+            nbFilm++;
+            classement.push(film);
+          }
+        }
+        index++;
+      }
+      return (classement.slice(4));
+
+    }
 
     to_json(){
 
       return {
-        groupeId: this.group_id,
+        groupId: this.group_id,
         user: this.users, 
         owner: this.owner,
         mood: this.mood,
-        films: this.list_films
+        films: this.list_films,
       }
     }
   }
