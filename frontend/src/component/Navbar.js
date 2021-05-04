@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { Button } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import "../styles/navbar.css";

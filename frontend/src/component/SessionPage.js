@@ -4,7 +4,6 @@ import "../styles/textes.css";
 import "../styles/box.css";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/socketContext";
-import { io } from "socket.io-client";
 import { AuthContext } from "../context/authContext";
 
 function SessionPage() {

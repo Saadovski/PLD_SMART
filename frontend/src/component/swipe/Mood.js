@@ -3,7 +3,6 @@ import { useHistory } from "react-router";
 import React, { useContext, useEffect } from "react";
 import "../../styles/textes.css";
 import "../../styles/box.css";
-import { io } from "socket.io-client";
 import { SocketContext } from "../../context/socketContext";
 
 function Mood(props) {
@@ -16,7 +15,7 @@ function Mood(props) {
     socketContext.socket.on("group", (group) => {
       socketContext.updateGroup(group);
     });
-  }, []);
+  }, [socketContext]);
 
   const addMood = () => {
     let profile = [];

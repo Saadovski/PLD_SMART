@@ -14,10 +14,6 @@ function Signin(props) {
   const authContext = useContext(AuthContext);
   const history = useHistory();
 
-  useEffect(() => {
-    console.log(props);
-  });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting form...");
@@ -57,10 +53,10 @@ function Signin(props) {
       )}
               <h3> Connexion </h3>
 
-      <form class="texte-centre">
+      <form className="texte-centre">
         <label>
           <input
-            class="box-sans-contour texte-vert texte-centre"
+            className="box-sans-contour texte-vert texte-centre"
             type="text"
             name="username"
             onChange={(e) => setUsername(e.target.value)}
@@ -69,7 +65,7 @@ function Signin(props) {
         </label>
         <label>
           <input
-            class="box-sans-contour texte-vert texte-centre"
+            className="box-sans-contour texte-vert texte-centre"
             type="password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
@@ -77,13 +73,13 @@ function Signin(props) {
           />
         </label>
         <hr></hr>
-        <div class="bouton-vert-hover">
-          <button class="bouton-vert-rempli" onClick={handleSubmit}>
+        <div className="bouton-vert-hover">
+          <button className="bouton-vert-rempli" onClick={handleSubmit}>
             Connexion
           </button>
         </div>
       <hr></hr>
-      <div class="bouton-gris-hover box-en-bas">
+      <div className="bouton-gris-hover box-en-bas">
         <button className="bouton-gris-rempli" onClick={(event) => {window.location.href="/connection"}}>
           Retour
         </button>
