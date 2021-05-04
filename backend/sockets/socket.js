@@ -44,7 +44,7 @@ exports.init = (server) => {
 
           if (user.username in mapUsernameGroupId) {
             let oldGroupId = mapUsernameGroupId[user.username];
-            mapGroupIdGroup[oldGroupId].removeUser(user.username);
+            mapGroupIdGroup[oldGroupId].removeUser(user);
             let tempGroupe = mapGroupIdGroup[oldGroupId];
             if (tempGroupe.owner === user.username) {
               console.log("suprimation");
@@ -92,7 +92,7 @@ exports.init = (server) => {
 
             if (user.username in mapUsernameGroupId) {
               let oldGroupId = mapUsernameGroupId[user.username];
-              mapGroupIdGroup[oldGroupId].removeUser(user.username);
+              mapGroupIdGroup[oldGroupId].removeUser(user);
             }
 
             // ajouter l'utilisateur dans son groupe, l'inscrire dans les variables partagées et envoyer le nouveau groupe aux autres membres

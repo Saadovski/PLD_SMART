@@ -25,7 +25,6 @@ exports.Group = class Group {
             delete this.users[index]
             delete this.username[index]
         }
-
     }
 
     initFilm(){
