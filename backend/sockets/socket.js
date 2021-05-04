@@ -21,7 +21,65 @@ exports.init = (server) => {
     console.log("Un client est connecté !" + socket.id);
 
     socket.on("openGroup", async (data) => {
+      const User = require("../models/user");
+      console.log(data);
 
+      // on vérifie que les champs nécéssaires sont renseignés
+      
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
+        console.log("ça va pas");
+      }
+
+      // On vérifie que l'utilisateur n'est pas dans un autre groupe.
+ 
+      if( user.username in mapUsernameGroupId){
+        
+        let oldGroupId = mapUsernameGroupId[user.username]
+        mapGroupIdGroup[oldGroupId].removeUser(user.username)
+        let tempGroupe = mapGroupIdGroup[oldGroupId];
+        if (tempGroupe.owner === user.username) {
+          console.log("suprimation")
+        }
+      }
+      
+      //auth
+
+      verifyUser(data.auth.id, data.auth.token)
+        .then((userFromDB) => {
+          console.log("user", userFromDB);
+          let user = userFromDB[0];
+
+          console.log("Username", user.username);
+
+          // On vérifie que l'utilisateur n'est pas dans un autre groupe.
+
+          if (user.username in mapUsernameGroupId) {
+            let oldGroupId = mapUsernameGroupId[user.username];
+            mapGroupIdGroup[oldGroupId].removeUser(user.username);
+          }
+
+          // créer un groupe et l'inscrire dans les variables partagées et on le place dans sa propre room
+
+          var groupId = "_" + Math.random().toString(36).substr(2, 9);
+
+          let newGroup = new Group(groupId, user.username);
+          console.log(groupId);
+          mapGroupIdGroup[newGroup.group_id] = newGroup;
+          mapUsernameGroupId[user.username] = newGroup.group_id;
+
+          let groupJson = newGroup.to_json();
+          console.log(groupJson);
+          socket.join(newGroup.group_id);
+          socket.emit("group", groupJson);
+        })
+        .catch((error) => {
+          console.log(error);
+          res = {
+            success: "false",
+            error: "User not found !",
+          };
+          return res;
+        });
     });
     socket.on("joinGroup", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
@@ -48,7 +106,7 @@ exports.init = (server) => {
             let groupe = mapGroupIdGroup[data.groupId];
             if (groupe.status === "waiting") {
               mapUsernameGroupId[user.username] = data.groupId;
-              groupe.addUser(user.username);
+              groupe.addUser(user);
               socket.join(data.groupId);
 
               // envoyer le contenu du groupe au nouvel utilisateur
@@ -86,7 +144,7 @@ exports.init = (server) => {
 
         if (groupe.status === "waiting") {
           mapUsernameGroupId[user.username] = data.groupId;
-          groupe.addUser(user.username);
+          groupe.addUser(user);
           socket.join(data.groupId);
 
           // envoyer le contenu du groupe au nouvel utilisateur
@@ -179,10 +237,10 @@ exports.init = (server) => {
         });
 
 
-        
         //console.log(filmsAvantTri)
 
-        // a faire
+        // a faire       
+
       } else {
         console.log("l'utilisateur n'est pas le chef du groupe");
       }
