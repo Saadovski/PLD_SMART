@@ -210,10 +210,10 @@ exports.init = (server) => {
 
       //auth
 
-      console.log("on va commencer la rq des films2");
+      //console.log("on va commencer la rq des films2");
       verifyUser(data.auth.id, data.auth.token)
         .then((userFromDB) => {
-          console.log("on va commencer la rq des films3");
+          //console.log("on va commencer la rq des films3");
           let user = userFromDB[0];
 
           // On vérifie que l'utilisateur est bien le chef du groupe
@@ -234,20 +234,19 @@ exports.init = (server) => {
                 listeGenre: groupe.mood,
               }),
             }).then((result) => {
-              console.log("c bon pour les films 2");
               result
                 .json()
                 .then((data) => {
                   listeFilms = data.listFilms;
                   //console.log(listeFilms);
-                  console.log(groupe.users);
+                  //console.log(groupe.users);
                   const liste_films_finale = IA.top_best_movies(listeFilms, groupe.users);
                   groupe.list_films = liste_films_finale;
 
                   groupe.status = "running";
 
                   // envoyer le contenu du groupe au nouvel utilisateur
-                  io.in(groupe.groupId).emit("group", groupe.to_json());
+                  io.in(groupe.groupId).emit("start", groupe.to_json());
                   let end = new Date().getTime();
                   console.log("Time for ready action : ", end - start);
                 })
