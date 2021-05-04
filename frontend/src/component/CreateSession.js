@@ -15,6 +15,7 @@ function CreateSession() {
   useEffect(() => {
     let newSocket = io("http://localhost:1024");
     setSocket(newSocket);
+    socketContext.setSocket(newSocket);
     console.log(newSocket);
     newSocket.on("error", (error) => {
       alert(error.message);
@@ -23,6 +24,8 @@ function CreateSession() {
     newSocket.on("group", (group) => {
       console.log(group);
       console.log(socket);
+      socketContext.setGroup(group);
+      socketContext.connectToSession(newSocket.id, newSocket, group.groupId);
       history.push(`/session/${group.groupId}`);
     });
   }, []);

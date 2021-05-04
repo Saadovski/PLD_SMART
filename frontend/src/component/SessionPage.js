@@ -11,13 +11,10 @@ function SessionPage() {
   const socketContext = useContext(SocketContext);
   const history = useHistory();
 
-  useEffect(() => {
-    const socket = io(`/${id}`);
-    socket.on("connect", () => {
-      console.log("connected to server socket");
-    });
-    socketContext.connectToSession(socket.id, socket, id);
-  }, []);
+  // useEffect(() => {
+
+  //   socketContext.connectToSession(socket.id, socket, id);
+  // }, []);
 
   return (
     <div class="box-centre">
