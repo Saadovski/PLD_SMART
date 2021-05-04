@@ -59,6 +59,7 @@ exports.init = (server) => {
           console.log(groupJson);
           socket.join(newGroup.group_id);
           socket.emit("group", groupJson);
+          io.emit('message')
         })
         .catch((error) => {
           console.log(error);
@@ -100,9 +101,11 @@ exports.init = (server) => {
 
               // envoyer le contenu du groupe au nouvel utilisateur
               socket.emit("group", groupe.to_json());
-              // io.broadcast.emit("group", groupe.to_json());
+              socket.broadcast.to(data.groupId).emit("group", groupe.to_json());
+              io.emit('test', "this is a test");
 
-              io.to(groupe.groupId).emit("group", groupe.to_json());
+              // io.in(groupe.groupId).emit("group", groupe.to_json());
+              // console.log(io.in(groupe.groupId).emit("group", groupe.to_json()));
             }
           })
           .catch((error) => {

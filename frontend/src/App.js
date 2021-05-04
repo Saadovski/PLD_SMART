@@ -50,7 +50,7 @@ function App() {
     setToken(null);
     localStorage.removeItem("pldsmartToken");
     localStorage.removeItem("pldsmartUser");
-    history.push("/");
+    window.location.href = "/";
   };
 
   const connectToSession = (socketId, socket, idSession) => {
@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <SocketContext.Provider value={{ socket, idSession, connectToSession, updateGroup, group }}>
+    <SocketContext.Provider value={{ socket: socket, idSession, connectToSession: connectToSession, updateGroup, group: group }}>
       <AuthContext.Provider value={{ isAuth: !!token, login: login, logout: logout, token: token, username: username, userId: userId }}>
         <div className="App">
           <Router>
