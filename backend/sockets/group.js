@@ -19,10 +19,11 @@ exports.Group = class Group {
       this.resultatSwipe[user.username] = 0;
       this.username.push(user.username)
     }
-    removeUser(username){
-        if(this.users.indexOf(username) !== -1){
-            let index = this.users.indexOf(username)
+    removeUser(user){
+        if(this.users.indexOf(user) !== -1){
+            let index = this.users.indexOf(user)
             delete this.users[index]
+            delete this.username[index]
         }
 
     }
