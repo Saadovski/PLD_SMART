@@ -7,7 +7,7 @@ const User = require('../models/user');
 const Preference = require('../models/preference');
 const parser = require('mongodb-query-parser');
 
-
+const tailleEchantillon = 100
 exports.createFilm = (req, res, next) => {
 
     //il faut transformer "profil" en vecteur
@@ -27,6 +27,7 @@ exports.createFilm = (req, res, next) => {
 
 exports.filmGender = async (req, res, next) => {
 
+    console.log("on requête les films")
     const listeGenre = req.body.listeGenre
     let requete = ""
     if(listeGenre.length === 0){
@@ -38,34 +39,44 @@ exports.filmGender = async (req, res, next) => {
         requete = "{$or:[";
 
         for(let genre of listeGenre) {
-            requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"
+            requete = requete + "{genre: \"" + genre+ "\"},"
         }
     requete = requete.substring(0, requete.length-1) + "]}";
     }
 
+    requete2 = "{"
 
-    await Film.find(parser(requete))
-        .then(async listeFilms => {
 
-            if(listeFilms.length > 500){
+    for(let genre of listeGenre) {
+        requete2 = requete2 + " genre: \""+genre+"\","
+    }
+    requete2 = requete2.substring(0, requete2.length-1);
+    requete2 = requete2 + "}"
+
+    console.log("requete", requete)
+    let query = parser(requete)
+    Film.find(query)
+        .then(listeFilms => {
+
+            if(listeFilms.length > tailleEchantillon){
 
                 listeFilms = listeFilms.sort(() => Math.random() - 0.5);
-                listeFilms = listeFilms.slice(0, 500);
+                listeFilms = listeFilms.slice(0, tailleEchantillon);
                 console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
                     listFilms: listeFilms
                 });
             } 
-            else if(listeFilms.length < 500){
-                while(listeFilms.length < 500){
+            else if(listeFilms.length < tailleEchantillon){
+                // while(listeFilms.length < tailleEchantillon){
 
-                    var random = Math.floor(Math.random() * 3437)
-                    await Film.findOne({}).skip(random)
-                    .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
-                    .catch(error => {console.log("soucis")})
-                    ; 
-                }
+                //     //var random = Math.floor(Math.random() * 2924)                     //Film.findOne({}).skip(random)
+                //     Film.aggregate([{ $sample: { size: 1 } }])
+                //     .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
+                //     .catch(error => {console.log("soucis")})
+                //     ; 
+                // }
                 console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
@@ -88,15 +99,15 @@ exports.filmGender = async (req, res, next) => {
 
 };
 
-exports.updatePreference = (req, res, next) => {
+exports.updatePreference = async (req, res, next) => {
 
     Film.findOne({ _id: req.body.filmId })
     .then( film => {
         User.findOne({ _id: req.body.userId }).populate('preference')
         .then(user => {
-            
-            let newPreferences = fctIa.maj_user_preferences(user, film);
-            //console.log(newPreferences);
+            console.log(user);
+            let newPreferences = await(fctIa.maj_user_preferences(user, film));
+            console.log(newPreferences);
             console.log("Pain")
             Preference.updateOne({ _id: user.preference._id }, {$set: 
             {
@@ -111,7 +122,7 @@ exports.updatePreference = (req, res, next) => {
                 return res.status(200).json({ success: "true", status: 'Preference modified' });
             });
         })
-        .catch(error => res.status(501).json({ error }));
+        .catch(error => console.log(res.status(501).json({ error })));
     })
     .catch(error => res.status(500).json({ error }));
 

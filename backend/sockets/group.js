@@ -4,7 +4,7 @@ const Preference = require('../models/preference');
 exports.Group = class Group {
     constructor(group_id, user) {
         this.group_id = group_id; 
-        this.owner = user;
+        this.owner = user.username;
         this.users = [user];
         this.username = [user.username];
         this.status = "waiting";
@@ -21,11 +21,11 @@ exports.Group = class Group {
       this.resultatSwipe[user.username] = 0;
       this.username.push(user.username)
     }
-    
-    removeUser(username){
-        if(this.users.indexOf(username) !== -1){
-            let index = this.users.indexOf(username)
+    removeUser(user){
+        if(this.users.indexOf(user) !== -1){
+            let index = this.users.indexOf(user)
             delete this.users[index]
+            delete this.username[index]
         }
 
     }
@@ -61,7 +61,6 @@ exports.Group = class Group {
         index++;
       }
       return (classement.slice(4));
-
     }
 
     to_json(){
@@ -72,6 +71,7 @@ exports.Group = class Group {
         owner: this.owner,
         mood: this.mood,
         films: this.list_films,
+        status: this.status
       }
     }
   }

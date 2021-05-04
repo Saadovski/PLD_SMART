@@ -13,10 +13,13 @@ exports.createUser = (req, res, next) => {
     .then(hash => {
 
       //il faut transformer "profil" en vecteur
-      let arrayGenre;
+      let arrayGenre = new Array(512).fill(0);;
       (async () => {
-        arrayGenre = (await fctIa.text_to_vector(req.body.profil))
-      
+        var genre_vectors = (await fctIa.text_to_vector(req.body.profil))
+        for (var i = 0; i < genre_vectors.length; ++i) {
+          arrayGenre = arrayGenre.map((val, idx)=> val + genre_vectors[i][idx]);
+        }
+        arrayGenre = arrayGenre.map((val)=> val / genre_vectors.length);
         console.log(arrayGenre)
 
         const preference_ = new Preference({
@@ -26,103 +29,106 @@ exports.createUser = (req, res, next) => {
           annee: 0
         });
         preference_.save()
-        .then( () =>{
-  
-          const user = new User({
-            username: req.body.username,
-            password: hash,
-            nbSession: 0,
-            preference: preference_
+          .then(() => {
+
+            const user = new User({
+              username: req.body.username,
+              password: hash,
+              nbSession: 0,
+              preference: preference_
             });
-      
+
             user.save()
-            .then(() =>  res.status(200).json({
-              success: "true" ,
-              reponse: "User enregistré et connecté",
-              userId: user._id,
-              token: jwt.sign(
-                { userId: user._id },
-                'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
-                { expiresIn: '24h' }
-              )
-            }))
-            .catch(error =>  res.status(400).json({ error }));
-      
+              .then(() => res.status(200).json({
+                success: "true",
+                reponse: "User enregistré et connecté",
+                userId: user._id,
+                token: jwt.sign(
+                  { userId: user._id },
+                  'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
+                  { expiresIn: '24h' }
+                )
+              }))
+              .catch(error => res.status(400).json({ error }));
+
           })
-        .catch(error =>  res.status(400).json({ error }));
-  
+          .catch(error => res.status(400).json({ error }));
+
 
       })()
 
 
     })
 
- 
+
 };
 
 exports.connectUser = (req, res, next) => {
-  
-  User.findOne({ username: req.body.username })
-  .then(user => {
-    if(!user) {
-      return res.status(401).json({ 
-        error: 'User not found !',
-        success: "false"  });
-    }
 
-    bcrypt.compare(req.body.password, user.password)
-    .then(valid => {
-      if(!valid) {
-        return res.status(401).json({ 
-          error: 'Wrong password !',
-          success: "false"  });
+  User.findOne({ username: req.body.username })
+    .then(user => {
+      if (!user) {
+        return res.status(401).json({
+          error: 'User not found !',
+          success: "false"
+        });
       }
-      res.status(200).json({
-        success: "true",
-        userId: user._id,
-        token: jwt.sign(
-          { userId: user._id },
-          'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
-          { expiresIn: '24h' }
-        )
-      })
+
+      bcrypt.compare(req.body.password, user.password)
+        .then(valid => {
+          if (!valid) {
+            return res.status(401).json({
+              error: 'Wrong password !',
+              success: "false"
+            });
+          }
+          res.status(200).json({
+            success: "true",
+            userId: user._id,
+            token: jwt.sign(
+              { userId: user._id },
+              'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
+              { expiresIn: '24h' }
+            )
+          })
+        })
+        .catch(error => res.status(500).json({ error }));
+
     })
     .catch(error => res.status(500).json({ error }));
-    
-  })
-  .catch(error => res.status(500).json({ error }));
 };
 
 exports.verifUsername = (req, res, next) => {
-  
+
   User.findOne({ username: req.body.username })
-  .then(user => {
-    if(!user) {
-      return res.status(200).json({ 
-      status: 'username available',
-      success: "true" });
-    }
-    return res.status(200).json({
-      status: 'username not available',
-      success: "false" 
-    });
+    .then(user => {
+      if (!user) {
+        return res.status(200).json({
+          status: 'username available',
+          success: "true"
+        });
+      }
+      return res.status(200).json({
+        status: 'username not available',
+        success: "false"
+      });
     })
-  .catch(error => res.status(500).json({ error }));
+    .catch(error => res.status(500).json({ error }));
 };
 
 exports.unsubscribe = (req, res, next) => {
-  
+
   console.log(req.body.userId)
   User.deleteOne({ _id: req.body.userId })
-  .then(() => res.status(200).json({ 
-    message: 'Objet supprimé !',
-    success: "true" 
-}))
-  .catch(error => res.status(400).json({ 
-    error ,
-    success: "false" 
-  }));
-  
+    .then(() => res.status(200).json({
+      message: 'Objet supprimé !',
+      success: "true"
+    }))
+    .catch(error => res.status(400).json({
+      error,
+      success: "false"
+    }));
+
 };
 
 exports.checkInfoUser = (req, res, next) => {
@@ -130,18 +136,18 @@ exports.checkInfoUser = (req, res, next) => {
   Film
   let newPreferences = ftcIA.maj_user_preferences(user, film);
   User.findOne({ _id: req.body.userId }).populate('preference')
-  .then(user => {
-    if(!user) {
-      return res.status(200).json({ success: "false", status: 'username not available' });
-    }
-    return res.status(200).json({ 
-      status: 'stats found',
-      success: "true",
-      nb_sessions: user.nbSession,
-      nb_films: user.preference.nbFilms
-    });
+    .then(user => {
+      if (!user) {
+        return res.status(200).json({ success: "false", status: 'username not available' });
+      }
+      return res.status(200).json({
+        status: 'stats found',
+        success: "true",
+        nb_sessions: user.nbSession,
+        nb_films: user.preference.nbFilms
+      });
     })
-  .catch(error => res.status(500).json({ error }));
+    .catch(error => res.status(500).json({ error }));
 };
 
 exports.modifMdp = (req, res, next) => {
