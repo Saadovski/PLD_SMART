@@ -30,11 +30,11 @@ function UserInfos() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": "Bearer "+authContext.token,
       },
       body: JSON.stringify({
         userId: authContext.userId,
-        password: password,
-        token: authContext.token, 
+        password: password, 
       }),
     })
       .then((response) => response.json())
