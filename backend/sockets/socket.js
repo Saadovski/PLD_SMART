@@ -270,7 +270,7 @@ exports.init = (server) => {
     socket.on("interruptSwipe", async (data) => {
 
       //on vérifie que l'on a les bons params
-      console.log(data);
+      console.log("interrupt_swipe", data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
         console.log("ça va pas");
       }
