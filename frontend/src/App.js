@@ -69,13 +69,13 @@ function App() {
             <Navbar />
             <Switch>
               <Route exact path="/home" component={Home} />
-              <Route path="/swipe" component={Swipe} />
+              <PrivateRoute path="/swipe" component={Swipe} />
               <Route path="/inscription" component={Signup_container} />
               <Route path="/connexion" component={Signin} />
-              <Route path="/session/:id" component={SessionPage} />
-              <Route path="/monespace" component={MonEspace} />
-              <Route path="/creersession" component={CreateSession} />
-              <Route path="/choisirmood" component={Mood} />
+              <PrivateRoute path="/session/:id" component={SessionPage} />
+              <PrivateRoute path="/monespace" component={MonEspace} />
+              <PrivateRoute path="/creersession" component={CreateSession} />
+              <PrivateRoute path="/choisirmood" component={Mood} />
               <Redirect to="/home" />
             </Switch>
           </Router>

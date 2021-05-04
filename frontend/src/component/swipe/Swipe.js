@@ -132,6 +132,17 @@ function Swipe() {
 */
   }
 
+  const interrompreSwipe = () => {
+    /*socket.emit('printClassement', 
+    {
+      auth: {
+        id: userId,
+        token: token,
+        }
+    })
+*/
+  }
+
   const swiped = (direction, nameToDelete) => {
     console.log('removing: ' + nameToDelete);
     setLastDirection(direction);
@@ -201,8 +212,8 @@ function Swipe() {
           <button
             className="bouton-rouge-rempli"
             onClick={() => 
-            history.push("/")
-            
+            history.push("/"),
+            interrompreSwipe()
             }>
             Interrompre le swipe</button>
         </div>}

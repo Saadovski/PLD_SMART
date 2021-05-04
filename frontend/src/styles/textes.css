@@ -11,6 +11,11 @@ color: #FFFFFF;
     color: #5CDB95;
 }
 
+.texte-username{    
+    width: 100%;
+    float: clear;
+}
+
 .texte-vert::placeholder{
     color: #5CDB95;
 }

@@ -33,7 +33,7 @@ function UserHistory() {
     }, []);
 
     return (
-        <div className="UserHistory-container">
+        <div className="texte-centre UserHistory-container">
             <div>
                 Nombre de sessions : {sessionsNb}
             </div>

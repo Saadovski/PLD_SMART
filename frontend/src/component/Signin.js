@@ -37,23 +37,13 @@ function Signin(props) {
       .then((data) => {
         if (data.success) {
           console.log("successfully logged");
-          //const newToken = { token: data.token, expiration: new Date().getTime() + 1000 * 60 * 2 };
-          //localStorage.setItem('projetpmToken', JSON.stringify({ token: newToken.token, expiration: newToken.expiration })); // 2h
-          //authContext.login(newToken);
-          // document.querySelector(".connection-info").innerHTML = "Connexion réussie !";
+          
           authContext.login(data.token, data.userId, username);
           history.push("/monespace");
 
-          /*if (props.location.state?.from.pathname)
-          {
-          window.location.href = props.location.state?.from.pathname;
-          }
-          else
-          {
-          window.location.href = "/";        
-          }*/
         } else {
-          document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
+          console.log("la connexion a échouée");
+          //document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
         }
       });
   };
