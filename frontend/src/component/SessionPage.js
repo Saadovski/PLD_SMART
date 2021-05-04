@@ -46,10 +46,10 @@ function SessionPage() {
     <div class="box-centre">
       <div class="box-en-haut">Session {id}</div>
       <div class="texte-centre">
-        <h3>Chef du groupe : {owner}</h3>
+        <h3>Chef du groupe : {owner.username}</h3>
         <div className="users">
           <h3>Utilisateurs connectés : </h3>
-          {group.user.map((u, index) => {
+          {socketContext.group.users.map((u, index) => {
             return (
               <div className="userElement" key={index}>
                 {u}
@@ -58,7 +58,7 @@ function SessionPage() {
           })}
         </div>
 
-        {owner === username && (
+        {owner.username === username && (
           <div className="bouton-vert-hover">
             <button className="bouton-vert-rempli" onClick={() => history.push("/ChoisirMood")}>
               Choisir le mood
@@ -66,7 +66,7 @@ function SessionPage() {
           </div>
         )}
         <hr></hr>
-        {owner === username && (
+        {owner.username === username && (
           <div className="bouton-gris-hover">
             <button
               className="bouton-gris-rempli texte-blanc"
