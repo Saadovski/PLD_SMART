@@ -177,12 +177,13 @@ function Swipe() {
     }
   }
 
- /* socketContext.socket.on("printRanking", (Ranking) => {
-    socketContext.updateGroup(group);
-    history.push("/ranking");
+  socketContext.socket.on("printRanking", (ranking) => {
+    //socketContext.updateGroup(group);
+    //history.push("/ranking");
     console.log("received a ranking");
+    console.log(ranking);
   });
-  }*/
+  
 
   return (
     <div className="box-ecran swipe-color" >
@@ -222,8 +223,8 @@ function Swipe() {
           <button
             className="bouton-rouge-rempli"
             onClick={() => 
-            history.push("/"),
-            interrompreSwipe()
+            interrompreSwipe(),
+            history.push("/")
             }>
             Interrompre le swipe</button>
         </div>}
