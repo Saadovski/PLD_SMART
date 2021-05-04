@@ -1,7 +1,7 @@
 const http = require('http');
 const app = require('./app');
 var fs = require('fs');
-
+const User = require('./models/user');
 var soc = require('./sockets/socket')
 
 
@@ -50,14 +50,12 @@ server.on('listening', () => {
   console.log('Listening on ' + bind);
 });
 
-const io = require("socket.io")(server, {cors: {origin: "*"}})
 
 // Quand un client se connecte, on le note dans la console
 
+soc.init(server)
 
 
-
-io.sockets.on('connection', soc.socketConnection);
 
 
 

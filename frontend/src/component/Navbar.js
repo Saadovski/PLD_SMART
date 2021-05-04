@@ -45,14 +45,18 @@ function Navbar() {
         <button href="" className="icon" onClick={open}>
           <i className="fa fa-bars"></i>
         </button>
+        
         <Link to="/" className="active" id="logo">
           Logo
         </Link>
       </div>
       <div id="myLinks">
+        <div className="box-horizontal texte-centre">
         <Button className="icon" onClick={closeNavBar}>
           <i className="fas fa-times"></i>
         </Button>
+        <div className="texte-centre"> {authContext.username} </div>
+        </div>
         <Link to="/">Accueil</Link>
         {!authContext.isAuth && <Link to="/connexion">Connexion</Link>}
         {!authContext.isAuth && <Link to="/inscription">Inscription</Link>}

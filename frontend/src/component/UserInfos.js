@@ -21,29 +21,31 @@ function UserInfos() {
     setIsModifying(!isModifying);
 
     if (isModifying && hasChanged) {
-      e.preventDefault();
-      console.log("Submitting form...");
-      console.log(`%c${username} ${password}`, "color: #cc0000");
+    
+    e.preventDefault();
+    console.log("Submitting form...");
+    console.log(`%c${username} ${password}`, "color: #cc0000");
 
-      fetch(REACT_APP_API_URL + "user/modification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password,
-          token: authContext.token,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.success) {
-            console.log("successfully modified the password");
-          } else {
-            document.querySelector(".connection-info").innerHTML = "La modification a échoué";
-          }
-        });
+    fetch(REACT_APP_API_URL + "user/modification", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: authContext.userId,
+        password: password,
+        token: authContext.token, 
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log("successfully modified the password");
+          
+        } else {
+          document.querySelector(".connection-info").innerHTML = "La modification a échoué";
+        }
+      });
     }
   };
 
@@ -83,33 +85,29 @@ function UserInfos() {
               setPassword(e.target.value);
             }}
             placeholder="Entrez votre mot de passe ici"
-          />
+
+            />
         </label>
 
-        {isModifying ? (
-          <div class="texte-centre">
-            <label>
-              <input
-                class="box-sans-contour texte-vert texte-centre"
-                type="password"
-                name="username"
-                readOnly={!isModifying}
-                onChange={() => setHasChanged(true)}
-                placeholder="Confirmez votre mot de passe ici"
-              />
-            </label>
 
-            <div className="bouton-vert-hover">
-              <button className="bouton-vert-rempli" onClick={handleModify}>
-                Valider
-              </button>
-            </div>
-            <hr></hr>
-            <div className="bouton-gris-hover">
-              <button className="bouton-gris-rempli" onClick={() => setIsModifying(false)}>
-                Annuler
-              </button>
-            </div>
+      {isModifying ? (
+        <div class="texte-centre">
+          <label>
+          <input
+            class="box-sans-contour texte-vert texte-centre"
+            type="password"
+            name="username"
+            value={password}
+            readOnly={!isModifying} 
+            onChange={() => setHasChanged(true)}
+            placeholder="Confirmez votre mot de passe ici"
+          />
+        </label>
+        <hr></hr>
+          <div className="bouton-vert-hover">
+          <button className="bouton-vert-rempli" onClick={handleModify}>
+            Valider
+          </button>
           </div>
         ) : (
           <div className="bouton-vert-hover">
@@ -117,7 +115,19 @@ function UserInfos() {
               Modifier
             </button>
           </div>
-        )}
+
+
+        </div>
+      ) : (
+        <div>
+        <hr></hr>
+        <div className="bouton-vert-hover">
+        <button className="bouton-vert-rempli" onClick={handleModify}>
+          Modifier
+        </button>
+        </div>
+        </div>
+      )}
       </form>
     </div>
   );

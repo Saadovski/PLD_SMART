@@ -9,6 +9,7 @@ function MonEspace() {
 
   return (
     <div className="box-centre">
+<<<<<<< HEAD
       <div className="monEspace-container">
         <div>
           <div>{authContext.username}</div>
@@ -19,6 +20,17 @@ function MonEspace() {
             <div onClick={() => setState(2)}>
               <i className="fas fa-heart float-left"></i> Mes préférences
             </div>
+=======
+    <div className="monEspace-container">
+      <div>
+        <div>Username ici ...</div>
+        <div className="nav">
+          <div onClick={() => setState(1)}>
+            <i className="fas fa-username float-left"></i> Mes infos
+          </div>
+          <div onClick={() => setState(2)}>
+            <i className="fas fa-heart float-left"></i> Mes préférences
+>>>>>>> d9681cacb8abb18289045af1c3e176d2083854cc
           </div>
         </div>
         <hr />
