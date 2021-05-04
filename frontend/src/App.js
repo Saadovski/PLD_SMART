@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./component/Home";
 import MonEspace from "./component/MonEspace";
 import Simple from "./component/swipe/examples/Simple";
+import Mood from "./component/swipe/Mood";
 import Advanced from "./component/swipe/examples/Advanced";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
@@ -72,6 +73,7 @@ function App() {
               <PrivateRoute path="/session/:id" component={SessionPage} />
               <PrivateRoute path="/monespace" component={MonEspace} />
               <PrivateRoute path="/creersession" component={CreateSession} />
+              <Route path="/ChoisirMood" component={Mood} />
               <Route path="/Initialisation" component={Signup_signin} />
               <Redirect to="/" />
             </Switch>

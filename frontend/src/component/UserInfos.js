@@ -94,8 +94,7 @@ function UserInfos() {
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="password"
-            name="username"
-            value={password}
+            name="passwordconf"
             readOnly={!isModifying} 
             onChange={() => setHasChanged(true)}
             placeholder="Confirmez votre mot de passe ici"
