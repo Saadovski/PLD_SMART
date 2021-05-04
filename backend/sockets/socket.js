@@ -209,7 +209,7 @@ exports.init = (server) => {
 
       console.log("on va commencer la rq des films2")
       verifyUser(data.auth.id, data.auth.token)
-        .then(async (userFromDB) => {
+        .then((userFromDB) => {
           console.log("on va commencer la rq des films3")
           let user = userFromDB[0];
 
@@ -223,7 +223,7 @@ exports.init = (server) => {
 
             //filmsAvantTri = await getFilmsByGender(groupe.mood)
 
-            await fetch("http://localhost:1024/api/film/get_film_by_gender", {
+            fetch("http://localhost:1024/api/film/get_film_by_gender", {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -231,7 +231,7 @@ exports.init = (server) => {
               body: JSON.stringify({
                 listeGenre: groupe.mood,
               }),
-            }).then(async (result) => {
+            }).then( (result) => {
 
               console.log("c bon pour les films 2")
               result.json()
@@ -250,7 +250,7 @@ exports.init = (server) => {
                 socket.broadcast.emit("group", groupe.to_json());
 
               })
-              .catch()
+              .catch( error => console.log(error))
               
 
             });
