@@ -104,22 +104,24 @@ const alreadyRemoved = []
 let charactersState = db // This fixes issues with updating characters state forcing it to use the current state and not the state that was active when the card was created.
 
 function Swipe() {
-  const Movies = db
+  //const Movies = db
   const history = useHistory();
   const [MovieIndex, setMovieIndex] = useState(0);
   const [lastDirection, setLastDirection] = useState(null);
   const childRefs = useMemo(() => Array(db.length).fill(0).map(i => React.createRef()), [])
   const socketContext = useContext(SocketContext);
-  const owner = "test"//socketContext.group.owner;
-  const username = "test"//AuthContext.username;
-  const userId = AuthContext.userId;
-  const token = AuthContext.token;
-  const groupId = socketContext.groudId;
+  const authContext = useContext(AuthContext);
+  const owner = socketContext.group.owner;
+  const username = authContext.username;
+  const userId = authContext.userId;
+  const token = authContext.token;
+  const groupId = socketContext.group.groupId;
   const socket = socketContext.socket;
+  const Movies = socketContext.group.films;
 
   const swipeMovie = (avis) => {
     const filmId = Movies[MovieIndex].netflixid;
-    /*socket.emit('swipe', 
+    socket.emit('swipe', 
     {
       auth: {
         id: userId,
@@ -129,19 +131,20 @@ function Swipe() {
       filmId,
       avis
     })
-*/
+
   }
 
   const interrompreSwipe = () => {
-    /*socket.emit('printClassement', 
+    socket.emit('interruptSwipe', 
     {
       auth: {
         id: userId,
         token: token,
-        }
+        },
+        groupId
     })
-*/
   }
+
 
   const swiped = (direction, nameToDelete) => {
     console.log('removing: ' + nameToDelete);
@@ -155,10 +158,10 @@ function Swipe() {
     }
   }
 
-  /*socket.on('group', (data) =>{
+  socket.on('group', (data) =>{
     alert(data.user)
     console.log(data)
-  })*/
+  })
 
   const outOfFrame = (name) => {
     console.log(name + ' left the screen!')
@@ -173,6 +176,14 @@ function Swipe() {
       swipeMovie("true")
     }
   }
+
+  socketContext.socket.on("printRanking", (ranking) => {
+    //socketContext.updateGroup(group);
+    //history.push("/ranking");
+    console.log("received a ranking");
+    console.log(ranking);
+  });
+  
 
   return (
     <div className="box-ecran swipe-color" >
@@ -211,9 +222,9 @@ function Swipe() {
         <div className="bouton-rouge-hover">
           <button
             className="bouton-rouge-rempli"
-            onClick={() => 
-            history.push("/"),
-            interrompreSwipe()
+            onClick={() => {
+            interrompreSwipe();
+            history.push("/")}
             }>
             Interrompre le swipe</button>
         </div>}
@@ -222,7 +233,11 @@ function Swipe() {
         </div>
 
 
-    </div>
+
+{lastDirection=="left" ? <div key={lastDirection} className='non'><i class="img-swipe fas fa-no float-left"></i></div> : <h2></h2>}
+{lastDirection=="right" ? <div key={lastDirection} className='oui'><i class="img-swipe fas fa-heart float-left"></i></div> : <h2></h2>}
+
+</div>
   )
 }
 

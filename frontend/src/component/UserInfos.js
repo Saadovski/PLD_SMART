@@ -1,5 +1,4 @@
 import { useState, useContext, useEffect } from "react";
-import { Form } from "react-bootstrap";
 import "../styles/boutons.css";
 import "../styles/textes.css";
 import "../styles/box.css";
@@ -15,7 +14,7 @@ function UserInfos() {
 
   useEffect(() => {
     setUsername(authContext.username);
-  }, []);
+  }, [authContext.username]);
 
   const handleModify = (e) => {
     setIsModifying(!isModifying);

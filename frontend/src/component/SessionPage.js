@@ -4,7 +4,6 @@ import "../styles/textes.css";
 import "../styles/box.css";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/socketContext";
-import { io } from "socket.io-client";
 import { AuthContext } from "../context/authContext";
 
 function SessionPage() {
@@ -62,7 +61,7 @@ function SessionPage() {
 
         {owner === username && (
           <div className="bouton-vert-hover">
-            <button className="bouton-vert-rempli" onClick={() => history.push("/ChoisirMood")}>
+            <button className="bouton-vert-rempli" onClick={() => history.push("/choisirMood")}>
               Choisir le mood
             </button>
           </div>
