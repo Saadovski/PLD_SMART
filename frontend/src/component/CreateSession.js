@@ -51,8 +51,8 @@ function CreateSession() {
       <Container className="texte-centre">
         <h2>Créer une session</h2>
 
-        <div class="bouton-vert-hover">
-          <button className="bouton-vert-rempli" onClick={createASession}>
+        <div class="bouton-gris-hover">
+          <button className="bouton-gris-rempli" onClick={createASession}>
             Créer une session
           </button>
         </div>

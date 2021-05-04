@@ -22,7 +22,7 @@ exports.createFilm = (req, res, next) => {
 
 };
 
-exports.filmGender = (req, res, next) => {
+exports.filmGender = async (req, res, next) => {
 
     const listeGenre = req.body.listeGenre
     let requete = ""
@@ -41,36 +41,34 @@ exports.filmGender = (req, res, next) => {
     }
 
 
-    Film.find(parser(requete))
-        .then(listeFilms => {
+    await Film.find(parser(requete))
+        .then(async listeFilms => {
 
-            if(listeFilms.length > 250){
+            if(listeFilms.length > 500){
 
                 listeFilms = listeFilms.sort(() => Math.random() - 0.5);
-                listeFilms = listeFilms.slice(0, 250);
+                listeFilms = listeFilms.slice(0, 500);
                 console.log(listeFilms.length)
                 return res.status(200).json({ 
                     success: "true",
                     listFilms: listeFilms
                 });
             } 
-            else if(listeFilms.length < 250){
-                tout_films = Film.find()
-                .then(tout_films =>{
-                    nb_films = tout_films.length
-                    while(listeFilms.length < 250){
-    
-                        var random = Math.floor(Math.random() * nb_films)
-                        film = tout_films[random]
-                        if(listeFilms.indexOf(film) === -1) listeFilms.push(film); 
-                    }
-                    console.log(listeFilms.length)
-                    return res.status(200).json({ 
-                        success: "true",
-                        listFilms: listeFilms
-                    });
-                })
-                .catch(error => res.status(400).json({ error }))
+            else if(listeFilms.length < 500){
+                while(listeFilms.length < 500){
+
+                    var random = Math.floor(Math.random() * 3437)
+                    await Film.findOne({}).skip(random)
+                    .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
+                    .catch(error => {console.log("soucis")})
+                    ; 
+                }
+                console.log(listeFilms.length)
+                return res.status(200).json({ 
+                    success: "true",
+                    listFilms: listeFilms
+                });
+            
 
                
             }

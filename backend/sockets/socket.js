@@ -25,11 +25,23 @@ exports.init = (server) => {
       console.log(data);
 
       // on vérifie que les champs nécéssaires sont renseignés
-
+      
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
         console.log("ça va pas");
       }
 
+      // On vérifie que l'utilisateur n'est pas dans un autre groupe.
+ 
+      if( user.username in mapUsernameGroupId){
+        
+        let oldGroupId = mapUsernameGroupId[user.username]
+        mapGroupIdGroup[oldGroupId].removeUser(user.username)
+        let tempGroupe = mapGroupIdGroup[oldGroupId];
+        if (tempGroupe.owner === user.username) {
+          console.log("suprimation")
+        }
+      }
+      
       //auth
 
       verifyUser(data.auth.id, data.auth.token)
@@ -70,7 +82,6 @@ exports.init = (server) => {
           return res;
         });
     });
-
     socket.on("joinGroup", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
       console.log(data);
@@ -96,7 +107,7 @@ exports.init = (server) => {
             let groupe = mapGroupIdGroup[data.groupId];
             if (groupe.status === "waiting") {
               mapUsernameGroupId[user.username] = data.groupId;
-              groupe.addUser(user.username);
+              groupe.addUser(user);
               socket.join(data.groupId);
 
               // envoyer le contenu du groupe au nouvel utilisateur
@@ -136,7 +147,7 @@ exports.init = (server) => {
 
         if (groupe.status === "waiting") {
           mapUsernameGroupId[user.username] = data.groupId;
-          groupe.addUser(user.username);
+          groupe.addUser(user);
           socket.join(data.groupId);
 
           // envoyer le contenu du groupe au nouvel utilisateur
@@ -228,55 +239,48 @@ exports.init = (server) => {
           console.log(data);
         });
 
+
         //console.log(filmsAvantTri)
 
-        // a faire
+        // a faire       
+
       } else {
         console.log("l'utilisateur n'est pas le chef du groupe");
       }
     });
-  });
-};
 
-const getFilmsByGender = async (mood) => {
-  const listeGenre = mood;
-  let requete = "";
-  if (listeGenre.length === 0) {
-    requete = "{}";
-  } else {
-    requete = "{$or:[";
+    socket.on("swipe", async (data) => {
 
-    for (let genre of listeGenre) {
-      requete = requete + '{"genre": {$regex : ".*' + genre + '.*"}},';
-    }
-    requete = requete.substring(0, requete.length - 1) + "]}";
-  }
+      console.log(data)
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data )){
+        console.log("ça va pas")
+      }
 
-  await Film.find(parser(requete)).then(async (listeFilms) => {
-    if (listeFilms.length > 250) {
-      listeFilms = listeFilms.sort(() => Math.random() - 0.5);
-      listeFilms = listeFilms.slice(0, 250);
-      console.log(listeFilms.length);
-      return listeFilms;
-    } else if (listeFilms.length < 250) {
-      tout_films = await Film.find()
-        .then((tout_films) => {
-          nb_films = tout_films.length;
-          while (listeFilms.length < 250) {
-            var random = Math.floor(Math.random() * nb_films);
-            film = tout_films[random];
-            if (listeFilms.indexOf(film) === -1) listeFilms.push(film);
-          }
-          console.log(listeFilms.length);
-          return listeFilms;
-        })
-        .catch((error) => res.status(400).json({ error }));
-    } else {
-      console.log(listeFilms.length);
-      return listeFilms;
-    }
-  });
-};
+      let auth = await verifyUser(data.auth.id, data.auth.token);
+
+      if( auth.success === "false"){
+        console.auth("ça va pas 2")    
+      } else {
+        let user = auth.user[0];
+        let groupId = mapUsernameGroupId[user.username];
+        let groupe = mapGroupIdGroup[groupId];
+        let match = groupe.addFilm(data.filmId, user.username);
+        let classement = groupe.genClassement();
+
+        if (match === true) {
+          
+        }
+
+      }
+
+      
+      
+
+      
+
+
+    });
+  })};
 
 const verifyUser = async (id, token) => {
   const decodedToken = jwt.verify(token, "RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE");
