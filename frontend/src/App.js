@@ -7,6 +7,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./component/Home";
 import MonEspace from "./component/MonEspace";
 import Simple from "./component/swipe/examples/Simple";
+import Mood from "./component/swipe/Mood";
 import Advanced from "./component/swipe/examples/Advanced";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
@@ -65,13 +66,14 @@ function App() {
             <Navbar />
             <Switch>
               <Route exact path="/" component={Home} />
-              <PrivateRoute path="/Simple" component={Simple} />
+              <Route path="/Simple" component={Simple} />
               <Route path="/Avance" component={Advanced} />
               <Route path="/inscription" component={Signup_container} />
               <Route path="/connexion" component={Signin} />
-              <PrivateRoute path="/session/:id" component={SessionPage} />
-              <PrivateRoute path="/monespace" component={MonEspace} />
-              <PrivateRoute path="/creersession" component={CreateSession} />
+              <Route path="/session/:id" component={SessionPage} />
+              <Route path="/monespace" component={MonEspace} />
+              <Route path="/creersession" component={CreateSession} />
+              <Route path="/ChoisirMood" component={Mood} />
               <Route path="/Initialisation" component={Signup_signin} />
               <Redirect to="/" />
             </Switch>
