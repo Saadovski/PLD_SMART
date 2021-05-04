@@ -59,7 +59,6 @@ exports.Group = class Group {
         index++;
       }
       return (classement.slice(4));
-
     }
 
     to_json(){
@@ -70,6 +69,7 @@ exports.Group = class Group {
         owner: this.owner,
         mood: this.mood,
         films: this.list_films,
+        status: this.status
       }
     }
   }
