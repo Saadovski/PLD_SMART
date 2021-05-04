@@ -38,6 +38,7 @@ exports.init = (server) => {
           let user = userFromDB[0];
 
           console.log("Username", user.username);
+          socket.data.user = user;
 
           // On vérifie que l'utilisateur n'est pas dans un autre groupe.
 
@@ -86,6 +87,7 @@ exports.init = (server) => {
           .then((userFromDB) => {
             let user = userFromDB[0];
             console.log(userFromDB);
+            socket.data.user = user;
             // On vérifie que l'utilisateur n'est pas dans un autre groupe.
 
             if (user.username in mapUsernameGroupId) {
@@ -167,6 +169,28 @@ exports.init = (server) => {
       } else {
         socket.emit("error", { message: "ID de session incorrect" });
       }
+    });
+
+    socket.on("disconnect", async () => {
+      console.log("disconnect");
+      const user = socket.data.user;
+      console.log("disconnection", user);
+      const groupId = mapUsernameGroupId[user.username];
+      const group = mapGroupIdGroup[groupId];
+      console.log("group", group);
+      // console.log("index", group.username.indexOf(user.username));
+      group.users.splice(
+        group.users.findIndex((u) => u.username === user.username),
+        1
+      );
+      group.username.splice(group.username.indexOf(user.username), 1);
+
+      if (user.username === group.owner.username && group.username.length > 0) {
+        group.owner = group.users[0];
+      }
+
+      console.log("new group", group);
+      io.in(groupId).emit("group", group.to_json());
     });
 
     socket.on("ready", async (data) => {
