@@ -1,18 +1,21 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import "../styles/boutons.css";
 import "../styles/textes.css";
 import "../styles/box.css";
 import { AuthContext } from "../context/authContext";
 
-
 function UserInfos() {
   const [isModifying, setIsModifying] = useState(false);
   const [hasChanged, setHasChanged] = useState(false);
-  const [username, setUsername] = useState("username");
+  const [username, setUsername] = useState();
   const [password, setPassword] = useState("password");
   const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    setUsername(authContext.username);
+  }, []);
 
   const handleModify = (e) => {
     setIsModifying(!isModifying);
@@ -57,7 +60,7 @@ function UserInfos() {
   return (
     <div className="container-fluid texte-centre">
       <form>
-      <label>
+        <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="text"
@@ -68,11 +71,10 @@ function UserInfos() {
               setUsername(e.target.value);
             }}
             placeholder="Entrez votre nom d'utilisateur ici"
-
-            />
+          />
         </label>
-      
-      <label>
+
+        <label>
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="password"
@@ -94,8 +96,7 @@ function UserInfos() {
           <input
             class="box-sans-contour texte-vert texte-centre"
             type="password"
-            name="username"
-            value={password}
+            name="passwordconf"
             readOnly={!isModifying} 
             onChange={() => setHasChanged(true)}
             placeholder="Confirmez votre mot de passe ici"
@@ -107,11 +108,11 @@ function UserInfos() {
             Valider
           </button>
           </div>
-          <hr></hr>
-          <div className="bouton-gris-hover">
-          <button className="bouton-gris-rempli" onClick={() => setIsModifying(false)}>
-            Annuler
-          </button>
+        ) : (
+          <div className="bouton-vert-hover">
+            <button className="bouton-vert-rempli" onClick={handleModify}>
+              Modifier
+            </button>
           </div>
 
 

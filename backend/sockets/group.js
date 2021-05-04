@@ -61,11 +61,11 @@ exports.Group = class Group {
     to_json(){
 
       return {
-        groupeId: this.group_id,
+        groupId: this.group_id,
         user: this.users, 
         owner: this.owner,
         mood: this.mood,
-        films: this.list_films
+        films: this.list_films,
       }
     }
   }
