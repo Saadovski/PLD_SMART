@@ -142,15 +142,14 @@ exports.init = (server) => {
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log(user);
-            console.log("groupe", groupe);
+            console.log("the user", user);
 
             // On vérifie que l'utilisateur est bien le chef du groupe
 
             if (groupe.username.find((username) => username === user.username) && groupe.owner.username === user.username) {
               //on ajoute le mood
               groupe.mood = data.mood;
-              console.log("mood", groupe.mood);
+              console.log("the mood", groupe.mood);
 
               // on renvoie le groupe à tout le monde
               io.in(data.groupId).emit("group", groupe.to_json());
@@ -187,6 +186,10 @@ exports.init = (server) => {
 
       if (user.username === group.owner.username && group.username.length > 0) {
         group.owner = group.users[0];
+      }
+
+      if (group.users.length < 1) {
+        delete mapGroupIdGroup[groupId];
       }
 
       console.log("new group", group);
