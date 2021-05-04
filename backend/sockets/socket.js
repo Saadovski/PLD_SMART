@@ -106,7 +106,7 @@ exports.init = (server) => {
             let groupe = mapGroupIdGroup[data.groupId];
             if (groupe.status === "waiting") {
               mapUsernameGroupId[user.username] = data.groupId;
-              groupe.addUser(user.username);
+              groupe.addUser(user);
               socket.join(data.groupId);
 
               // envoyer le contenu du groupe au nouvel utilisateur
@@ -144,7 +144,7 @@ exports.init = (server) => {
 
         if (groupe.status === "waiting") {
           mapUsernameGroupId[user.username] = data.groupId;
-          groupe.addUser(user.username);
+          groupe.addUser(user);
           socket.join(data.groupId);
 
           // envoyer le contenu du groupe au nouvel utilisateur
@@ -236,9 +236,11 @@ exports.init = (server) => {
           console.log(data);
         });
 
+
         //console.log(filmsAvantTri)
 
-        // a faire
+        // a faire       
+
       } else {
         console.log("l'utilisateur n'est pas le chef du groupe");
       }

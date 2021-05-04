@@ -51,34 +51,32 @@ module.exports = {
         return score;
     },
 
-    maj_user_preferences: function(user, movie, like){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
-        if(like){
-            var len = movie.genreVectors.length;
-            var nbfilms = user.preferences.nbFilms;
-            var annee = 0;
-            var synopsis = [];
+    maj_user_preferences: function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
+        var len = movie.genreVectors.length;
+        var nbfilms = user.preferences.nbFilms;
+        var annee = 0;
+        var synopsis = [];
 
-            synopsis = user.preferences.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
+        synopsis = user.preferences.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
 
-            var newGenre = user.preferences.genre;
-            newGenre = newGenre.map((val) => val * nbfilms * 5);
-            for(var i = 0; i < len; ++i){
-                newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
-            }
-            newGenre = newGenre.map((val) => val / (nbfilms * 5));
-            user.preferences.genre = newGenre;
-
-            annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
-
-            nbfilms = user.preferences.nbFilms + 1;
-
-            preferences = {
-                nbFilms : nbfilms,
-                genre: newGenre,
-                synopsis : synopsis,
-                annee : annee
-            }
-            return preferences;
+        var newGenre = user.preferences.genre;
+        newGenre = newGenre.map((val) => val * nbfilms * 5);
+        for(var i = 0; i < len; ++i){
+            newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
         }
+        newGenre = newGenre.map((val) => val / (nbfilms * 5));
+        user.preferences.genre = newGenre;
+
+        annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
+
+        nbfilms = user.preferences.nbFilms + 1;
+
+        preferences = {
+            nbFilms : nbfilms,
+            genre: newGenre,
+            synopsis : synopsis,
+            annee : annee
+        }
+        return preferences;
     }
 };
