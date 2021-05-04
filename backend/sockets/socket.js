@@ -47,6 +47,11 @@ exports.init = (server) => {
  
       if( user.username in mapUsernameGroupId){
         let oldGroupId = mapUsernameGroupId[user.username]
+        let tempGroupe = mapGroupIdGroup[oldGroupId];
+        if (tempGroupe.owner === user.username) {
+          console.log("suprimation")
+        }
+        
         mapGroupIdGroup[oldGroupId].removeUser(user.username)
       }
 
@@ -184,6 +189,38 @@ exports.init = (server) => {
       else{
         console.log("l'utilisateur n'est pas le chef du groupe")
       }
+    });
+
+    socket.on("swipe", async (data) => {
+
+      console.log(data)
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data )){
+        console.log("ça va pas")
+      }
+
+      let auth = await verifyUser(data.auth.id, data.auth.token);
+
+      if( auth.success === "false"){
+        console.auth("ça va pas 2")    
+      } else {
+        let user = auth.user[0];
+        let groupId = mapUsernameGroupId[user.username];
+        let groupe = mapGroupIdGroup[groupId];
+        let match = groupe.addFilm(data.filmId, user.username);
+        let classement = groupe.genClassement();
+
+        if (match === true) {
+          
+        }
+
+      }
+
+      
+      
+
+      
+
+
     });
   });
 };
