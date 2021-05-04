@@ -31,41 +31,41 @@ module.exports = {
         }
         score = score / len;
         score += similarity(user.preference.synopsis, movie.synopsisVector);
-        if(user.preference.annee - movie.annee > 1){
-            score += (1/(Math.abs(user.preference.annee - movie.annee)))/5;
+        if(user.preference.annee - movie.year > 1){
+            score += (1/(Math.abs(user.preference.annee - movie.year)))/5;
         }else{//ce if else est pour eviter d'avoir des grandes valeurs
             score += 1/5;
         } //j'ai divisé l'influence de l'année par 5 pour qu'elle ait pas un poids trop fort par rapport au synopsis et les genres
         return score;
     },
 
-    maj_user_preference: function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
-            var len = movie.genreVectors.length;
-            var nbfilms = user.preference.nbFilms;
-            var annee = 0;
-            var synopsis = [];
-
-        synopsis = user.preference.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
-
+    maj_user_preferences: async function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
+        var len = movie.genreVectors.length;
+        var nbfilms = user.preference.nbFilms;
+        var annee = 0;
+        var synopsis = [];
+        //console.log(user.preference.synopsis);
+        synopsis = user.preference.synopsis.map((val, idx) => (val*(nbfilms + 1) + movie.synopsisVector[idx]) / (nbfilms + 1));
+        //console.log(synopsis);
         var newGenre = user.preference.genre;
-        newGenre = newGenre.map((val) => val * nbfilms * 5);
+        newGenre = newGenre.map((val) => val * (nbfilms + 1) * 5);
         for(var i = 0; i < len; ++i){
             newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
         }
-        newGenre = newGenre.map((val) => val / (nbfilms * 5));
+        newGenre = newGenre.map((val) => val / ((nbfilms + 1) * 5));
         user.preference.genre = newGenre;
 
-        annee = (user.preference.annee * nbfilms + movie.annee) / (nbfilms + 1);
-
+        annee = (user.preference.annee * nbfilms + movie.year) / (nbfilms + 1);
+        console.log(annee);
         nbfilms = user.preference.nbFilms + 1;
 
-            preference = {
-                nbFilms : nbfilms,
-                genre: newGenre,
-                synopsis : synopsis,
-                annee : annee
-            }
-            return preference;
+        preference = {
+            nbFilms : nbfilms,
+            genre: newGenre,
+            synopsis : synopsis,
+            annee : annee
+        }
+        return preference;
     },
 
     top_best_movies: function(movies, users){

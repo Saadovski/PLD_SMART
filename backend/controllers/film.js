@@ -1,8 +1,11 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const parser = require('mongodb-query-parser')
+const fctIa = require("../fonctions_IA.js")
 const Film = require('../models/film');
+const User = require('../models/user');
+const Preference = require('../models/preference');
+const parser = require('mongodb-query-parser');
 
 const tailleEchantillon = 100
 exports.createFilm = (req, res, next) => {
@@ -90,17 +93,113 @@ exports.filmGender = async (req, res, next) => {
                     listFilms: listeFilms
                 });  
             }
-            
-                
-                
-            
-
-        
-        
-        
         
         })
 
 
 };
 
+exports.updatePreference = async (req, res, next) => {
+
+    Film.findOne({ _id: req.body.filmId })
+    .then( film => {
+        User.findOne({ _id: req.body.userId }).populate('preference')
+        .then(user => {
+            console.log(user);
+            let newPreferences = await(fctIa.maj_user_preferences(user, film));
+            console.log(newPreferences);
+            console.log("Pain")
+            Preference.updateOne({ _id: user.preference._id }, {$set: 
+            {
+                genre: newPreferences.genre, 
+                annee: newPreferences.annee,
+                nbFilms: newPreferences.nbFilms,
+                synopsis: newPreferences.synopsis
+            }},
+            function(err, resp) {
+                if (err) return res.status(502).json({ success: "false", status: 'Error' });
+                console.log("1 document updated");
+                return res.status(200).json({ success: "true", status: 'Preference modified' });
+            });
+        })
+        .catch(error => console.log(res.status(501).json({ error })));
+    })
+    .catch(error => res.status(500).json({ error }));
+
+    
+
+    
+
+}
+
+// exports.filmGender = (req, res, next) => {
+
+
+//     let listFilm = [];
+//     const longueurListGenre = req.body.listeGenre.length;
+//     console.log(longueurListGenre);
+//     const listeGenre = req.body.listeGenre
+//     console.log(listeGenre);
+    
+//     if(longueurListGenre === 0){
+            
+        
+//         return res.status(200).json({ 
+//                 success: "true",
+//                 listFilms: []
+//             });
+//     }
+
+//     let requete = "{$or:[";
+
+//     for(let genre of listeGenre) {
+//         requete = requete + "{\"genre\": {$regex : \".*" + genre+ ".*\"}},"
+//     }
+
+//     requete = requete.substring(0, requete.length-1) + "]}";
+//     console.log(requete)
+//     Film.find(parser(requete))
+//     .then(listeFilms => {
+//         console.log("liste récupérée")
+//         if(listeFilms.length > 250){
+
+//             listeFilms = listeFilms.sort(() => Math.random() - 0.5);
+//             listeFilms = listeFilms.slice(0, 249);
+//             console.log("liste raccourcie")
+//             console.log(listeFilms.length)
+//             return res.status(200).json({ 
+//                 success: "true",
+//                 listFilms: listeFilms
+//             });
+//         } 
+//          else{
+            
+//             Film.count()
+//             .then(nbFilms =>{
+//                 while(listeFilms.length < 250){
+//                     console.log(nbFilms);
+                    
+//                     Film.findOne({"genre": "Comedy"})
+//                     .then( film =>
+//                         console.log("a")
+//                     )
+//                     .catch(error => console.log("error"))
+                
+//                 }
+//                 return res.status(200).json({ 
+//                     success: "true",
+//                     listFilms: listeFilms
+//                 });
+//             })
+//             console.log("liste allongée")
+//             console.log(listeFilms.length)
+//         }
+        
+
+
+//     })        
+//     .catch(error =>  res.status(500).json({ error }))
+
+
+
+// };

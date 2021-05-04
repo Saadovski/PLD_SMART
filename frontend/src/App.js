@@ -28,16 +28,18 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    console.log("UseEffect in app.js");
     const storedToken = JSON.parse(localStorage.getItem("pldsmartToken"));
     const storedUser = JSON.parse(localStorage.getItem("pldsmartUser"));
     console.log("stored token", storedToken);
     if (storedToken && storedToken.token && new Date(storedToken.expiration).getTime() > new Date().getTime()) {
+      console.log("login launched");
       login(storedToken.token, storedUser.userId, storedUser.username);
     }
   }, []);
 
   const login = (newToken, userId, username) => {
-    localStorage.setItem("pldsmartToken", JSON.stringify({ token: newToken, expiration: new Date().getTime() + 1000 * 60 * 2 }));
+    localStorage.setItem("pldsmartToken", JSON.stringify({ token: newToken, expiration: new Date().getTime() + 1000 * 60 * 60 * 24 }));
     localStorage.setItem("pldsmartUser", JSON.stringify({ userId, username }));
     setToken(newToken);
     setUsername(username);

@@ -3,6 +3,7 @@ import PeopleWatchingFilm from "../images/home-cinema-amico.svg";
 import Popcorn from "../images/popcorn.svg";
 import Glasses from "../images/glasses.svg";
 import Arrow from "../images/next.svg";
+import { withRouter } from "react-router";
 
 function Home() {
   return (
@@ -45,4 +46,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withRouter(Home);

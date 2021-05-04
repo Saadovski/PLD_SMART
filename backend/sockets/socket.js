@@ -178,28 +178,31 @@ exports.init = (server) => {
 
     socket.on("disconnect", async () => {
       console.log("disconnect");
-      const user = socket.data.user;
-      console.log("disconnection", user);
-      const groupId = mapUsernameGroupId[user.username];
-      const group = mapGroupIdGroup[groupId];
-      console.log("group", group);
-      // console.log("index", group.username.indexOf(user.username));
-      group.users.splice(
-        group.users.findIndex((u) => u.username === user.username),
-        1
-      );
-      group.username.splice(group.username.indexOf(user.username), 1);
 
-      if (user.username === group.owner.username && group.username.length > 0) {
-        group.owner = group.users[0];
+      if (socket.data.user) {
+        const user = socket.data.user;
+        console.log("disconnection", user);
+        const groupId = mapUsernameGroupId[user.username];
+        const group = mapGroupIdGroup[groupId];
+        console.log("group", group);
+        // console.log("index", group.username.indexOf(user.username));
+        group.users.splice(
+          group.users.findIndex((u) => u.username === user.username),
+          1
+        );
+        group.username.splice(group.username.indexOf(user.username), 1);
+
+        if (user.username === group.owner.username && group.username.length > 0) {
+          group.owner = group.users[0];
+        }
+
+        if (group.users.length < 1) {
+          delete mapGroupIdGroup[groupId];
+        }
+
+        console.log("new group", group);
+        io.in(groupId).emit("group", group.to_json());
       }
-
-      if (group.users.length < 1) {
-        delete mapGroupIdGroup[groupId];
-      }
-
-      console.log("new group", group);
-      io.in(groupId).emit("group", group.to_json());
     });
 
     socket.on("ready", async (data) => {
@@ -314,8 +317,7 @@ exports.init = (server) => {
         let groupId = mapUsernameGroupId[user.username];
         let groupe = mapGroupIdGroup[groupId];
         let match = groupe.addFilm(data.filmId, user.username);
-        let classement = groupe.genClassement();
-
+        
         if (match === true) {
         }
       }
