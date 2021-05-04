@@ -6,12 +6,10 @@ import Navbar from "./component/Navbar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./component/Home";
 import MonEspace from "./component/MonEspace";
-import Simple from "./component/swipe/examples/Simple";
 import Mood from "./component/swipe/Mood";
-import Advanced from "./component/swipe/examples/Advanced";
+import Swipe from "./component/swipe/Swipe";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
-import Signup_signin from "./component/Signup_signin";
 import { useEffect, useState } from "react";
 import { AuthContext } from "./context/authContext";
 import { SocketContext } from "./context/socketContext";
@@ -71,15 +69,13 @@ function App() {
             <Navbar />
             <Switch>
               <Route exact path="/home" component={Home} />
-              <Route path="/Simple" component={Simple} />
-              <Route path="/Avance" component={Advanced} />
+              <PrivateRoute path="/swipe" component={Swipe} />
               <Route path="/inscription" component={Signup_container} />
               <Route path="/connexion" component={Signin} />
-              <Route path="/session/:id" component={SessionPage} />
-              <Route path="/monespace" component={MonEspace} />
-              <Route path="/creersession" component={CreateSession} />
-              <Route path="/ChoisirMood" component={Mood} />
-              <Route path="/Initialisation" component={Signup_signin} />
+              <PrivateRoute path="/session/:id" component={SessionPage} />
+              <PrivateRoute path="/monespace" component={MonEspace} />
+              <PrivateRoute path="/creersession" component={CreateSession} />
+              <PrivateRoute path="/choisirmood" component={Mood} />
               <Redirect to="/home" />
             </Switch>
           </Router>
