@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const parser = require('mongodb-query-parser')
 const Film = require('../models/film');
 
-const tailleEchantillon = 100
+const tailleEchantillon = 1000
 exports.createFilm = (req, res, next) => {
 
     //il faut transformer "profil" en vecteur
@@ -36,7 +36,7 @@ exports.filmGender = async (req, res, next) => {
         requete = "{$or:[";
 
         for(let genre of listeGenre) {
-            requete = requete + "{genre: \"" + genre+ "\"}},"
+            requete = requete + "{genre: \"" + genre+ "\"},"
         }
     requete = requete.substring(0, requete.length-1) + "]}";
     }

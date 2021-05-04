@@ -61,7 +61,10 @@ exports.init = (server) => {
           mapUsernameGroupId[user.username] = newGroup.group_id;
 
           let groupJson = newGroup.to_json();
+          
+          console.log("group id ",newGroup.group_id)
           socket.join(newGroup.group_id);
+
           socket.emit("group", groupJson);
           io.emit("message");
         })
@@ -131,25 +134,27 @@ exports.init = (server) => {
     socket.on("addMood", async (data) => {
       // on vérifie que les champs nécéssaires sont renseignés
       console.log("Add mood function", data);
-      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "mood" in data)) {
+      if (!("auth" in data && "id" in data.auth && "token" in data.auth && "mood" in data && "groupId" in data)) {
         console.log("ça va pas");
       }
 
       //auth
       let groupe = mapGroupIdGroup[data.groupId];
       if (groupe) {
+        console.log("on est dans le if")
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log(user);
+            console.log("on est dans la ftc")
+            //console.log(user);
             console.log("groupe", groupe);
 
             // On vérifie que l'utilisateur est bien le chef du groupe
 
-            if (groupe.username.find((username) => username === user.username) && groupe.owner.username === user.username) {
+            if (groupe.username.find((username) => username === user.username) && groupe.owner === user.username) {
               //on ajoute le mood
               groupe.mood = data.mood;
-              console.log("mood", groupe.mood);
+              console.log("mood :", groupe.mood);
 
               // on renvoie le groupe à tout le monde
               io.in(data.groupId).emit("group", groupe.to_json());
@@ -158,6 +163,7 @@ exports.init = (server) => {
             }
           })
           .catch((error) => {
+            console.log("coucou on est dans le catch")
             console.log(error);
             res = {
               success: "false",
