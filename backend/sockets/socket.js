@@ -246,8 +246,8 @@ exports.init = (server) => {
                 groupe.status = "running"
 
                 // envoyer le contenu du groupe au nouvel utilisateur
-                socket.emit("group", groupe.to_json());
-                socket.broadcast.emit("group", groupe.to_json());
+                socket.emit("start", groupe.to_json());
+                socket.broadcast.emit("start", groupe.to_json());
 
               })
               .catch( error => console.log(error))
