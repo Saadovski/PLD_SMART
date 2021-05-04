@@ -57,7 +57,7 @@ function Navbar() {
         </Button>
         <div className="texte-centre"> {authContext.username} </div>
       </div>
-      <NavLink to="/" activeClassName="selected">Accueil</NavLink>
+      <NavLink to="/home" activeClassName="selected">Accueil</NavLink>
         {!authContext.isAuth && <NavLink to="/connexion" activeClassName="selected">Connexion</NavLink>}
         {!authContext.isAuth && <NavLink to="/inscription" activeClassName="selected">Inscription</NavLink>}
         {authContext.isAuth && <NavLink to="/monespace" activeClassName="selected">Mon Espace</NavLink>}
