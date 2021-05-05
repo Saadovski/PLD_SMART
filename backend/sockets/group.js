@@ -13,6 +13,7 @@ exports.Group = class Group {
         this.resultatSwipe = {};
         this.resultatSwipe[user.username] = 0
         this.countFilm = {};
+        this.filmSwiped = [];
     }
   
     addUser(user){
@@ -50,13 +51,15 @@ exports.Group = class Group {
 
       if(!(filmId in this.countFilm)){
         this.countFilm[filmId] = 0;
+        this.filmSwiped.push({filmId: filmId, title: (this.list_films.find(film => film.netflixid === filmId)).title, count: 0});
+        console.log(this.filmSwiped);
       }
       console.log("je suis passé ici")
       this.resultatSwipe[username]++;
       
       let res = false;
 
-      if(avis){
+      if(avis === 'true'){
         this.countFilm[filmId]++;
         if (this.countFilm[filmId] === this.users.length) {
           res = true;
@@ -72,20 +75,17 @@ exports.Group = class Group {
 
 
     genClassement() {
-      let classement = [];
-      let index = 0;
-      let nbFilm = 0;
-      while (index < this.users.length && nbFilm < 5) {
-        for (let film of this.list_films) {
-          if(this.countFilm[film._id] === (this.users.length - index)) {
-            nbFilm++;
-            classement.push(film);
-          }
-        }
-        index++;
-      }
+      
+      this.filmSwiped = this.filmSwiped.map(film => {
+        film.count = this.countFilm[film.filmId];
+        return film
+      }); 
+      
+      let newClassement = this.filmSwiped.sort((a,b)=>{return b.count - a.count});
+
       console.log(this.status);
-      return (classement.slice(4));
+      console.log(newClassement.slice(0,5))
+      return (newClassement.slice(0,5));
     }
 
     to_json(){
