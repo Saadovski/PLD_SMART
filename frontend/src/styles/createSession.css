@@ -18,7 +18,3 @@
 .separator:not(:empty)::after {
   margin-left: 0.25em;
 }
-
-.createSessionBox {
-  height: 100%;
-}

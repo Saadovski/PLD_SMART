@@ -5,6 +5,7 @@ import Glasses from "../images/glasses.svg";
 import Arrow from "../images/next.svg";
 import { withRouter } from "react-router";
 import PopUpSpinner from "./PopUpSpinner";
+import PopUpRank from "./PopUpRank";
 
 function Home() {
   return (
@@ -44,6 +45,7 @@ function Home() {
       >
         Cliquez ici
       </button> */}
+      {/* <PopUpRank /> */}
     </div>
   );
 }
