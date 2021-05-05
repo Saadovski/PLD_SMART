@@ -27,14 +27,14 @@ exports.createUser = (req, res, next) => {
           requete = requete.substring(0, requete.length-1) + "]}";  
         }
 
-        console.log("requete", requete)
+        //console.log("requete", requete)
 
 
         let query = parser(requete)
         
         Genre.find(query)
         .then(list_genre =>{
-          console.log("genre_verctor : ",list_genre)
+          //console.log("genre_verctor : ",list_genre)
           
           let genre_vectors = []
           for (let gr of list_genre){
@@ -47,7 +47,7 @@ exports.createUser = (req, res, next) => {
           }
           arrayGenre = arrayGenre.map((val)=> val / genre_vectors.length);
           //console.log(arrayGenre)
-          console.log("voici ce que l'on va insérer dans la bdd", arrayGenre)
+          //console.log("voici ce que l'on va insérer dans la bdd", arrayGenre)
           const preference_ = new Preference({
             genre: arrayGenre,
             synopsis : arrayGenre,
