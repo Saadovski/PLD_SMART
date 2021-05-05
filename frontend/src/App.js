@@ -9,7 +9,6 @@ import MonEspace from "./component/MonEspace";
 import Mood from "./component/swipe/Mood";
 import Swipe from "./component/swipe/Swipe";
 import Match from "./component/swipe/Match";
-import Ranking from "./component/swipe/Ranking";
 import CreateSession from "./component/CreateSession";
 import SessionPage from "./component/SessionPage";
 import { useEffect, useState } from "react";
