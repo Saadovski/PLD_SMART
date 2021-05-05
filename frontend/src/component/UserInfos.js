@@ -34,10 +34,13 @@ function UserInfos() {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data.success);
+
           if (data.success) {
-            console.log("successfully modified the password");
+            
           } else {
-            console.log("unsuccessfully modified the password");
+            document.getElementById("nouveau").style.border = "1px solid red";
+            document.getElementById("confirmernouveau").style.border = "1px solid red";
           }
         });
     } else {
@@ -114,6 +117,7 @@ function UserInfos() {
                 class="box-sans-contour texte-vert texte-centre"
                 type="password"
                 name="newPassword"
+                id="nouveau"
                 value={newPassword}
                 placeholder="Nouveau mot de passe ..."
                 onChange={(e) => {
@@ -127,6 +131,7 @@ function UserInfos() {
                 class="box-sans-contour texte-vert texte-centre"
                 type="password"
                 name="newPasswordConf"
+                id="confirmernouveau"
                 value={newPasswordConf}
                 placeholder="Confirmer le nouveau mot de passe ..."
                 onChange={(e) => {

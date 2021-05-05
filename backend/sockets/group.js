@@ -84,6 +84,7 @@ exports.Group = class Group {
         }
         index++;
       }
+      console.log(this.status);
       return (classement.slice(4));
     }
 
