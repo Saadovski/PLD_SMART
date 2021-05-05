@@ -286,7 +286,9 @@ exports.init = (server) => {
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
+            let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
+            groupe.status = "finished";
+            io.in(mapUsernameGroupId[user.username]).emit("printRanking", groupe.genClassement());
           })
           .catch((error) => {
             console.log("error", error);
@@ -294,6 +296,7 @@ exports.init = (server) => {
               success: "false",
               error: "User not found !",
             };
+            console.log(res);
             return res;
           });
 
@@ -320,6 +323,7 @@ exports.init = (server) => {
 
         if(groupe.isFinish()){
           console.log("toute la liste a été traitée")
+          groupe.status = "finished";
           io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
         }        
         else if (match === true) {
