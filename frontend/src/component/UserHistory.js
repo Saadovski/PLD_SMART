@@ -9,8 +9,6 @@ function UserHistory() {
     const authContext = useContext(AuthContext);
 
     useEffect(() => {
-        console.log(authContext.token);
-        console.log(authContext.token.split(' ')[1]);
         fetch(REACT_APP_API_URL + "user/check_infouser", {
             method: "POST",
             headers: {
