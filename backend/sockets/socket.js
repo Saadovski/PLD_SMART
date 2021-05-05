@@ -303,7 +303,7 @@ exports.init = (server) => {
     });
 
     socket.on("swipe", async (data) => {
-      //console.log(data);
+      console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
         console.log("ça va pas");
       }else{
