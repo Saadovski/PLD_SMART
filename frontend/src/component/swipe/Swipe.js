@@ -57,16 +57,21 @@ function Swipe() {
     setLastDirection(direction);
     alreadyRemoved.push(nameToDelete);
     if (direction === "left") {
-      swipeMovie("false")
+      swipeMovie(false)
     }
     else {
-      swipeMovie("true")
+      swipeMovie(true)
     }
   }
 
   socket.on('group', (data) =>{
     alert(data.user)
     console.log(data)
+  })
+
+  socket.on('printMatch', (filmId) =>{
+    console.log(filmId)
+    history.push('/match/'+filmId);
   })
 
   const outOfFrame = (name) => {
@@ -76,10 +81,10 @@ function Swipe() {
   const swipe = (dir) => {
     setMovieIndex(MovieIndex + 1);
     if (dir === "left") {
-      swipeMovie("false")
+      swipeMovie(false)
     }
     else {
-      swipeMovie("true")
+      swipeMovie(true)
     }
   }
 
