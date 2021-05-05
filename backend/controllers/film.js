@@ -7,7 +7,7 @@ const User = require('../models/user');
 const Preference = require('../models/preference');
 const parser = require('mongodb-query-parser');
 
-const tailleEchantillon = 100
+const tailleEchantillon = 500
 exports.createFilm = (req, res, next) => {
 
     //il faut transformer "profil" en vecteur
