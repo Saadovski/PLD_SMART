@@ -60,7 +60,7 @@ exports.filmGender = async (req, res, next) => {
     console.log("requete", requete)
     let query = parser(requete)
     Film.find(query)
-        .then(listeFilms => {
+        .then( async listeFilms => {
 
             if(listeFilms.length > tailleEchantillon){
 
@@ -72,8 +72,12 @@ exports.filmGender = async (req, res, next) => {
                 });
             } 
             else if(listeFilms.length < tailleEchantillon){
+
                 while(listeFilms.length < tailleEchantillon){
-                    Film.aggregate([{ $sample: { size: tailleEchantillon - listeFilms.length } }])
+
+                    let reqCount =  tailleEchantillon - listeFilms.length
+                    console.log("pour l'instant ça passe ", reqCount)
+                    await Film.aggregate([{ $sample: { size: reqCount } }])
                     .then(films  => {films.forEach(film => {
                         if(listeFilms.indexOf(film) === -1) listeFilms.push(film)
                     })
