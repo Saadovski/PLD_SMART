@@ -27,7 +27,7 @@ function Signup_id(props) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data.success);
-        if (data.success === "true") {
+        if (data.success) {
           e.target.style.border = "";
           props.setState(2);
         }

@@ -56,7 +56,7 @@ function Swipe() {
     console.log('removing: ' + nameToDelete);
     setLastDirection(direction);
     alreadyRemoved.push(nameToDelete);
-    if (direction == "left") {
+    if (direction === "left") {
       swipeMovie("false")
     }
     else {
@@ -75,7 +75,7 @@ function Swipe() {
 
   const swipe = (dir) => {
     setMovieIndex(MovieIndex + 1);
-    if (dir == "left") {
+    if (dir === "left") {
       swipeMovie("false")
     }
     else {
@@ -140,8 +140,8 @@ function Swipe() {
 
 
 
-{lastDirection=="left" ? <div key={lastDirection} className='non'><i class="img-swipe fas fa-no float-left"></i></div> : <h2></h2>}
-{lastDirection=="right" ? <div key={lastDirection} className='oui'><i class="img-swipe fas fa-heart float-left"></i></div> : <h2></h2>}
+{lastDirection==="left" ? <div key={lastDirection} className='non'><i class="img-swipe fas fa-no float-left"></i></div> : <h2></h2>}
+{lastDirection==="right" ? <div key={lastDirection} className='oui'><i class="img-swipe fas fa-heart float-left"></i></div> : <h2></h2>}
 
 </div>
   )
