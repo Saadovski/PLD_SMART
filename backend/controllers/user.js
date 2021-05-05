@@ -52,7 +52,7 @@ exports.createUser = (req, res, next) => {
               .catch(error => res.status(400).json({ error }));
 
           })
-          .catch(error => res.status(400).json({ error }));
+          .catch(error => res.status(401).json({ error }));
 
 
       })()
@@ -77,7 +77,7 @@ exports.connectUser = (req, res, next) => {
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({
+            return res.status(402).json({
               error: 'Wrong password !',
               success: "false"
             });
