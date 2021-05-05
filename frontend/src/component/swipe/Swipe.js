@@ -3,6 +3,7 @@ import { SocketContext } from "../../context/socketContext";
 import MovieCard from "./index";
 import { AuthContext } from "../../context/authContext";
 import { useHistory } from "react-router";
+import Match from "./Match";
 
 import "../../styles/textes.css";
 import "../../styles/box.css";
@@ -24,6 +25,7 @@ function Swipe() {
   const groupId = socketContext.group.groupId;
   const socket = socketContext.socket;
   const Movies = socketContext.group.films;
+  const [selectedMovie,setSelectedMovie] = useState(Movies[0]);
 
   useEffect(() => {
     socket.on("group", (group) => {
@@ -67,11 +69,35 @@ function Swipe() {
     setLastDirection(direction);
     alreadyRemoved.push(nameToDelete);
     if (direction === "left") {
-      swipeMovie("false");
-    } else {
-      swipeMovie("true");
+      swipeMovie(false)
+    }
+    else {
+      swipeMovie(true)
     }
   };
+
+  socket.on('printMatch', (data) =>{
+    console.log("received a match");
+    console.log(data);
+//    const movie = Movies.find((m) => m.netflixid === data.filmId);
+    var indiceMovie;
+    for (var i=0; i<Movies.length;i++){
+      console.log(i);
+      console.log(Movies[i].netflixid);
+      if(Movies[i].netflixid == data.filmId){
+        indiceMovie = i;
+      }
+    }
+    console.log("movies:");
+    console.log(Movies);
+    
+    console.log("indicemovie:");
+    console.log(indiceMovie);
+
+    setSelectedMovie(Movies[indiceMovie]);
+    const match = document.getElementById('match');
+    match.classList.remove('hide');
+  })
 
   const outOfFrame = (name) => {
     console.log(name + " left the screen!");
@@ -80,11 +106,19 @@ function Swipe() {
   const swipe = (dir) => {
     setMovieIndex(MovieIndex + 1);
     if (dir === "left") {
-      swipeMovie("false");
-    } else {
-      swipeMovie("true");
+      swipeMovie(false)
     }
-  };
+    else {
+      swipeMovie(true)
+    }
+  }
+
+  socketContext.socket.on("printRanking", (ranking) => {
+    //socketContext.updateGroup(group);
+    console.log("received a ranking");
+    console.log(ranking);
+  });
+  
 
   return (
     <div className="box-ecran swipe-color">
@@ -118,12 +152,19 @@ function Swipe() {
                 non
               </button>
             </div>
-            <hr></hr>
-            <div className="bouton-swipe-oui-hover">
-              <button className="bouton-swipe-oui" onClick={() => swipe("right")}>
-                oui
-              </button>
+            <h4> {Movies[MovieIndex].genre.join(" ")} </h4>
+            <div>{Movies[MovieIndex].synopsis}
             </div>
+            {owner === username &&
+        <div className="bouton-rouge-hover">
+          <button
+            className="bouton-rouge-rempli"
+            onClick={() => {
+            interrompreSwipe();
+            }
+            }>
+            Interrompre le swipe</button>
+        </div>}
           </div>
           <h4> {Movies[MovieIndex].genre}, </h4>
           <div>{Movies[MovieIndex].synopsis}</div>
@@ -143,22 +184,23 @@ function Swipe() {
         </div>
       </div>
 
-      {lastDirection === "left" ? (
-        <div key={lastDirection} className="non">
-          <i class="img-swipe fas fa-no float-left"></i>
-        </div>
-      ) : (
-        <h2></h2>
-      )}
-      {lastDirection === "right" ? (
-        <div key={lastDirection} className="oui">
-          <i class="img-swipe fas fa-heart float-left"></i>
-        </div>
-      ) : (
-        <h2></h2>
-      )}
-    </div>
-  );
+
+
+{lastDirection==="left" ? <div key={lastDirection} className='non'><i class="img-swipe fas fa-no float-left"></i></div> : <h2></h2>}
+{lastDirection==="right" ? <div key={lastDirection} className='oui'><i class="img-swipe fas fa-heart float-left"></i></div> : <h2></h2>}
+
+
+<Match 
+title={selectedMovie.title}
+url={selectedMovie.img}
+genre={selectedMovie.genre}
+runtime={selectedMovie.runtime}
+synopsis={selectedMovie.synopsis}
+year={selectedMovie.year}
+/>
+
+</div>
+  )
 }
 
 export default Swipe;
