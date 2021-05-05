@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const fctIa = require("../fonctions_IA.js")
 const Film = require('../models/user');
 const User = require('../models/user');
+const Genre = require('../models/genre');
 const Preference = require('../models/preference');
 
 
@@ -13,14 +14,28 @@ exports.createUser = (req, res, next) => {
     .then(hash => {
 
       //il faut transformer "profil" en vecteur
-      let arrayGenre = new Array(512).fill(0);;
+      
       (async () => {
-        var genre_vectors = (await fctIa.text_to_vector(req.body.profil))
+        var genre_vectors = [] //(await fctIa.text_to_vector(req.body.profil))
+
+        for (let genre of req.body.profil){
+          console.log("voici le genre", genre)
+          Genre.findOne({"genre": genre})
+          .then( vector => {
+            console.log(vector);
+            //genre_vectors.push(vector.vector)
+          })
+          .catch( console.log("test"))
+        }
+
+
+        let arrayGenre = new Array(512).fill(0);
+
         for (var i = 0; i < genre_vectors.length; ++i) {
           arrayGenre = arrayGenre.map((val, idx)=> val + genre_vectors[i][idx]);
         }
         arrayGenre = arrayGenre.map((val)=> val / genre_vectors.length);
-        console.log(arrayGenre)
+        //console.log(arrayGenre)
 
         const preference_ = new Preference({
           genre: arrayGenre,
