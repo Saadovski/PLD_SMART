@@ -1,6 +1,6 @@
 import React, { useState, useContext, useMemo, useEffect } from "react";
 import { SocketContext } from "../../context/socketContext";
-import MovieCard from "./index";
+import MovieCard from "./Index";
 import { AuthContext } from "../../context/authContext";
 import { useHistory } from "react-router";
 import Match from "./Match";
@@ -42,6 +42,7 @@ function Swipe() {
   }, []);
 
   const swipeMovie = (avis) => {
+    console.log("swipe");
     const filmId = Movies[MovieIndex].netflixid;
     socket.emit("swipe", {
       auth: {
@@ -96,7 +97,8 @@ function Swipe() {
 
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById('match');
-    match.classList.remove('hide');
+    match.style.display = 'flex';
+    match.style.transform = 'translateY(0%)';
   })
 
   const outOfFrame = (name) => {
@@ -146,7 +148,6 @@ function Swipe() {
           </MovieCard>
           <hr></hr>
 
-          <div className="buttons bouton-swipe box-horizontal">
             <div className="bouton-swipe-non-hover">
               <button className="bouton-swipe-non" onClick={() => swipe("left")}>
                 non
@@ -154,7 +155,6 @@ function Swipe() {
             </div>
             <h4> {Movies[MovieIndex].genre.join(" ")} </h4>
             <div>{Movies[MovieIndex].synopsis}
-            </div>
             {owner === username &&
         <div className="bouton-rouge-hover">
           <button
@@ -166,21 +166,6 @@ function Swipe() {
             Interrompre le swipe</button>
         </div>}
           </div>
-          <h4> {Movies[MovieIndex].genre}, </h4>
-          <div>{Movies[MovieIndex].synopsis}</div>
-          {owner === username && (
-            <div className="bouton-rouge-hover">
-              <button
-                className="bouton-rouge-rempli"
-                onClick={() => {
-                  interrompreSwipe();
-                  history.push("/");
-                }}
-              >
-                Interrompre le swipe
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
@@ -197,7 +182,9 @@ genre={selectedMovie.genre}
 runtime={selectedMovie.runtime}
 synopsis={selectedMovie.synopsis}
 year={selectedMovie.year}
-/>
+id={selectedMovie.netflixid}
+>
+  </Match>
 
 </div>
   )

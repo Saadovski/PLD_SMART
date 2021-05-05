@@ -45,12 +45,18 @@ exports.init = (server) => {
           if (user.username in mapUsernameGroupId) {
             let oldGroupId = mapUsernameGroupId[user.username];
             if(oldGroupId in mapGroupIdGroup){
-              mapGroupIdGroup[oldGroupId].removeUser(user);
+              let tempOldGroup = mapGroupIdGroup[oldGroupId];
+              if ( tempOldGroup.owner === user.username) {
+                let usernameList = tempOldGroup.username;
+                usernameList.map(username => {
+                  delete mapUsernameGroupId[username];
+                })
+              } else {
+                mapGroupIdGroup[oldGroupId].removeUser(user);
+              }
             }
-            let tempGroupe = mapGroupIdGroup[oldGroupId];
-            if (tempGroupe && tempGroupe.owner === user.username) {
-              console.log("suprimation");
-            }
+            
+            
           }
           // créer un groupe et l'inscrire dans les variables partagées et on le place dans sa propre room
 
@@ -286,8 +292,10 @@ exports.init = (server) => {
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
+            console.log(user)
             let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
             groupe.status = "finished";
+            console.log(groupe.genClassement());
             io.in(mapUsernameGroupId[user.username]).emit("printRanking", groupe.genClassement());
           })
           .catch((error) => {
@@ -296,7 +304,6 @@ exports.init = (server) => {
               success: "false",
               error: "User not found !",
             };
-            console.log(res);
             return res;
           });
 
