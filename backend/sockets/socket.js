@@ -44,19 +44,17 @@ exports.init = (server) => {
 
           if (user.username in mapUsernameGroupId) {
             let oldGroupId = mapUsernameGroupId[user.username];
-            if(oldGroupId in mapGroupIdGroup){
+            if (oldGroupId in mapGroupIdGroup) {
               let tempOldGroup = mapGroupIdGroup[oldGroupId];
-              if ( tempOldGroup.owner === user.username) {
+              if (tempOldGroup.owner === user.username) {
                 let usernameList = tempOldGroup.username;
-                usernameList.map(username => {
+                usernameList.map((username) => {
                   delete mapUsernameGroupId[username];
-                })
+                });
               } else {
                 mapGroupIdGroup[oldGroupId].removeUser(user);
               }
             }
-            
-            
           }
           // créer un groupe et l'inscrire dans les variables partagées et on le place dans sa propre room
 
@@ -98,7 +96,7 @@ exports.init = (server) => {
             socket.data.user = user;
             // On vérifie que l'utilisateur n'est pas dans un autre groupe.
 
-            if (user.username in mapUsernameGroupId) {
+            if (mapUsernameGroupId[user.username] && mapGroupIdGroup[mapUsernameGroupId[user.username]]) {
               let oldGroupId = mapUsernameGroupId[user.username];
               mapGroupIdGroup[oldGroupId].removeUser(user);
             }
@@ -212,6 +210,7 @@ exports.init = (server) => {
     });
 
     socket.on("ready", async (data) => {
+      socket.broadcast.emit("ready", {});
       let start = new Date().getTime();
       // on vérifie que les champs nécéssaires sont renseignés
       console.log(data);
@@ -277,22 +276,18 @@ exports.init = (server) => {
         });
     });
 
-
     socket.on("interruptSwipe", async (data) => {
-
       //on vérifie que l'on a les bons params
       console.log("interrupt_swipe", data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth)) {
         console.log("ça va pas");
-      }
-      else{
-
+      } else {
         //auth
 
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log(user)
+            console.log(user);
             let groupe = mapGroupIdGroup[mapUsernameGroupId[user.username]];
             groupe.status = "finished";
             console.log(groupe.genClassement());
@@ -306,42 +301,33 @@ exports.init = (server) => {
             };
             return res;
           });
-
-
       }
-
     });
 
     socket.on("swipe", async (data) => {
       console.log(data);
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "avis" in data && "filmId" in data)) {
         console.log("ça va pas");
-      }else{
+      } else {
+        verifyUser(data.auth.id, data.auth.token).then((userFromDB) => {
+          let user = userFromDB[0];
+          let groupId = mapUsernameGroupId[user.username];
+          let groupe = mapGroupIdGroup[groupId];
+          let match = groupe.addFilm(data.filmId, user.username, data.avis);
 
-      verifyUser(data.auth.id, data.auth.token)
-      .then( (userFromDB) => {
-        let user = userFromDB[0];
-        let groupId = mapUsernameGroupId[user.username];
-        let groupe = mapGroupIdGroup[groupId];
-        let match = groupe.addFilm(data.filmId, user.username, data.avis);
-        
-        console.log(groupe.resultatSwipe)
-        //console.log(groupe.countFilm)
+          console.log(groupe.resultatSwipe);
+          //console.log(groupe.countFilm)
 
-        if(groupe.isFinish()){
-          console.log("toute la liste a été traitée")
-          groupe.status = "finished";
-          io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
-        }        
-        else if (match === true) {
-          console.log("match !")
-          io.in(mapUsernameGroupId[user.username]).emit("printMatch", {filmId: data.filmId});
-        }
-
-
-
-
-      })}
+          if (groupe.isFinish()) {
+            console.log("toute la liste a été traitée");
+            groupe.status = "finished";
+            io.in(mapUsernameGroupId[user.username]).emit("printRanking", mapGroupIdGroup[mapUsernameGroupId[user.username]].genClassement());
+          } else if (match === true) {
+            console.log("match !");
+            io.in(mapUsernameGroupId[user.username]).emit("printMatch", { filmId: data.filmId });
+          }
+        });
+      }
     });
   });
 };

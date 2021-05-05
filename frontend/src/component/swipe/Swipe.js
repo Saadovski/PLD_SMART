@@ -9,6 +9,8 @@ import "../../styles/textes.css";
 import "../../styles/box.css";
 import "../../styles/swipe.css";
 import "../../styles/boutons.css";
+import PopUpSpinner from "../PopUpSpinner";
+import PopUpRank from "../PopUpRank";
 
 const alreadyRemoved = [];
 
@@ -25,7 +27,9 @@ function Swipe() {
   const groupId = socketContext.group.groupId;
   const socket = socketContext.socket;
   const Movies = socketContext.group.films;
-  const [selectedMovie,setSelectedMovie] = useState(Movies[0]);
+  const [selectedMovie, setSelectedMovie] = useState(Movies[0]);
+  const [isFinished, setIsFinished] = useState(false);
+  const [topFilm, setTopFilm] = useState([]);
 
   useEffect(() => {
     socket.on("group", (group) => {
@@ -37,7 +41,25 @@ function Swipe() {
     });
 
     socketContext.socket.on("printRanking", (ranking) => {
-      console.log("Ranking", ranking);
+      const filmToDisplay = [];
+      if (ranking.length >= 3) {
+        console.log("Ranking", ranking);
+        Movies.forEach((film) => {
+          if (film.netflixid === ranking[0].filmId || film.netflixid === ranking[1].filmId || film.netflixid === ranking[2].filmId) {
+            filmToDisplay.push(film);
+          }
+        });
+        console.log("filmtodisplay", filmToDisplay);
+      }
+      
+      document.getElementById("waitingPopUp").classList.add("hide");
+      const popUpRank = document.querySelector(".popUpRank-container");
+      const medalsBox = document.querySelector(".popUpRank-container .popUpRank");
+      const blackBackground = document.querySelector(".popUpRank-container .backgroundRank");
+      blackBackground.classList.remove("hideRank");
+      popUpRank.classList.remove("hideRank");
+      medalsBox.style.transform = "translateY(0%)";
+      setTopFilm(filmToDisplay);
     });
   }, []);
 
@@ -70,57 +92,55 @@ function Swipe() {
     setLastDirection(direction);
     alreadyRemoved.push(nameToDelete);
     if (direction === "left") {
-      swipeMovie(false)
-    }
-    else {
-      swipeMovie(true)
+      swipeMovie(false);
+    } else {
+      swipeMovie(true);
     }
   };
 
-  socket.on('printMatch', (data) =>{
+  socket.on("printMatch", (data) => {
     console.log("received a match");
     console.log(data);
-//    const movie = Movies.find((m) => m.netflixid === data.filmId);
+    //    const movie = Movies.find((m) => m.netflixid === data.filmId);
     var indiceMovie;
-    for (var i=0; i<Movies.length;i++){
+    for (var i = 0; i < Movies.length; i++) {
       console.log(i);
       console.log(Movies[i].netflixid);
-      if(Movies[i].netflixid == data.filmId){
+      if (Movies[i].netflixid == data.filmId) {
         indiceMovie = i;
       }
     }
     console.log("movies:");
     console.log(Movies);
-    
+
     console.log("indicemovie:");
     console.log(indiceMovie);
 
     setSelectedMovie(Movies[indiceMovie]);
-    const match = document.getElementById('match');
-    match.style.display = 'flex';
-    match.style.transform = 'translateY(0%)';
-  })
+    const match = document.getElementById("match");
+    match.style.display = "flex";
+    match.style.transform = "translateY(0%)";
+  });
 
   const outOfFrame = (name) => {
     console.log(name + " left the screen!");
   };
 
   const swipe = (dir) => {
-    setMovieIndex(MovieIndex + 1);
-    if (dir === "left") {
-      swipeMovie(false)
+    if (!(MovieIndex + 1 >= Movies.length)) {
+      setMovieIndex(MovieIndex + 1);
+    } else {
+      setIsFinished(true);
+      const waitingPopUp = document.getElementById("waitingPopUp");
+      waitingPopUp.classList.toggle("hide");
     }
-    else {
-      swipeMovie(true)
-    }
-  }
 
-  socketContext.socket.on("printRanking", (ranking) => {
-    //socketContext.updateGroup(group);
-    console.log("received a ranking");
-    console.log(ranking);
-  });
-  
+    if (dir === "left") {
+      swipeMovie(false);
+    } else {
+      swipeMovie(true);
+    }
+  };
 
   return (
     <div className="box-ecran swipe-color">
@@ -148,46 +168,60 @@ function Swipe() {
           </MovieCard>
           <hr></hr>
 
-            <div className="bouton-swipe-non-hover">
-              <button className="bouton-swipe-non" onClick={() => swipe("left")}>
-                non
-              </button>
-            </div>
-            <h4> {Movies[MovieIndex].genre.join(" ")} </h4>
-            <div>{Movies[MovieIndex].synopsis}
-            {owner === username &&
-        <div className="bouton-rouge-hover">
-          <button
-            className="bouton-rouge-rempli"
-            onClick={() => {
-            interrompreSwipe();
-            }
-            }>
-            Interrompre le swipe</button>
-        </div>}
+          <div className="bouton-swipe-non-hover">
+            <button className="bouton-swipe-non" onClick={() => swipe("left")}>
+              non
+            </button>
+          </div>
+          <h4> {Movies[MovieIndex].genre.join(" ")} </h4>
+          <div>
+            {Movies[MovieIndex].synopsis}
+            {owner === username && (
+              <div className="bouton-rouge-hover">
+                <button
+                  className="bouton-rouge-rempli"
+                  onClick={() => {
+                    interrompreSwipe();
+                  }}
+                >
+                  Interrompre le swipe
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
 
+      {lastDirection === "left" ? (
+        <div key={lastDirection} className="non">
+          <i class="img-swipe fas fa-no float-left"></i>
+        </div>
+      ) : (
+        <h2></h2>
+      )}
+      {lastDirection === "right" ? (
+        <div key={lastDirection} className="oui">
+          <i class="img-swipe fas fa-heart float-left"></i>
+        </div>
+      ) : (
+        <h2></h2>
+      )}
 
+      <Match
+        title={selectedMovie.title}
+        url={selectedMovie.img}
+        genre={selectedMovie.genre}
+        runtime={selectedMovie.runtime}
+        synopsis={selectedMovie.synopsis}
+        year={selectedMovie.year}
+        id={selectedMovie.netflixid}
+      ></Match>
 
-{lastDirection==="left" ? <div key={lastDirection} className='non'><i class="img-swipe fas fa-no float-left"></i></div> : <h2></h2>}
-{lastDirection==="right" ? <div key={lastDirection} className='oui'><i class="img-swipe fas fa-heart float-left"></i></div> : <h2></h2>}
+      <PopUpSpinner id="waitingPopUp" text="En attente des autres participants" />
 
-
-<Match 
-title={selectedMovie.title}
-url={selectedMovie.img}
-genre={selectedMovie.genre}
-runtime={selectedMovie.runtime}
-synopsis={selectedMovie.synopsis}
-year={selectedMovie.year}
-id={selectedMovie.netflixid}
->
-  </Match>
-
-</div>
-  )
+      <PopUpRank films={topFilm} />
+    </div>
+  );
 }
 
 export default Swipe;

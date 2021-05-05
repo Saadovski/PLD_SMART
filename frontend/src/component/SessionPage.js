@@ -44,6 +44,12 @@ function SessionPage() {
       history.push("/swipe");
       console.log("received a start");
     });
+
+    socketContext.socket.on("ready", (group) => {
+      console.log("received ready");
+      const spinner = document.getElementsByClassName("PopUp")[0];
+      spinner.classList.toggle("hide");
+    });
   }, []);
 
   return (
