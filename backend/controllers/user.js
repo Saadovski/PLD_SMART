@@ -55,7 +55,7 @@ exports.createUser = (req, res, next) => {
 
             user.save()
               .then(() => res.status(200).json({
-                success: "true",
+                success: true,
                 reponse: "User enregistré et connecté",
                 userId: user._id,
                 token: jwt.sign(
@@ -67,7 +67,7 @@ exports.createUser = (req, res, next) => {
               .catch(error => res.status(400).json({ error }));
 
           })
-          .catch(error => res.status(400).json({ error }));
+          .catch(error => res.status(401).json({ error }));
 
 
       })()
@@ -85,20 +85,20 @@ exports.connectUser = (req, res, next) => {
       if (!user) {
         return res.status(401).json({
           error: 'User not found !',
-          success: "false"
+          success: false
         });
       }
 
       bcrypt.compare(req.body.password, user.password)
         .then(valid => {
           if (!valid) {
-            return res.status(401).json({
+            return res.status(402).json({
               error: 'Wrong password !',
-              success: "false"
+              success: false
             });
           }
           res.status(200).json({
-            success: "true",
+            success: true,
             userId: user._id,
             token: jwt.sign(
               { userId: user._id },
@@ -120,12 +120,12 @@ exports.verifUsername = (req, res, next) => {
       if (!user) {
         return res.status(200).json({
           status: 'username available',
-          success: "true"
+          success: true
         });
       }
       return res.status(200).json({
         status: 'username not available',
-        success: "false"
+        success: false
       });
     })
     .catch(error => res.status(500).json({ error }));
@@ -137,11 +137,11 @@ exports.unsubscribe = (req, res, next) => {
   User.deleteOne({ _id: req.body.userId })
     .then(() => res.status(200).json({
       message: 'Objet supprimé !',
-      success: "true"
+      success: true
     }))
     .catch(error => res.status(400).json({
       error,
-      success: "false"
+      success: false
     }));
 
 };
@@ -153,11 +153,11 @@ exports.checkInfoUser = (req, res, next) => {
   User.findOne({ _id: req.body.userId }).populate('preference')
     .then(user => {
       if (!user) {
-        return res.status(200).json({ success: "false", status: 'username not available' });
+        return res.status(200).json({ success: false, status: 'username not available' });
       }
       return res.status(200).json({
         status: 'stats found',
-        success: "true",
+        success: true,
         nb_sessions: user.nbSession,
         nb_films: user.preference.nbFilms
       });
@@ -170,9 +170,9 @@ exports.modifMdp = (req, res, next) => {
 bcrypt.hash(req.body.password, 10)
 .then(hash => {
   User.updateOne({ _id: req.body.userId }, {$set: {password: hash}},function(err, resp) {
-    if (err) return res.status(500).json({ success: "false", status: 'Error' });
+    if (err) return res.status(500).json({ success: false, status: 'Error' });
     console.log("1 document updated");
-    return res.status(200).json({ success: "true", status: 'Password modified' });
+    return res.status(200).json({ success: true, status: 'Password modified' });
   });
 })
 }
