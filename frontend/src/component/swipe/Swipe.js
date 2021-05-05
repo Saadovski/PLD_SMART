@@ -182,6 +182,7 @@ genre={selectedMovie.genre}
 runtime={selectedMovie.runtime}
 synopsis={selectedMovie.synopsis}
 year={selectedMovie.year}
+id={selectedMovie.netflixid}
 >
   </Match>
 

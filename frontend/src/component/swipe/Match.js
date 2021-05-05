@@ -17,7 +17,7 @@ function Match(props) {
                 <div>
                     <div className='texte-vert background-vide'><h3>{props.title}, {props.year} ({props.runtime})</h3></div>
                     <hr></hr>
-                    <div style={{ backgroundImage: url}} className='card'>
+                    <div onClick={() => window.location.href='https://www.netflix/'+props.id} style={{ backgroundImage: url}} className='card'>
                         </div>
 
                         <hr></hr>
@@ -26,7 +26,9 @@ function Match(props) {
                         </div>
                         <div className="texte-vert">{props.id}</div>
                 </div>
-                <button onClick={() => continuerSwipe()}> Continuer le swipe </button>
+                <div className="bouton-vert-hover">
+                <button className="bouton-vert-rempli" onClick={() => continuerSwipe()}> Continuer le swipe </button>
+                </div>
             </div>
         </div>
     );
