@@ -4,6 +4,7 @@ import Popcorn from "../images/popcorn.svg";
 import Glasses from "../images/glasses.svg";
 import Arrow from "../images/next.svg";
 import { withRouter } from "react-router";
+import PopUpSpinner from "./PopUpSpinner";
 
 function Home() {
   return (
@@ -34,6 +35,7 @@ function Home() {
           Lancer une session
         </button>
       </section>
+      
       {/* <button
         className="bouton-gris-rempli texte-blanc"
         onClick={(event) => {
