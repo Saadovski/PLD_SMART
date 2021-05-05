@@ -10,7 +10,7 @@ function PopUpRank(props) {
     setTimeout(() => {
       const pop = document.querySelector(".popUpRank");
       pop.style.transform = "translate(0%)";
-    }, 2000);
+    }, 1000);
   }, []);
 
   return (
@@ -35,6 +35,7 @@ function PopUpRank(props) {
             <Button>Voir</Button>
           </div>
         </div>
+        <Button variant="danger" className="mt-5">Quitter la session</Button>
       </div>
       <div className="backgroundRank"></div>
     </div>
