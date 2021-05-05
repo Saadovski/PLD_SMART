@@ -1,4 +1,4 @@
-.hide {
+.hideN {
   display: none;
 }
 
@@ -22,7 +22,7 @@
   top: 0;
   left: -80vw;
   height: 100vh;
-  width: 80%;
+  width: 300px;
   background-color: #fff;
   transition-duration: 0.5s;
 }

@@ -5,6 +5,7 @@ import "../styles/box.css";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/socketContext";
 import { AuthContext } from "../context/authContext";
+import PopUpSpinner from "./PopUpSpinner";
 
 function SessionPage() {
   const { id } = useParams();
@@ -19,6 +20,8 @@ function SessionPage() {
   const [group, setGroup] = useState(socketContext.group);
 
   const ready = () => {
+    const spinner = document.getElementsByClassName("PopUp")[0];
+    spinner.classList.toggle("hide");
     socket.emit("ready", {
       auth: {
         id: userId,
@@ -80,6 +83,7 @@ function SessionPage() {
           </div>
         )}
       </div>
+      <PopUpSpinner text="Chargement de la session ..." />
     </div>
   );
 }

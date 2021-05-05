@@ -7,7 +7,7 @@ const User = require('../models/user');
 const Preference = require('../models/preference');
 const parser = require('mongodb-query-parser');
 
-const tailleEchantillon = 100
+const tailleEchantillon = 500
 exports.createFilm = (req, res, next) => {
 
     //il faut transformer "profil" en vecteur
@@ -28,30 +28,34 @@ exports.createFilm = (req, res, next) => {
 exports.filmGender = async (req, res, next) => {
 
     console.log("on requête les films")
+    console.log("on passe ici1")
     const listeGenre = req.body.listeGenre
     let requete = ""
     if(listeGenre.length === 0){
             
+        listeFilms= []
+
+
+        Film.aggregate([{ $sample: { size: tailleEchantillon} }])
+        .then(films  => {listeFilms = films
         
-        requete = "{}"
+            return res.status(200).json({ 
+                success: "true",
+                listFilms: listeFilms
+            });}) 
+        .catch(error => {console.log("soucis")});
+    
     }
     else{
+        console.log("on passe ici2")
         requete = "{$or:[";
 
         for(let genre of listeGenre) {
             requete = requete + "{genre: \"" + genre+ "\"},"
         }
     requete = requete.substring(0, requete.length-1) + "]}";
-    }
+    
 
-    requete2 = "{"
-
-
-    for(let genre of listeGenre) {
-        requete2 = requete2 + " genre: \""+genre+"\","
-    }
-    requete2 = requete2.substring(0, requete2.length-1);
-    requete2 = requete2 + "}"
 
     console.log("requete", requete)
     let query = parser(requete)
@@ -69,20 +73,20 @@ exports.filmGender = async (req, res, next) => {
             } 
             else if(listeFilms.length < tailleEchantillon){
                 while(listeFilms.length < tailleEchantillon){
-
-                    //var random = Math.floor(Math.random() * 2924)                     //Film.findOne({}).skip(random)
-                    Film.aggregate([{ $sample: { size: 1 } }])
-                    .then( film => {if(listeFilms.indexOf(film) === -1) listeFilms.push(film)})
-                    .catch(error => {console.log("soucis")})
-                    ; 
+                    Film.aggregate([{ $sample: { size: tailleEchantillon - listeFilms.length } }])
+                    .then(films  => {films.forEach(film => {
+                        if(listeFilms.indexOf(film) === -1) listeFilms.push(film)
+                    })
+                }) 
+                .catch(error => {console.log("soucis")});
                 }
                 return res.status(200).json({ 
                     success: "true",
                     listFilms: listeFilms
                 });
-            
 
-               
+
+
             }
             else{
                 return res.status(200).json({ 
@@ -94,7 +98,16 @@ exports.filmGender = async (req, res, next) => {
         })
 
 
+
+
+
+    }
+
+
 };
+
+
+
 
 exports.updatePreference = async (req, res, next) => {
 
@@ -129,4 +142,17 @@ exports.updatePreference = async (req, res, next) => {
 
     
 
+}
+
+
+
+
+exports.addSession = async (req, res, next) => {
+    console.log("coucou")
+
+    User.updateOne({ _id: req.body.userId },{ $inc: { nbSession: 1 } })
+    .then(()=>{
+        return res.status(200).json({ success: "true", status: 'Session ajoutee' });
+    })
+    .catch(error => console.log(res.status(501).json({ error })));
 }

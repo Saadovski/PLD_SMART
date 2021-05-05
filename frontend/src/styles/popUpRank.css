@@ -1,0 +1,46 @@
+.popUpRank-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.popUpRank {
+    position: fixed;
+    width: 95%;
+    height: 54%;
+    background-color: white;
+    border: 1px solid #f1f1f1;
+    border-radius: 5px;
+    color: black;
+    top: 27%;
+    left: 2.5%;
+    z-index: 1000;
+    transition-duration: 1s;
+    transition-timing-function: cubic-bezier(.8, -.5, .2, 1.4);
+    transform: translateY(600px);
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.medalsBox {
+    display: flex;
+    justify-content: space-evenly;
+    height: 150px;
+}
+
+.medalsBox > div > img {
+    width: 50px;
+}
+
+.medalsBox div:nth-child(1),  .medalsBox div:nth-child(3){
+    align-self: flex-end;
+}
+
+.backgroundRank {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 70%;
+}
