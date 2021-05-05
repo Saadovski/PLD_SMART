@@ -6,7 +6,7 @@ const Film = require('../models/user');
 const User = require('../models/user');
 const Genre = require('../models/genre');
 const Preference = require('../models/preference');
-
+const parser = require('mongodb-query-parser');
 
 exports.createUser = (req, res, next) => {
 
@@ -15,67 +15,71 @@ exports.createUser = (req, res, next) => {
 
       //il faut transformer "profil" en vecteur
       
-      (async () => {
-        var genre_vectors = [] //(await fctIa.text_to_vector(req.body.profil))
+    
+        if(req.body.profil.length === 0){
+          requete = "{}";
+        } else{
+          requete = "{$or:[";
 
-        for (let genre of req.body.profil){
-          console.log("voici le genre", genre)
-          Genre.findOne({"genre": genre})
-          .then( vector => {
-            console.log(vector);
-            //genre_vectors.push(vector.vector)
-          })
-          .catch( console.log("test"))
+          for(let genre of req.body.profil) {
+              requete = requete + "{genre: \"" + genre+ "\"},"
+          }
+          requete = requete.substring(0, requete.length-1) + "]}";  
         }
 
-
-        let arrayGenre = new Array(512).fill(0);
-
-        for (var i = 0; i < genre_vectors.length; ++i) {
-          arrayGenre = arrayGenre.map((val, idx)=> val + genre_vectors[i][idx]);
-        }
-        arrayGenre = arrayGenre.map((val)=> val / genre_vectors.length);
-        //console.log(arrayGenre)
-
-        const preference_ = new Preference({
-          genre: arrayGenre,
-          synopsis : arrayGenre,
-          nbFilms: 0,
-          annee: 0
-        });
-        preference_.save()
-          .then(() => {
-
-            const user = new User({
-              username: req.body.username,
-              password: hash,
-              nbSession: 0,
-              preference: preference_
-            });
-
-            user.save()
-              .then(() => res.status(200).json({
-                success: true,
-                reponse: "User enregistré et connecté",
-                userId: user._id,
-                token: jwt.sign(
-                  { userId: user._id },
-                  'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
-                  { expiresIn: '24h' }
-                )
-              }))
-              .catch(error => res.status(400).json({ error }));
-
-          })
-          .catch(error => res.status(401).json({ error }));
+        //console.log("requete", requete)
 
 
-      })()
+        let query = parser(requete)
+        
+        Genre.find(query)
+        .then(list_genre =>{
+          //console.log("genre_verctor : ",list_genre)
+          
+          let genre_vectors = []
+          for (let gr of list_genre){
+            genre_vectors.push(gr.vector)
+          }
+          let arrayGenre = new Array(512).fill(0);
 
+          for (var i = 0; i < genre_vectors.length; ++i) {
+            arrayGenre = arrayGenre.map((val, idx)=> val + genre_vectors[i][idx]);
+          }
+          arrayGenre = arrayGenre.map((val)=> val / genre_vectors.length);
+          //console.log(arrayGenre)
+          //console.log("voici ce que l'on va insérer dans la bdd", arrayGenre)
+          const preference_ = new Preference({
+            genre: arrayGenre,
+            synopsis : arrayGenre,
+            nbFilms: 0,
+            annee: 0
+          });
+          preference_.save()
+            .then(() => {
 
+              const user = new User({
+                username: req.body.username,
+                password: hash,
+                nbSession: 0,
+                preference: preference_
+              });
+
+              user.save()
+                .then(() => res.status(200).json({
+                  success: true,
+                  reponse: "User enregistré et connecté",
+                  userId: user._id,
+                  token: jwt.sign(
+                    { userId: user._id },
+                    'RANDOM_LEVURE_BOULANGERE_SALADE_RADIS_JAKOB_69_LATRIQUE',
+                    { expiresIn: '24h' }
+                  )
+                }))
+                .catch(error => res.status(400).json({ error }));
+            })
+            .catch(error => res.status(401).json({ error }));
+        })
     })
-
-
 };
 
 exports.connectUser = (req, res, next) => {

@@ -20,7 +20,8 @@ function UserInfos() {
   }, [authContext.username]);
 
   const handleSubmit = (e) => {
-    if (newPassword === newPasswordConf) {
+    e.preventDefault();
+    if (newPassword === newPasswordConf && newPassword) {
       fetch(REACT_APP_API_URL + "user/modification", {
         method: "POST",
         headers: {
@@ -34,8 +35,6 @@ function UserInfos() {
       })
         .then((response) => response.json())
         .then((data) => {
-          console.log(data.success);
-
           if (data.success) {
             
           } else {
@@ -44,8 +43,9 @@ function UserInfos() {
           }
         });
     } else {
-      e.preventDefault();
       setIsModifying(true);
+      document.getElementById("nouveau").style.border = "1px solid red";
+      document.getElementById("confirmernouveau").style.border = "1px solid red";
       alert("Confirmation du mot de passe incorrect");
     }
   };
@@ -61,8 +61,6 @@ function UserInfos() {
 
     if (isModifying && hasChanged) {
       e.preventDefault();
-      console.log("Submitting form...");
-      console.log(`%c${username} ${password}`, "color: #cc0000");
     }
   };
 
