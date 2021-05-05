@@ -59,7 +59,7 @@ exports.Group = class Group {
       
       let res = false;
 
-      if(avis === 'true'){
+      if(avis){
         this.countFilm[filmId]++;
         if (this.countFilm[filmId] === this.users.length) {
           res = true;

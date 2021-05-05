@@ -42,6 +42,7 @@ function Swipe() {
   }, []);
 
   const swipeMovie = (avis) => {
+    console.log("swipe");
     const filmId = Movies[MovieIndex].netflixid;
     socket.emit("swipe", {
       auth: {
@@ -96,7 +97,7 @@ function Swipe() {
 
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById('match');
-    match.classList.remove('hide');
+    match.style.display = 'flex';
     match.style.transform = 'translateY(0%)';
   })
 
@@ -181,7 +182,8 @@ genre={selectedMovie.genre}
 runtime={selectedMovie.runtime}
 synopsis={selectedMovie.synopsis}
 year={selectedMovie.year}
-/>
+>
+  </Match>
 
 </div>
   )

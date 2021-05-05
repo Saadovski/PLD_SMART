@@ -4,6 +4,12 @@ function Match(props) {
 
     const url='url('+ props.url + ')';
 
+    const continuerSwipe = () => {
+        const match = document.getElementById('match');
+        match.style.display = 'none';
+        match.style.transform = 'translateY(100%)';    
+      }
+    
     return (
         <div id="match" className="popupMatch hide">
             <h2 className="texte-vert">Vous avez un match !</h2>
@@ -20,6 +26,7 @@ function Match(props) {
                         </div>
                         <div className="texte-vert">{props.id}</div>
                 </div>
+                <button onClick={() => continuerSwipe()}> Continuer le swipe </button>
             </div>
         </div>
     );
