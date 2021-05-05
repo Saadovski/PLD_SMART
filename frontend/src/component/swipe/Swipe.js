@@ -1,4 +1,4 @@
-import React, { useState, useContext, useMemo } from 'react'
+import React, { useState, useContext, useMemo, useEffect } from 'react'
 import { SocketContext } from '../../context/socketContext'
 import MovieCard from './index'
 import { AuthContext } from "../../context/authContext";
@@ -24,6 +24,16 @@ function Swipe() {
   const groupId = socketContext.group.groupId;
   const socket = socketContext.socket;
   const Movies = socketContext.group.films;
+
+  useEffect(() => {
+    socket.on('group', (group) =>{
+      socketContext.updateGroup(group);
+      window.addEventListener('beforeunload', () => {
+        socket.disconnect();
+        history.push("/");
+      });
+    })
+  }, [])
 
   const swipeMovie = (avis) => {
     const filmId = Movies[MovieIndex].netflixid;
@@ -64,10 +74,7 @@ function Swipe() {
     }
   }
 
-  socket.on('group', (data) =>{
-    alert(data.user)
-    console.log(data)
-  })
+  
 
   socket.on('printMatch', (filmId) =>{
     console.log("received a match");
