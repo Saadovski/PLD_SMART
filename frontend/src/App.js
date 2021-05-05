@@ -28,16 +28,18 @@ function App() {
   const history = useHistory();
 
   useEffect(() => {
+    console.log("UseEffect in app.js");
     const storedToken = JSON.parse(localStorage.getItem("pldsmartToken"));
     const storedUser = JSON.parse(localStorage.getItem("pldsmartUser"));
     console.log("stored token", storedToken);
     if (storedToken && storedToken.token && new Date(storedToken.expiration).getTime() > new Date().getTime()) {
+      console.log("login launched");
       login(storedToken.token, storedUser.userId, storedUser.username);
     }
   }, []);
 
   const login = (newToken, userId, username) => {
-    localStorage.setItem("pldsmartToken", JSON.stringify({ token: newToken, expiration: new Date().getTime() + 1000 * 60 * 2 }));
+    localStorage.setItem("pldsmartToken", JSON.stringify({ token: newToken, expiration: new Date().getTime() + 1000 * 60 * 60 * 24 }));
     localStorage.setItem("pldsmartUser", JSON.stringify({ userId, username }));
     setToken(newToken);
     setUsername(username);
@@ -69,13 +71,13 @@ function App() {
             <Navbar />
             <Switch>
               <Route exact path="/home" component={Home} />
-              <Route path="/swipe" component={Swipe} />
+              <PrivateRoute path="/swipe" component={Swipe} />
               <Route path="/inscription" component={Signup_container} />
               <Route path="/connexion" component={Signin} />
-              <Route path="/session/:id" component={SessionPage} />
-              <Route path="/monespace" component={MonEspace} />
-              <Route path="/creersession" component={CreateSession} />
-              <Route path="/choisirmood" component={Mood} />
+              <PrivateRoute path="/session/:id" component={SessionPage} />
+              <PrivateRoute path="/monespace" component={MonEspace} />
+              <PrivateRoute path="/creersession" component={CreateSession} />
+              <PrivateRoute path="/choisirmood" component={Mood} />
               <Redirect to="/home" />
             </Switch>
           </Router>

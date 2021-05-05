@@ -14,10 +14,6 @@ function Signin(props) {
   const authContext = useContext(AuthContext);
   const history = useHistory();
 
-  useEffect(() => {
-    console.log(props);
-  });
-
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting form...");
@@ -37,23 +33,13 @@ function Signin(props) {
       .then((data) => {
         if (data.success) {
           console.log("successfully logged");
-          //const newToken = { token: data.token, expiration: new Date().getTime() + 1000 * 60 * 2 };
-          //localStorage.setItem('projetpmToken', JSON.stringify({ token: newToken.token, expiration: newToken.expiration })); // 2h
-          //authContext.login(newToken);
-          // document.querySelector(".connection-info").innerHTML = "Connexion réussie !";
+          
           authContext.login(data.token, data.userId, username);
           history.push("/monespace");
 
-          /*if (props.location.state?.from.pathname)
-          {
-          window.location.href = props.location.state?.from.pathname;
-          }
-          else
-          {
-          window.location.href = "/";        
-          }*/
         } else {
-          document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
+          console.log("la connexion a échouée");
+          //document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
         }
       });
   };
@@ -67,10 +53,10 @@ function Signin(props) {
       )}
               <h3> Connexion </h3>
 
-      <form class="texte-centre">
+      <form className="texte-centre">
         <label>
           <input
-            class="box-sans-contour texte-vert texte-centre"
+            className="box-sans-contour texte-vert texte-centre"
             type="text"
             name="username"
             onChange={(e) => setUsername(e.target.value)}
@@ -79,7 +65,7 @@ function Signin(props) {
         </label>
         <label>
           <input
-            class="box-sans-contour texte-vert texte-centre"
+            className="box-sans-contour texte-vert texte-centre"
             type="password"
             name="password"
             onChange={(e) => setPassword(e.target.value)}
@@ -87,13 +73,13 @@ function Signin(props) {
           />
         </label>
         <hr></hr>
-        <div class="bouton-vert-hover">
-          <button class="bouton-vert-rempli" onClick={handleSubmit}>
+        <div className="bouton-vert-hover">
+          <button className="bouton-vert-rempli" onClick={handleSubmit}>
             Connexion
           </button>
         </div>
       <hr></hr>
-      <div class="bouton-gris-hover box-en-bas">
+      <div className="bouton-gris-hover box-en-bas">
         <button className="bouton-gris-rempli" onClick={(event) => {window.location.href="/connection"}}>
           Retour
         </button>

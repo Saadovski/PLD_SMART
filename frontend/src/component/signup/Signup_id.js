@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Form } from 'react-bootstrap';
 import "../../styles/boutons.css";
 import "../../styles/textes.css";
 import "../../styles/box.css";
@@ -28,12 +27,12 @@ function Signup_id(props) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data.success);
-        if (data.success === "true") {
+        if (data.success) {
           e.target.style.border = "";
           props.setState(2);
         }
         else {
-          e.target.style.border = "1px solid red";
+          document.getElementById("username").style.border = "1px solid red";
         }
       });
     }
@@ -45,6 +44,7 @@ function Signup_id(props) {
         <h3> Inscription </h3>
       <label>
           <input
+            id="username"
             class="box-sans-contour texte-vert texte-centre"
             type="text"
             name="username"

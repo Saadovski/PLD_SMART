@@ -24,45 +24,48 @@ module.exports = {
         var len = movie.genreVectors.length;
         var score=0;
         for(var i = 0; i < len; ++i){
-            score += similarity(user.preferences.genre, movie.genreVectors[i]);
+            // console.log("user.preference.genre ", user.preference.genre.length)
+            // console.log("movie.genreVectors[i] ", movie.genreVectors[i].length)
+            // console.log("similarity", { 1: user.preference.genre, 2: movie.genreVectors[i] })
+            score += similarity(user.preference.genre, movie.genreVectors[i]);
         }
         score = score / len;
-        score += similarity(user.preferences.synopsis, movie.synopsisVector);
-        if(user.preferences.annee - movie.annee > 1){
-            score += (1/(Math.abs(user.preferences.annee - movie.annee)))/5;
+        score += similarity(user.preference.synopsis, movie.synopsisVector);
+        if(user.preference.annee - movie.year > 1){
+            score += (1/(Math.abs(user.preference.annee - movie.year)))/5;
         }else{//ce if else est pour eviter d'avoir des grandes valeurs
             score += 1/5;
         } //j'ai divisé l'influence de l'année par 5 pour qu'elle ait pas un poids trop fort par rapport au synopsis et les genres
         return score;
     },
 
-    maj_user_preferences: function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
-            var len = movie.genreVectors.length;
-            var nbfilms = user.preferences.nbFilms;
-            var annee = 0;
-            var synopsis = [];
-
-        synopsis = user.preferences.synopsis.map((val, idx) => (val*nbfilms + movie.synopsisVector[idx]) / (nbfilms));
-
-        var newGenre = user.preferences.genre;
-        newGenre = newGenre.map((val) => val * nbfilms * 5);
+    maj_user_preferences: async function(user, movie){ //l'idee est la le code peut etre adapte a ce qu'on veut faire
+        var len = movie.genreVectors.length;
+        var nbfilms = user.preference.nbFilms;
+        var annee = 0;
+        var synopsis = [];
+        //console.log(user.preference.synopsis);
+        synopsis = user.preference.synopsis.map((val, idx) => (val*(nbfilms + 1) + movie.synopsisVector[idx]) / (nbfilms + 1));
+        //console.log(synopsis);
+        var newGenre = user.preference.genre;
+        newGenre = newGenre.map((val) => val * (nbfilms + 1) * 5);
         for(var i = 0; i < len; ++i){
             newGenre = newGenre.map((val, idx) => val + movie.genreVectors[i][idx]);
         }
-        newGenre = newGenre.map((val) => val / (nbfilms * 5));
-        user.preferences.genre = newGenre;
+        newGenre = newGenre.map((val) => val / ((nbfilms + 1) * 5));
+        user.preference.genre = newGenre;
 
-        annee = (user.preferences.annee * nbfilms + movie.annee) / (nbfilms + 1);
+        annee = (user.preference.annee * nbfilms + movie.year) / (nbfilms + 1);
+        console.log(annee);
+        nbfilms = user.preference.nbFilms + 1;
 
-        nbfilms = user.preferences.nbFilms + 1;
-
-            preferences = {
-                nbFilms : nbfilms,
-                genre: newGenre,
-                synopsis : synopsis,
-                annee : annee
-            }
-            return preferences;
+        preference = {
+            nbFilms : nbfilms,
+            genre: newGenre,
+            synopsis : synopsis,
+            annee : annee
+        }
+        return preference;
     },
 
     top_best_movies: function(movies, users){

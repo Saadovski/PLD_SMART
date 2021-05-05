@@ -1,3 +1,6 @@
+.hide {
+  display: none;
+}
 
 .blackBackground {
   opacity: 60%;
@@ -8,18 +11,18 @@
   left: 0;
   z-index: 5;
   display: none;
-  position: absolute;
+  position: fixed;
 }
 
 /* Hide the links inside the navigation menu (except for logo/home) */
 #myLinks {
   z-index: 10;
   display: block;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: -80vw;
-  min-height: 100vh;
-  width: 80%;
+  height: 100vh;
+  width: 300px;
   background-color: #fff;
   transition-duration: 0.5s;
 }
@@ -46,6 +49,21 @@
 
 .navbar-container button {
   border: 0;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.header-nav button {
+  align-self: flex-start;
+  background-color: var(--primaryColor);
+  border: 0;
+  padding: 5px;
+  width: 30px;
+  height: 30px;
+  color: white;
 }
 
 /* Style navigation menu links */

@@ -4,7 +4,6 @@ import "../styles/textes.css";
 import "../styles/box.css";
 import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/socketContext";
-import { io } from "socket.io-client";
 import { AuthContext } from "../context/authContext";
 
 function SessionPage() {
@@ -37,8 +36,10 @@ function SessionPage() {
       console.log("Nouveau message group", group);
     });
 
-    socketContext.socket.on("test", (test) => {
-      console.log("test message", test);
+    socketContext.socket.on("start", (group) => {
+      socketContext.updateGroup(group);
+      history.push("/swipe");
+      console.log("received a start");
     });
   }, []);
 
@@ -49,7 +50,7 @@ function SessionPage() {
         <h3>Chef du groupe : {owner}</h3>
         <div className="users">
           <h3>Utilisateurs connectés : </h3>
-          {group.user.map((u, index) => {
+          {socketContext.group.users.map((u, index) => {
             return (
               <div className="userElement" key={index}>
                 {u}
@@ -60,7 +61,7 @@ function SessionPage() {
 
         {owner === username && (
           <div className="bouton-vert-hover">
-            <button className="bouton-vert-rempli" onClick={() => history.push("/ChoisirMood")}>
+            <button className="bouton-vert-rempli" onClick={() => history.push("/choisirMood")}>
               Choisir le mood
             </button>
           </div>
@@ -71,8 +72,7 @@ function SessionPage() {
             <button
               className="bouton-gris-rempli texte-blanc"
               onClick={() => {
-                //ready();
-                history.push("/Avance");
+                ready();
               }}
             >
               Ready

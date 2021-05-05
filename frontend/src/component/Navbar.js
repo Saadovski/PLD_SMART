@@ -1,5 +1,4 @@
 import { useContext } from "react";
-import { Button } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import "../styles/navbar.css";
@@ -45,38 +44,54 @@ function Navbar() {
         <button href="" className="icon" onClick={open}>
           <i className="fa fa-bars"></i>
         </button>
-        
+
         <Link to="/" className="logo  " id="logo">
           Logo
         </Link>
       </div>
-      <div id="myLinks">
-        <div className="box-horizontal texte-centre">
-        <Button className="icon" onClick={closeNavBar}>
-          <i className="fas fa-times"></i>
-        </Button>
-        <div className="texte-centre"> {authContext.username} </div>
-      </div>
-      <NavLink to="/home" activeClassName="selected">Accueil</NavLink>
-        {!authContext.isAuth && <NavLink to="/connexion" activeClassName="selected">Connexion</NavLink>}
-        {!authContext.isAuth && <NavLink to="/inscription" activeClassName="selected">Inscription</NavLink>}
-        {authContext.isAuth && <NavLink to="/monespace" activeClassName="selected">Mon Espace</NavLink>}
-        <NavLink activeClassName="selected" to="/creersession">Rejoindre ou créer une session</NavLink>
-        {authContext.isAuth && (
-        <div className="bouton-gris-hover">
-          <button
-            className="bouton-gris-rempli"
-            onClick={() => {
-              authContext.logout();
-              // closeNavBar();
-            }}
-          >
-            Deconnexion
+      <div className="texte-centre" id="myLinks">
+        <div className="header-nav">
+          <button className="float-left" onClick={closeNavBar}>
+            <i class="fas fa-times"></i>
           </button>
+          <div className="texte-centre texte-username"> Connecté en tant que : {authContext.username} </div>
         </div>
+        <NavLink to="/home" activeClassName="selected">
+          Accueil
+        </NavLink>
+        {!authContext.isAuth && (
+          <NavLink to="/connexion" activeClassName="selected">
+            Connexion
+          </NavLink>
+        )}
+        {!authContext.isAuth && (
+          <NavLink to="/inscription" activeClassName="selected">
+            Inscription
+          </NavLink>
+        )}
+        {authContext.isAuth && (
+          <NavLink to="/monespace" activeClassName="selected">
+            Mon Espace
+          </NavLink>
+        )}
+        <NavLink activeClassName="selected" to="/creersession">
+          Rejoindre ou créer une session
+        </NavLink>
+        {authContext.isAuth && (
+          <div className="texte-centre box-en-bas-deconnexion bouton-gris-hover">
+            <button
+              className="bouton-gris-rempli"
+              onClick={() => {
+                authContext.logout();
+                // closeNavBar();
+              }}
+            >
+              Deconnexion
+            </button>
+          </div>
         )}
       </div>
-      <div className="blackBackground"></div>
+      <div className="blackBackground" onClick={closeNavBar}></div>
     </div>
   );
 }

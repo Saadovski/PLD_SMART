@@ -12,12 +12,12 @@ function MonEspace() {
     <div className="box-centre">
       <div className="monEspace-container">
         <div>
-          <div>{authContext.username}</div>
+          <div> Connecté en tant que : {authContext.username}</div>
           <div className="nav">
-            <div onClick={() => setState(1)}>
+            <div className="box-arrondie" onClick={() => setState(1)}>
               <i className="fas fa-user float-left"></i> Mes infos
             </div>
-            <div onClick={() => setState(2)}>
+            <div className="box-arrondie" onClick={() => setState(2)}>
               <i className="fas fa-heart float-left"></i> Mon historique
             </div>
           </div>
