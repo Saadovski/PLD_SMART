@@ -70,8 +70,8 @@ function Swipe() {
   })
 
   socket.on('printMatch', (filmId) =>{
+    console.log("received a match");
     console.log(filmId)
-    history.push('/match/'+filmId);
   })
 
   const outOfFrame = (name) => {
@@ -90,7 +90,6 @@ function Swipe() {
 
   socketContext.socket.on("printRanking", (ranking) => {
     //socketContext.updateGroup(group);
-    //history.push("/ranking");
     console.log("received a ranking");
     console.log(ranking);
   });
@@ -135,7 +134,7 @@ function Swipe() {
             className="bouton-rouge-rempli"
             onClick={() => {
             interrompreSwipe();
-            history.push("/")}
+            }
             }>
             Interrompre le swipe</button>
         </div>}
