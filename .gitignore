@@ -119,3 +119,7 @@ dist
 .backend/package-lock.json
 .backend/package.json
 
+backend/package-lock.json
+backend/package.json
+frontend/package-lock.json
+backend/package.json
