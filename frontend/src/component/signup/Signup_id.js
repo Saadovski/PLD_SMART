@@ -32,7 +32,7 @@ function Signup_id(props) {
           props.setState(2);
         }
         else {
-          e.target.style.border = "1px solid red";
+          document.getElementById("username").style.border = "1px solid red";
         }
       });
     }
@@ -44,6 +44,7 @@ function Signup_id(props) {
         <h3> Inscription </h3>
       <label>
           <input
+            id="username"
             class="box-sans-contour texte-vert texte-centre"
             type="text"
             name="username"
