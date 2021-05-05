@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 import { io } from "socket.io-client";
 import { AuthContext } from "../context/authContext";
 import { SocketContext } from "../context/socketContext";
+import "../styles/createSession.css";
 
 function CreateSession() {
   const [joinSessionId, setJoinSessionId] = useState(null);
@@ -49,7 +50,7 @@ function CreateSession() {
 
   return (
     <div class="box-centre">
-      <Container className="texte-centre">
+      <Container className="texte-centre createSessionBox">
         <h2>Créer une session</h2>
 
         <div class="bouton-gris-hover">
@@ -57,7 +58,6 @@ function CreateSession() {
             Créer une session
           </button>
         </div>
-        <div className="separator">ou</div>
         <hr></hr>
         <h2>Rejoindre une session</h2>
         <form class="texte-centre">

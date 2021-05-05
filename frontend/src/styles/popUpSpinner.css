@@ -1,6 +1,6 @@
 .PopUp {
     z-index: 1000;
-    position: fixed;
+    position: absolute;
     top: calc(50% - 125px);
     left: calc(50% - 125px);
     width: 250px;
