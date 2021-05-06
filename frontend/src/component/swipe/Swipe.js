@@ -58,7 +58,7 @@ function Swipe() {
       const blackBackground = document.querySelector(".popUpRank-container .backgroundRank");
       blackBackground.classList.remove("hideRank");
       popUpRank.classList.remove("hideRank");
-      medalsBox.style.transform = "translateY(0%)";
+      medalsBox.style.transform = "translateY(0vh)";
       setTopFilm(filmToDisplay);
     });
   }, []);
