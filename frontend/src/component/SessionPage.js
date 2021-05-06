@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react";
 import { SocketContext } from "../context/socketContext";
 import { AuthContext } from "../context/authContext";
 import PopUpSpinner from "./PopUpSpinner";
+import { Button } from "react-bootstrap";
 
 function SessionPage() {
   const { id } = useParams();
@@ -54,11 +55,14 @@ function SessionPage() {
 
   return (
     <div class="box-centre">
-      <div class="box-en-haut">Session {id}</div>
+      <div><h4 class="box-en-haut">Session <span className="texte-vert">{id}</span></h4></div>
       <div class="texte-centre">
-        <h3>Chef du groupe : {owner}</h3>
+        <h4>Chef du groupe : {owner}</h4>
+        <h4>Mood selectionnés : {socketContext.group.mood.length > 0 ? socketContext.group.mood.map((e) => {
+          return <div className="texte-vert">{e}</div>
+        }) : "Aucun mood selectionné"}</h4>
         <div className="users">
-          <h3>Utilisateurs connectés : </h3>
+          <h4>Utilisateurs connectés : </h4>
           {socketContext.group.users.map((u, index) => {
             return (
               <div className="userElement" key={index}>
