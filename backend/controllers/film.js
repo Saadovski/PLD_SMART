@@ -26,8 +26,6 @@ exports.createFilm = (req, res, next) => {
 
 exports.filmGender = async (req, res, next) => {
 
-    console.log("on requête les films")
-    console.log("on passe ici1")
     const listeGenre = req.body.listeGenre
     let requete = ""
     if(listeGenre.length === 0){
@@ -42,11 +40,10 @@ exports.filmGender = async (req, res, next) => {
                 success: "true",
                 listFilms: listeFilms
             });}) 
-        .catch(error => {console.log("soucis")});
+        .catch(error => {});
     
     }
     else{
-        console.log("on passe ici2")
         requete = "{$or:[";
 
         for(let genre of listeGenre) {
@@ -55,8 +52,6 @@ exports.filmGender = async (req, res, next) => {
     requete = requete.substring(0, requete.length-1) + "]}";
     
 
-
-    console.log("requete", requete)
     let query = parser(requete)
     Film.find(query)
         .then( async listeFilms => {
@@ -75,13 +70,13 @@ exports.filmGender = async (req, res, next) => {
                 while(listeFilms.length < tailleEchantillon){
 
                     let reqCount =  tailleEchantillon - listeFilms.length
-                    console.log("pour l'instant ça passe ", reqCount)
+
                     await Film.aggregate([{ $sample: { size: reqCount } }])
                     .then(films  => {films.forEach(film => {
                         if(listeFilms.indexOf(film) === -1) listeFilms.push(film)
                     })
                 }) 
-                .catch(error => {console.log("soucis")});
+                .catch(error => {});
                 }
                 return res.status(200).json({ 
                     success: "true",
@@ -151,8 +146,6 @@ exports.updatePreference = async (req, res, next) => {
 
 
 exports.addSession = async (req, res, next) => {
-    console.log("coucou")
-
     User.updateOne({ _id: req.body.userId },{ $inc: { nbSession: 1 } })
     .then(()=>{
         return res.status(200).json({ success: "true", status: 'Session ajoutee' });

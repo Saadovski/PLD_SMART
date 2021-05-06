@@ -27,12 +27,26 @@ function Swipe() {
   const token = authContext.token;
   const groupId = socketContext.group.groupId;
   const socket = socketContext.socket;
-  const Movies = socketContext.group.films;
+  const [Movies, setMovies] = useState(socketContext.group.films);
   const [selectedMovie, setSelectedMovie] = useState(Movies[0]);
   const [isFinished, setIsFinished] = useState(false);
   const [topFilm, setTopFilm] = useState([]);
+  var shuffled = socketContext.group.films;
+
+  function shuffle(array) {
+    var movie = [...array];
+    var shuffledArray = [];
+    var nbFilms = movie.length;
+    while(movie.length != 0) {
+      var random = Math.floor(Math.random() * movie.length);
+      shuffledArray[nbFilms - movie.length] = movie[random];
+      movie.splice(random,1);
+    }
+    setMovies(shuffledArray);
+  }
 
   useEffect(() => {
+    shuffle(Movies);
     socket.on("group", (group) => {
       socketContext.updateGroup(group);
       window.addEventListener("beforeunload", () => {
@@ -44,8 +58,7 @@ function Swipe() {
     socketContext.socket.on("printRanking", (ranking) => {
       const filmToDisplay = [];
       if (ranking.length >= 3) {
-        console.log("Ranking", ranking);
-        Movies.forEach((film) => {
+        shuffled.forEach((film) => {
           if (film.netflixid === ranking[0].filmId || film.netflixid === ranking[1].filmId || film.netflixid === ranking[2].filmId) {
             filmToDisplay.push(film);
           }
@@ -65,8 +78,11 @@ function Swipe() {
   }, []);
 
   const swipeMovie = (avis) => {
+<<<<<<< HEAD
+=======
     
     console.log("swipe");
+>>>>>>> 3cec429a1a7584f9bb482039609a6faea3df7ef8
     const filmId = Movies[MovieIndex].netflixid;
     fetch(REACT_APP_API_URL + "film/updatePreference", {
       method: "POST",
@@ -122,18 +138,13 @@ function Swipe() {
     console.log(data);
     //    const movie = Movies.find((m) => m.netflixid === data.filmId);
     var indiceMovie;
+    console.log("MOVIES");
+    console.log(Movies);
     for (var i = 0; i < Movies.length; i++) {
-      console.log(i);
-      console.log(Movies[i].netflixid);
       if (Movies[i].netflixid == data.filmId) {
         indiceMovie = i;
       }
     }
-    console.log("movies:");
-    console.log(Movies);
-
-    console.log("indicemovie:");
-    console.log(indiceMovie);
 
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById("match");
