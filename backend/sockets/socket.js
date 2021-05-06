@@ -58,10 +58,10 @@ exports.init = (server) => {
           }
           // créer un groupe et l'inscrire dans les variables partagées et on le place dans sa propre room
 
-          var groupId = Math.random().toString(36).substr(2, 3);
+          var groupId = Math.floor(Math.random()*999)
 
           while(groupId in mapGroupIdGroup){
-            groupId =  Math.random().toString(36).substr(2, 3);
+            groupId =  Math.floor(Math.random()*999);
           }
 
           let newGroup = new Group(groupId, user);
