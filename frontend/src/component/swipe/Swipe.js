@@ -78,11 +78,6 @@ function Swipe() {
   }, []);
 
   const swipeMovie = (avis) => {
-<<<<<<< HEAD
-=======
-    
-    console.log("swipe");
->>>>>>> 3cec429a1a7584f9bb482039609a6faea3df7ef8
     const filmId = Movies[MovieIndex].netflixid;
     fetch(REACT_APP_API_URL + "film/updatePreference", {
       method: "POST",
