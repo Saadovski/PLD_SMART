@@ -33,27 +33,31 @@ function Swipe() {
   const [topFilm, setTopFilm] = useState([]);
   var shuffled = socketContext.group.films;
 
-  function shuffle(array) {
-    var movie = [...array];
-    var shuffledArray = [];
-    var nbFilms = movie.length;
-    while(movie.length != 0) {
-      var random = Math.floor(Math.random() * movie.length);
-      shuffledArray[nbFilms - movie.length] = movie[random];
-      movie.splice(random,1);
-    }
-    setMovies(shuffledArray);
-  }
+  
 
   useEffect(() => {
     shuffle(Movies);
-    socket.on("group", (group) => {
-      socketContext.updateGroup(group);
-      window.addEventListener("beforeunload", () => {
-        socket.disconnect();
-        history.push("/");
-      });
+
+    document.getElementById("btnLeaveSession").addEventListener("click", () => {
+      history.push("/");
     });
+
+    socket.on("group", (group) => {
+      console.log("swipe group");
+      socketContext.updateGroup(group);
+    });
+
+    function shuffle(array) {
+      var movie = [...array];
+      var shuffledArray = [];
+      var nbFilms = movie.length;
+      while (movie.length != 0) {
+        var random = Math.floor(Math.random() * movie.length);
+        shuffledArray[nbFilms - movie.length] = movie[random];
+        movie.splice(random, 1);
+      }
+      setMovies(shuffledArray);
+    }
 
     socketContext.socket.on("printRanking", (ranking) => {
       const filmToDisplay = [];
@@ -65,7 +69,7 @@ function Swipe() {
         });
         console.log("filmtodisplay", filmToDisplay);
       }
-      
+
       document.getElementById("waitingPopUp").classList.add("hide");
       const popUpRank = document.querySelector(".popUpRank-container");
       const medalsBox = document.querySelector(".popUpRank-container .popUpRank");
@@ -87,13 +91,12 @@ function Swipe() {
       },
       body: JSON.stringify({
         userId: authContext.userId,
-        filmId: filmId
+        filmId: filmId,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-      console.log(data.status);
-
+        console.log(data.status);
       });
 
     socket.emit("swipe", {
@@ -130,13 +133,10 @@ function Swipe() {
 
   socket.on("printMatch", (data) => {
     console.log("received a match");
-    console.log(data);
     //    const movie = Movies.find((m) => m.netflixid === data.filmId);
     var indiceMovie;
-    console.log("MOVIES");
-    console.log(Movies);
     for (var i = 0; i < Movies.length; i++) {
-      if (Movies[i].netflixid == data.filmId) {
+      if (Movies[i].netflixid === data.filmId) {
         indiceMovie = i;
       }
     }
@@ -194,18 +194,18 @@ function Swipe() {
             <div style={{ backgroundImage: "url(" + Movies[MovieIndex].img + ")" }} className="card"></div>
           </MovieCard>
           <hr></hr>
-<div className="box-horizontal">
-          <div className="bouton-swipe-non-hover">
-            <button className="bouton-swipe-non" onClick={() => swipe("left")}>
-              non
-            </button>
-          </div>
-          <hr></hr>
-          <div className="bouton-swipe-oui-hover">
-            <button className="bouton-swipe-oui" onClick={() => swipe("right")}>
-              oui
-            </button>
-          </div>
+          <div className="box-horizontal">
+            <div className="bouton-swipe-non-hover">
+              <button className="bouton-swipe-non" onClick={() => swipe("left")}>
+                non
+              </button>
+            </div>
+            <hr></hr>
+            <div className="bouton-swipe-oui-hover">
+              <button className="bouton-swipe-oui" onClick={() => swipe("right")}>
+                oui
+              </button>
+            </div>
           </div>
           <h4> {Movies[MovieIndex].genre.join(" ")} </h4>
           <div>

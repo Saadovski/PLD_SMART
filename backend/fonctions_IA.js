@@ -56,7 +56,6 @@ module.exports = {
         user.preference.genre = newGenre;
 
         annee = (user.preference.annee * nbfilms + movie.year) / (nbfilms + 1);
-        console.log(annee);
         nbfilms = user.preference.nbFilms + 1;
 
         preference = {

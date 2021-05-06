@@ -108,7 +108,7 @@ exports.filmGender = async (req, res, next) => {
 
 
 exports.updatePreference = async (req, res, next) => {
-
+    console.log("ceci est romain", req.body);
     Film.findOne({ netflixid: req.body.filmId })
     .then( film => {
         User.findOne({ _id: req.body.userId }).populate('preference')
@@ -125,6 +125,7 @@ exports.updatePreference = async (req, res, next) => {
                         synopsis: newPreferences.synopsis
                     }},
                     function(err, resp) {
+                        console.log("erreur update", err);
                         if (err) return res.status(502).json({ success: "false", status: 'Error' });
 
                         return res.status(200).json({ success: "true", status: 'Preference modified' });

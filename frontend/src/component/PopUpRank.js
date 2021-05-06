@@ -61,7 +61,7 @@ function PopUpRank(props) {
             </div>
           )}
         </div>
-        <Button variant="danger" className="mt-2" onClick={() => (window.location.href = "/")}>
+        <Button variant="danger" className="mt-2" id="btnLeaveSession">
           Quitter la session
         </Button>
       </div>

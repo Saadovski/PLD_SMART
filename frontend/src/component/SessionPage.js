@@ -34,6 +34,7 @@ function SessionPage() {
   useEffect(() => {
     setGroup(socketContext.group);
     socketContext.socket.on("group", (group) => {
+      console.log("received group");
       setGroup(group);
       socketContext.updateGroup(group);
     });
@@ -51,12 +52,21 @@ function SessionPage() {
 
   return (
     <div class="box-centre">
-      <div><h4 class="box-en-haut">Session <span className="texte-vert">{id}</span></h4></div>
+      <div>
+        <h4 class="box-en-haut">
+          ID de Session : <span className="texte-vert">{id}</span>
+        </h4>
+      </div>
       <div class="texte-centre">
         <h4>Chef du groupe : {owner}</h4>
-        <h4>Mood selectionnés : {socketContext.group.mood.length > 0 ? socketContext.group.mood.map((e) => {
-          return <div className="texte-vert">{e}</div>
-        }) : "Aucun mood selectionné"}</h4>
+        <h4>
+          Mood selectionnés :{" "}
+          {socketContext.group.mood.length > 0
+            ? socketContext.group.mood.map((e) => {
+                return <div className="texte-vert">{e}</div>;
+              })
+            : "Aucun mood selectionné"}
+        </h4>
         <div className="users">
           <h4>Utilisateurs connectés : </h4>
           {socketContext.group.users.map((u, index) => {

@@ -14,18 +14,15 @@ function CreateSession() {
   const socketContext = useContext(SocketContext);
   const URL = process.env.REACT_APP_SESSION_URL || "http://localhost:1024";
 
-
   useEffect(() => {
     let newSocket = io(URL);
     setSocket(newSocket);
-    console.log(newSocket);
+
     newSocket.on("error", (error) => {
       alert(error.message);
     });
 
     newSocket.on("group", (group) => {
-      console.log(group);
-      console.log(socket);
       socketContext.updateGroup(group);
       socketContext.connectToSession(newSocket.id, newSocket, group.groupId);
       history.push(`/session/${group.groupId}`);
@@ -36,7 +33,6 @@ function CreateSession() {
     socket.emit("openGroup", {
       auth: { id: authContext.userId, token: authContext.token },
     });
-    console.log(socket);
 
     // const randomID = Math.floor(Math.random() * 100);
     // history.push(`/session/${randomID}`);
