@@ -26,10 +26,24 @@ function Swipe() {
   const token = authContext.token;
   const groupId = socketContext.group.groupId;
   const socket = socketContext.socket;
-  const Movies = socketContext.group.films;
+  var Movies = socketContext.group.films;
   const [selectedMovie, setSelectedMovie] = useState(Movies[0]);
   const [isFinished, setIsFinished] = useState(false);
   const [topFilm, setTopFilm] = useState([]);
+
+  var Movies = shuffle(Movies);
+
+  function shuffle(array) {
+
+    var shuffledArray = [];
+    var nbFilms = array.length;
+    while(array.length != 0) {
+      var random = Math.floor(Math.random() * array.length);
+      shuffledArray[nbFilms - array.length] = array[random];
+      array.splice(random,1);
+    }
+    return shuffledArray;
+  }
 
   useEffect(() => {
     socket.on("group", (group) => {
@@ -43,7 +57,6 @@ function Swipe() {
     socketContext.socket.on("printRanking", (ranking) => {
       const filmToDisplay = [];
       if (ranking.length >= 3) {
-        console.log("Ranking", ranking);
         Movies.forEach((film) => {
           if (film.netflixid === ranking[0].filmId || film.netflixid === ranking[1].filmId || film.netflixid === ranking[2].filmId) {
             filmToDisplay.push(film);
@@ -104,17 +117,10 @@ function Swipe() {
     //    const movie = Movies.find((m) => m.netflixid === data.filmId);
     var indiceMovie;
     for (var i = 0; i < Movies.length; i++) {
-      console.log(i);
-      console.log(Movies[i].netflixid);
       if (Movies[i].netflixid == data.filmId) {
         indiceMovie = i;
       }
     }
-    console.log("movies:");
-    console.log(Movies);
-
-    console.log("indicemovie:");
-    console.log(indiceMovie);
 
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById("match");
