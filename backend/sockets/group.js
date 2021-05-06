@@ -113,7 +113,8 @@ exports.Group = class Group {
             "year": film.year,
             "poster": film.poster,
             "genre": film.genre,
-            "country": film.country
+            "country": film.country,
+            "runtime": film.runtime 
           })
     }
     return liste

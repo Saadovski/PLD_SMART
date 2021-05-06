@@ -33,21 +33,17 @@ function SessionPage() {
 
   useEffect(() => {
     setGroup(socketContext.group);
-    console.log("Socket context", socketContext);
     socketContext.socket.on("group", (group) => {
       setGroup(group);
       socketContext.updateGroup(group);
-      console.log("Nouveau message group", group);
     });
 
     socketContext.socket.on("start", (group) => {
       socketContext.updateGroup(group);
       history.push("/swipe");
-      console.log("received a start");
     });
 
     socketContext.socket.on("ready", (group) => {
-      console.log("received ready");
       const spinner = document.getElementsByClassName("PopUp")[0];
       spinner.classList.toggle("hide");
     });
