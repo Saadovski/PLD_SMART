@@ -15,6 +15,7 @@ import PopUpRank from "../PopUpRank";
 const alreadyRemoved = [];
 
 function Swipe() {
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
   const history = useHistory();
   const [MovieIndex, setMovieIndex] = useState(0);
   const [lastDirection, setLastDirection] = useState(null);
@@ -71,13 +72,35 @@ function Swipe() {
       const blackBackground = document.querySelector(".popUpRank-container .backgroundRank");
       blackBackground.classList.remove("hideRank");
       popUpRank.classList.remove("hideRank");
-      medalsBox.style.transform = "translateY(0%)";
+      medalsBox.style.transform = "translateY(0vh)";
       setTopFilm(filmToDisplay);
     });
   }, []);
 
   const swipeMovie = (avis) => {
+<<<<<<< HEAD
+=======
+    
+    console.log("swipe");
+>>>>>>> 3cec429a1a7584f9bb482039609a6faea3df7ef8
     const filmId = Movies[MovieIndex].netflixid;
+    fetch(REACT_APP_API_URL + "film/updatePreference", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + authContext.token,
+      },
+      body: JSON.stringify({
+        userId: authContext.userId,
+        filmId: filmId
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+      console.log(data.status);
+
+      });
+
     socket.emit("swipe", {
       auth: {
         id: userId,
@@ -125,7 +148,9 @@ function Swipe() {
 
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById("match");
-    match.style.display = "flex";
+    //match.style.display = "flex";
+    match.classList.remove("matchOut");
+    match.classList.remove("hide");
     match.classList.add("matchIn");
   });
 

@@ -34,7 +34,7 @@
 
     @keyframes matchIn {
         from {
-          margin-top: 100%;
+          margin-top: 200%;
           width: 100%;
         }
       
@@ -51,7 +51,7 @@
         }
       
         to {
-          margin-top: 100%;
+          margin-top: 200%;
           width: 100%;
         }
       }
