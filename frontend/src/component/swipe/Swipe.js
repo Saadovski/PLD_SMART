@@ -15,6 +15,7 @@ import PopUpRank from "../PopUpRank";
 const alreadyRemoved = [];
 
 function Swipe() {
+  const REACT_APP_API_URL = process.env.REACT_APP_API_URL || "http://localhost:1024/api/";
   const history = useHistory();
   const [MovieIndex, setMovieIndex] = useState(0);
   const [lastDirection, setLastDirection] = useState(null);
@@ -64,8 +65,26 @@ function Swipe() {
   }, []);
 
   const swipeMovie = (avis) => {
+    
     console.log("swipe");
     const filmId = Movies[MovieIndex].netflixid;
+    fetch(REACT_APP_API_URL + "film/updatePreference", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: "Bearer " + authContext.token,
+      },
+      body: JSON.stringify({
+        userId: authContext.userId,
+        filmId: filmId
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+      console.log(data.status);
+
+      });
+
     socket.emit("swipe", {
       auth: {
         id: userId,
