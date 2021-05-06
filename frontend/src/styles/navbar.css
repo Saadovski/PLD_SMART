@@ -45,6 +45,7 @@
 
 .navbar-container #logo {
   width: 100%;
+  text-align: center;
 }
 
 .navbar-container button {
@@ -98,4 +99,8 @@
 .logo {
   background-color: var(--primaryColor);
   color: black;
+}
+
+#logoNavbar {
+  width: 50px;
 }

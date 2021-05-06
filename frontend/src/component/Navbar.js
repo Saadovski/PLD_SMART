@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import "../styles/navbar.css";
+import LogoEmpty from '../images/logo1.svg';
 
 function Navbar() {
   const authContext = useContext(AuthContext);
@@ -46,7 +47,7 @@ function Navbar() {
         </button>
 
         <Link to="/" className="logo  " id="logo">
-          Logo
+          <img id="logoNavbar" src={LogoEmpty} alt="logoempty"></img>
         </Link>
       </div>
       <div className="texte-centre" id="myLinks">

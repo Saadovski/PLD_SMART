@@ -33,13 +33,11 @@ function Signin(props) {
       .then((data) => {
         if (data.success) {
           console.log("successfully logged");
-          
           authContext.login(data.token, data.userId, username);
           history.push("/monespace");
 
         } else {
-          console.log("la connexion a échouée");
-          //document.querySelector(".connection-info").innerHTML = "La connexion a échoué";
+          alert('La connexion a échouée');
         }
       });
   };

@@ -86,6 +86,7 @@ exports.init = (server) => {
         });
     });
     socket.on("joinGroup", async (data) => {
+      console.log("join group data", data);
       // on vérifie que les champs nécéssaires sont renseignés
       if (!("auth" in data && "id" in data.auth && "token" in data.auth && "groupId" in data)) {
         console.log("ça va pas");
@@ -96,30 +97,27 @@ exports.init = (server) => {
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log(userFromDB);
+            // console.log(userFromDB);
             socket.data.user = user;
             // On vérifie que l'utilisateur n'est pas dans un autre groupe.
 
             if (mapUsernameGroupId[user.username] && mapGroupIdGroup[mapUsernameGroupId[user.username]]) {
+              console.log("in another group");
               let oldGroupId = mapUsernameGroupId[user.username];
               mapGroupIdGroup[oldGroupId].removeUser(user);
             }
 
             // ajouter l'utilisateur dans son groupe, l'inscrire dans les variables partagées et envoyer le nouveau groupe aux autres membres
 
-            let groupe = mapGroupIdGroup[data.groupId];
             if (groupe.status === "waiting") {
-              mapUsernameGroupId[user.username] = data.groupId;
+              mapUsernameGroupId[user.username] = groupe.group_id;
               groupe.addUser(user);
-              socket.join(data.groupId);
+              console.log("join group in waiting", groupe);
+              socket.join(groupe.group_id);
 
               // envoyer le contenu du groupe au nouvel utilisateur
-              socket.emit("group", groupe.to_json());
-              socket.broadcast.to(data.groupId).emit("group", groupe.to_json());
-              io.emit("test", "this is a test");
-
-              // io.in(groupe.groupId).emit("group", groupe.to_json());
-              // console.log(io.in(groupe.groupId).emit("group", groupe.to_json()));
+              io.in(groupe.group_id).emit("group", groupe.to_json());
+              io.emit("test", "salut");
             }
           })
           .catch((error) => {
@@ -149,11 +147,9 @@ exports.init = (server) => {
       //auth
       let groupe = mapGroupIdGroup[data.groupId];
       if (groupe) {
-        console.log("on est dans le if");
         verifyUser(data.auth.id, data.auth.token)
           .then((userFromDB) => {
             let user = userFromDB[0];
-            console.log("on est dans la ftc");
             //console.log(user);
             console.log("groupe", groupe);
 
@@ -166,6 +162,7 @@ exports.init = (server) => {
 
               // on renvoie le groupe à tout le monde
               io.in(data.groupId).emit("group", groupe.to_json());
+              io.emit('test', "test");
             } else {
               socket.emit("error", { message: "Vous ne pouvez pas faire ça, vous n'êtes pas le chef du groupe" });
             }

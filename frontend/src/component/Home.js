@@ -15,7 +15,7 @@ function Home(props) {
         <div>
           <div className="text-header">
             <h1>Walou</h1>
-            <div>Slogan ...</div>
+            <div className="texte-vert">Une envie de film ?</div>
           </div>
           <img src={PeopleWatchingFilm} alt="film-amico" id="PeopleWatchingFilm"></img>
           <img src={Popcorn} alt="popcorn" id="Popcorn"></img>

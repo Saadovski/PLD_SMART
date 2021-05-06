@@ -7,6 +7,7 @@ import { SocketContext } from "../context/socketContext";
 import { AuthContext } from "../context/authContext";
 import PopUpSpinner from "./PopUpSpinner";
 import { Button } from "react-bootstrap";
+import { io } from "socket.io-client";
 
 function SessionPage() {
   const { id } = useParams();
@@ -34,7 +35,7 @@ function SessionPage() {
   useEffect(() => {
     setGroup(socketContext.group);
     socketContext.socket.on("group", (group) => {
-      console.log("received group");
+      console.log("received group", group);
       setGroup(group);
       socketContext.updateGroup(group);
     });
@@ -43,6 +44,8 @@ function SessionPage() {
       socketContext.updateGroup(group);
       history.push("/swipe");
     });
+
+    socketContext.socket.on("test", (test) => console.log(test));
 
     socketContext.socket.on("ready", (group) => {
       const spinner = document.getElementsByClassName("PopUp")[0];
@@ -69,7 +72,7 @@ function SessionPage() {
         </h4>
         <div className="users">
           <h4>Utilisateurs connectés : </h4>
-          {socketContext.group.users.map((u, index) => {
+          {group.users.map((u, index) => {
             return (
               <div className="userElement" key={index}>
                 {u}
