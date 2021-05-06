@@ -6,8 +6,14 @@ function Match(props) {
 
     const continuerSwipe = () => {
         const match = document.getElementById('match');
-        match.style.display = 'none';
+        match.classList.remove("matchIn");
         match.classList.add("matchOut");    
+        setTimeout(function(){ 
+            console.log("Ready")
+            match.classList.add("hide");
+        }, 1000);
+
+        //match.style.display = 'none';
       }
     
     return (

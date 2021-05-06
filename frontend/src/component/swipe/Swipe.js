@@ -118,7 +118,9 @@ function Swipe() {
 
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById("match");
-    match.style.display = "flex";
+    //match.style.display = "flex";
+    match.classList.remove("matchOut");
+    match.classList.remove("hide");
     match.classList.add("matchIn");
   });
 
