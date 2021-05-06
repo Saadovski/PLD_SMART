@@ -119,7 +119,7 @@ function Swipe() {
     setSelectedMovie(Movies[indiceMovie]);
     const match = document.getElementById("match");
     match.style.display = "flex";
-    match.style.transform = "translateY(0%)";
+    match.classList.add("matchIn");
   });
 
   const outOfFrame = (name) => {
@@ -167,11 +167,18 @@ function Swipe() {
             <div style={{ backgroundImage: "url(" + Movies[MovieIndex].img + ")" }} className="card"></div>
           </MovieCard>
           <hr></hr>
-
+<div className="box-horizontal">
           <div className="bouton-swipe-non-hover">
             <button className="bouton-swipe-non" onClick={() => swipe("left")}>
               non
             </button>
+          </div>
+          <hr></hr>
+          <div className="bouton-swipe-oui-hover">
+            <button className="bouton-swipe-oui" onClick={() => swipe("right")}>
+              oui
+            </button>
+          </div>
           </div>
           <h4> {Movies[MovieIndex].genre.join(" ")} </h4>
           <div>
@@ -184,7 +191,7 @@ function Swipe() {
                     interrompreSwipe();
                   }}
                 >
-                  Interrompre le swipe
+                  Afficher le classement
                 </button>
               </div>
             )}

@@ -10,7 +10,6 @@ const parser = require('mongodb-query-parser');
 const tailleEchantillon = 500
 exports.createFilm = (req, res, next) => {
 
-    //il faut transformer "profil" en vecteur
     
 
     const film_ = new Film({

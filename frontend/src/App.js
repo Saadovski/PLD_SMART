@@ -72,7 +72,7 @@ function App() {
             <Navbar />
             <Switch>
               <Route exact path="/home" component={Home} />
-              <PrivateRoute path="/swipe" component={Swipe} />
+              <Route path="/swipe" component={Swipe} />
               <Route path="/inscription" component={Signup_container} />
               <Route path="/connexion" component={Signin} />
               <PrivateRoute path="/session/:id" component={SessionPage} />
