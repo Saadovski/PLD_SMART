@@ -23,8 +23,9 @@ function Match(props) {
                 <div>
                     <div className='texte-vert background-vide'><h3>{props.title}, {props.year} ({props.runtime})</h3></div>
                     <hr></hr>
-                    <div target="_blank" onClick={() => window.location.href='https://www.netflix.com/watch/'+props.id} style={{ backgroundImage: url}} className='card'>
-                        </div>
+                    <a href={`https://netflix.com/watch/${props.id}`} target="_blank" style={{ backgroundImage: url}} className='card'>
+                    </a>
+
 
                         <hr></hr>
                         <h4 className="texte-vert"> {props.genre.join(" ")}</h4>
