@@ -196,8 +196,8 @@ exports.init = (server) => {
         );
         group.username.splice(group.username.indexOf(user.username), 1);
 
-        if (user.username === group.owner.username && group.username.length > 0) {
-          group.owner = group.users[0];
+        if (user.username === group.owner && group.username.length > 0) {
+          group.owner = group.users[0].username;
         }
 
         if (group.users.length < 1) {

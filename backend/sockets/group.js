@@ -40,7 +40,7 @@ exports.Group = class Group {
       let res = true
       let count = this.list_films.length
       for (let username of this.username){
-        if(this.resultatSwipe[username] !== count-1){
+        if(this.resultatSwipe[username] !== count){
           res = false
         }
       }
