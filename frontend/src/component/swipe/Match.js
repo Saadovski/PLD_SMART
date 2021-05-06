@@ -7,7 +7,7 @@ function Match(props) {
     const continuerSwipe = () => {
         const match = document.getElementById('match');
         match.style.display = 'none';
-        match.style.transform = 'translateY(100%)';    
+        match.classList.add("matchOut");    
       }
     
     return (
@@ -17,7 +17,7 @@ function Match(props) {
                 <div>
                     <div className='texte-vert background-vide'><h3>{props.title}, {props.year} ({props.runtime})</h3></div>
                     <hr></hr>
-                    <div onClick={() => window.location.href='https://www.netflix/'+props.id} style={{ backgroundImage: url}} className='card'>
+                    <div target="_blank" onClick={() => window.location.href='https://www.netflix.com/watch/'+props.id} style={{ backgroundImage: url}} className='card'>
                         </div>
 
                         <hr></hr>
