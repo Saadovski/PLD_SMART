@@ -1,0 +1,5 @@
+Notre Projet étant une application Web, aucune installation n'est nécessaire.
+Pour lancer le projet en local, il faut installer les dépendances js avec la commande "npm i" en se situant dans les dossiers backend et
+frontend du projet. Ensuite, il faut lancer le serveur et l'interface via la commande "npm start" en se situant dans le dossier backend puis 
+frontend.
+Pour tester l'appplication de manière plus simple, vous pouvez accéder à la version hébergée sur notre serveur sur le lien suivant: 146.59.236.173:5000
