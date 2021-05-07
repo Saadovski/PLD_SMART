@@ -70,7 +70,7 @@ module.exports = {
     top_best_movies: function(movies, users){
         const len = movies.length;
         const nbUsers = users.length;
-        const result_length = 10; //nb de films de la liste finale
+        const result_length = 50; //nb de films de la liste finale
 
         for(var m = 0; m < len; ++m){
             movies[m].score = 0;
